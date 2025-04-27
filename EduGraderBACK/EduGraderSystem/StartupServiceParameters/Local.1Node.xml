@@ -1,6 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <StartupServices xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.microsoft.com/2011/01/fabric">
   <Parameters>
+    <Parameter Name="UploadService_PartitionCount" Value="1" />
+    <Parameter Name="UploadService_MinReplicaSetSize" Value="1" />
+    <Parameter Name="UploadService_TargetReplicaSetSize" Value="1" />
+    <Parameter Name="ProgressService_InstanceCount" Value="1" />
+    <Parameter Name="GradeAndAnalysesService_PartitionCount" Value="1" />
+    <Parameter Name="GradeAndAnalysesService_MinReplicaSetSize" Value="1" />
+    <Parameter Name="GradeAndAnalysesService_TargetReplicaSetSize" Value="1" />
+    <Parameter Name="AllUsersService_PartitionCount" Value="1" />
+    <Parameter Name="AllUsersService_MinReplicaSetSize" Value="1" />
+    <Parameter Name="AllUsersService_TargetReplicaSetSize" Value="1" />
     <Parameter Name="APIController_Service_InstanceCount" Value="1" />
   </Parameters>
 </StartupServices>

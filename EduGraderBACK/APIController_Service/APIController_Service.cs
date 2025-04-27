@@ -55,7 +55,13 @@ namespace APIController_Service
                         }
                         app.UseAuthorization();
                         app.MapControllers();
-                        
+                        app.UseCors(options =>
+                        {
+                            options.AllowAnyOrigin()
+                                   .AllowAnyMethod()
+                                   .AllowAnyHeader();
+                        });
+
                         return app;
 
                     }))

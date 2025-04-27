@@ -4,65 +4,113 @@ using System.Fabric;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Common.Database;
+using Common.Models;
+using Common.Requests;
 using Microsoft.ServiceFabric.Data.Collections;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
 using Microsoft.ServiceFabric.Services.Runtime;
+using Microsoft.ServiceFabric.Services.Remoting.Runtime;
+using Common.Services;
 
 namespace AllUsersService
 {
     /// <summary>
     /// An instance of this class is created for each service replica by the Service Fabric runtime.
     /// </summary>
-    internal sealed class AllUsersService : StatefulService
+    internal sealed class AllUsersService : StatefulService, IAllUsersService
     {
+        private readonly UserDatabase _userDatabase;
         public AllUsersService(StatefulServiceContext context)
-            : base(context)
-        { }
-
-        /// <summary>
-        /// Optional override to create listeners (e.g., HTTP, Service Remoting, WCF, etc.) for this service replica to handle client or user requests.
-        /// </summary>
-        /// <remarks>
-        /// For more information on service communication, see https://aka.ms/servicefabricservicecommunication
-        /// </remarks>
-        /// <returns>A collection of listeners.</returns>
-        protected override IEnumerable<ServiceReplicaListener> CreateServiceReplicaListeners()
+                : base(context)
         {
-            return new ServiceReplicaListener[0];
+            _userDatabase = new UserDatabase("mongodb://localhost:27017", "AllUsersDatabase", "Users");
         }
-
-        /// <summary>
-        /// This is the main entry point for your service replica.
-        /// This method executes when this replica of your service becomes primary and has write status.
-        /// </summary>
-        /// <param name="cancellationToken">Canceled when Service Fabric needs to shut down this service replica.</param>
-        protected override async Task RunAsync(CancellationToken cancellationToken)
+        public async Task<bool> Register(Register user)
         {
-            // TODO: Replace the following sample code with your own logic 
-            //       or remove this RunAsync override if it's not needed in your service.
-
-            var myDictionary = await this.StateManager.GetOrAddAsync<IReliableDictionary<string, long>>("myDictionary");
-
-            while (true)
+            var existingUser = await _userDatabase.GetUserByEmail(user.email);
+            if (existingUser != null)
             {
-                cancellationToken.ThrowIfCancellationRequested();
-
-                using (var tx = this.StateManager.CreateTransaction())
-                {
-                    var result = await myDictionary.TryGetValueAsync(tx, "Counter");
-
-                    ServiceEventSource.Current.ServiceMessage(this.Context, "Current Counter Value: {0}",
-                        result.HasValue ? result.Value.ToString() : "Value does not exist.");
-
-                    await myDictionary.AddOrUpdateAsync(tx, "Counter", 0, (key, value) => ++value);
-
-                    // If an exception is thrown before calling CommitAsync, the transaction aborts, all changes are 
-                    // discarded, and nothing is saved to the secondary replicas.
-                    await tx.CommitAsync();
-                }
-
-                await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
+                return false;
             }
+
+            var newUser = new User
+            {
+                name = user.name,
+                email = user.email,
+                password = user.password,
+                role = "Student",
+                restrictions = new List<string>()
+            };
+
+            await _userDatabase.AddUser(newUser);
+            return true;
         }
+
+        public async Task<User> Login(Login request)
+        {
+            var user = await _userDatabase.GetUserByEmail(request.email);
+            if (user != null && user.password == request.password)
+            {
+                return user;
+            }
+            return null;
+        }
+
+        public async Task<User> GetUserByEmail(string email)
+        {
+            return await _userDatabase.GetUserByEmail(email);
+        }
+
+        public async Task<IEnumerable<User>> GetAllStudents()
+        {
+            return await _userDatabase.GetAllStudents();
+        }
+
+        public async Task<bool> UpdateUser(string email, User user)
+        {
+            return await _userDatabase.UpdateUser(email, user);
+        }
+
+        public async Task<bool> AddUserRestriction(string restriction, string email)
+        {
+            var user = await _userDatabase.GetUserByEmail(email);
+            if (user == null) return false;
+
+            if (!user.restrictions.Contains(restriction))
+            {
+                user.restrictions.Add(restriction);
+                return await _userDatabase.UpdateUser(email, user);
+            }
+
+            return true;
+        }
+
+        public async Task<bool> RemoveUserRestriction(string restriction, string email)
+        {
+            var user = await _userDatabase.GetUserByEmail(email);
+            if (user == null) return false;
+
+            if (user.restrictions.Contains(restriction))
+            {
+                user.restrictions.Remove(restriction);
+                return await _userDatabase.UpdateUser(email, user);
+            }
+
+            return true;
+        }
+
+        public async Task<bool> ChangeUserRole(string email, string newRole)
+        {
+            return await _userDatabase.ChangeUserRoleAsync(email, newRole);
+        }
+
+        public async Task<bool> DeleteUser(string email)
+        {
+            return await _userDatabase.DeleteUserAsync(email);
+        }
+
+        protected override IEnumerable<ServiceReplicaListener> CreateServiceReplicaListeners() => this.CreateServiceRemotingReplicaListeners();
+
     }
 }

@@ -1,6 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <StartupServicesManifest xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.microsoft.com/2011/01/fabric">
   <Parameters>
+    <Parameter Name="UploadService_MinReplicaSetSize" DefaultValue="3" />
+    <Parameter Name="UploadService_PartitionCount" DefaultValue="1" />
+    <Parameter Name="UploadService_TargetReplicaSetSize" DefaultValue="3" />
+    <Parameter Name="ProgressService_InstanceCount" DefaultValue="-1" />
+    <Parameter Name="GradeAndAnalysesService_MinReplicaSetSize" DefaultValue="3" />
+    <Parameter Name="GradeAndAnalysesService_PartitionCount" DefaultValue="1" />
+    <Parameter Name="GradeAndAnalysesService_TargetReplicaSetSize" DefaultValue="3" />
+    <Parameter Name="AllUsersService_MinReplicaSetSize" DefaultValue="3" />
+    <Parameter Name="AllUsersService_PartitionCount" DefaultValue="1" />
+    <Parameter Name="AllUsersService_TargetReplicaSetSize" DefaultValue="3" />
     <Parameter Name="APIController_Service_InstanceCount" DefaultValue="-1" />
   </Parameters>
   <Services>
@@ -9,6 +19,26 @@
          ServiceFabric PowerShell module.
 
          The attribute ServiceTypeName below must match the name defined in the imported ServiceManifest.xml file. -->
+    <Service Name="UploadService" ServicePackageActivationMode="ExclusiveProcess">
+      <StatefulService ServiceTypeName="UploadServiceType" TargetReplicaSetSize="[UploadService_TargetReplicaSetSize]" MinReplicaSetSize="[UploadService_MinReplicaSetSize]">
+        <UniformInt64Partition PartitionCount="[UploadService_PartitionCount]" LowKey="-9223372036854775808" HighKey="9223372036854775807" />
+      </StatefulService>
+    </Service>
+    <Service Name="ProgressService" ServicePackageActivationMode="ExclusiveProcess">
+      <StatelessService ServiceTypeName="ProgressServiceType" InstanceCount="[ProgressService_InstanceCount]">
+        <SingletonPartition />
+      </StatelessService>
+    </Service>
+    <Service Name="GradeAndAnalysesService" ServicePackageActivationMode="ExclusiveProcess">
+      <StatefulService ServiceTypeName="GradeAndAnalysesServiceType" TargetReplicaSetSize="[GradeAndAnalysesService_TargetReplicaSetSize]" MinReplicaSetSize="[GradeAndAnalysesService_MinReplicaSetSize]">
+        <UniformInt64Partition PartitionCount="[GradeAndAnalysesService_PartitionCount]" LowKey="-9223372036854775808" HighKey="9223372036854775807" />
+      </StatefulService>
+    </Service>
+    <Service Name="AllUsersService" ServicePackageActivationMode="ExclusiveProcess">
+      <StatefulService ServiceTypeName="AllUsersServiceType" TargetReplicaSetSize="[AllUsersService_TargetReplicaSetSize]" MinReplicaSetSize="[AllUsersService_MinReplicaSetSize]">
+        <UniformInt64Partition PartitionCount="[AllUsersService_PartitionCount]" LowKey="-9223372036854775808" HighKey="9223372036854775807" />
+      </StatefulService>
+    </Service>
     <Service Name="APIController_Service" ServicePackageActivationMode="ExclusiveProcess">
       <StatelessService ServiceTypeName="APIController_ServiceType" InstanceCount="[APIController_Service_InstanceCount]">
         <SingletonPartition />

@@ -2,7 +2,7 @@
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="packages\Microsoft.VisualStudio.Azure.Fabric.MSBuild.1.7.9\build\Microsoft.VisualStudio.Azure.Fabric.Application.props" Condition="Exists('packages\Microsoft.VisualStudio.Azure.Fabric.MSBuild.1.7.9\build\Microsoft.VisualStudio.Azure.Fabric.Application.props')" />
   <PropertyGroup Label="Globals">
-    <ProjectGuid>59f22ca1-f346-4177-b06b-0b6a212c3662</ProjectGuid>
+    <ProjectGuid>71cdec58-da32-4440-b0cf-73a2d31fa5ce</ProjectGuid>
     <ProjectVersion>2.7</ProjectVersion>
     <MinToolsVersion>16.10</MinToolsVersion>
     <SupportedMSBuildNuGetPackageVersion>1.7.9</SupportedMSBuildNuGetPackageVersion>
@@ -39,6 +39,10 @@
     <ProjectReference Include="..\APIController_Service\APIController_Service.csproj">
       <ServiceLaunchUrl>http://localhost:{ServicePort}/swagger</ServiceLaunchUrl>
     </ProjectReference>
+    <ProjectReference Include="AllUsersService\AllUsersService.csproj" />
+    <ProjectReference Include="GradeAndAnalysesService\GradeAndAnalysesService.csproj" />
+    <ProjectReference Include="ProgressService\ProgressService.csproj" />
+    <ProjectReference Include="UploadService\UploadService.csproj" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />
   <PropertyGroup>

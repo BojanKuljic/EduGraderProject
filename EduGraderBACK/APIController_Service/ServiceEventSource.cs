@@ -9,7 +9,7 @@ using Microsoft.ServiceFabric.Services.Runtime;
 
 namespace APIController_Service
 {
-    [EventSource(Name = "MyCompany-EduGarderSystem-APIController_Service")]
+    [EventSource(Name = "MyCompany-EduGraderSystem-APIController_Service")]
     internal sealed class ServiceEventSource : EventSource
     {
         public static readonly ServiceEventSource Current = new ServiceEventSource();
