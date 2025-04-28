@@ -39,5 +39,13 @@ namespace Common.Database
             var result = await _uploads.DeleteOneAsync(u => u.Id == id);
             return result.DeletedCount > 0;
         }
+        public async Task<List<StudentUpload>> GetStudentUploadsByEmail(string email)
+        {
+            return await _uploads.Find(u => u.Email == email).ToListAsync();
+        }
+        public async Task<List<StudentUpload>> GetAllUploads()
+        {
+            return await _uploads.Find(_ => true).ToListAsync();
+        }
     }
 }

@@ -28,7 +28,7 @@ namespace APIController_Service.Controllers
             return Ok(students);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{email}")]
         public async Task<IActionResult> UpdateUser(string email, User user)
         {
             var result = await _allUserService.UpdateUser(email, user);

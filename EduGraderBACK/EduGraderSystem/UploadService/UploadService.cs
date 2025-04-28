@@ -71,6 +71,35 @@ namespace UploadService
             return success ? true : false;
         }
 
+        public async Task<List<StudentUpload>> GetAllStudentUploads(string email)
+        {
+            var uploads = await _uploadDatabase.GetStudentUploadsByEmail(email);
+            if (uploads == null || !uploads.Any())
+                return null;
+
+            return uploads;
+        }
+
+        public async Task<Review> GetReview(string uploadId)
+        {
+            var upload = await _uploadDatabase.GetUpload(uploadId);
+            if (upload == null || upload.Review == null) return null;
+
+            return upload.Review;
+        }
+
+
+        public async Task<bool> ProfessorReview(string id, Review review)
+        {
+            var upload = await _uploadDatabase.GetUpload(id);
+            if (upload == null) return false;
+
+            upload.Review = review;
+
+            var success = await _uploadDatabase.UpdateUpload(upload.Id, upload);
+            return success ? true: false;
+        }
+
         /// <summary>
         /// Optional override to create listeners (e.g., HTTP, Service Remoting, WCF, etc.) for this service replica to handle client or user requests.
         /// </summary>
@@ -80,6 +109,5 @@ namespace UploadService
         /// <returns>A collection of listeners.</returns>
         protected override IEnumerable<ServiceReplicaListener> CreateServiceReplicaListeners() => this.CreateServiceRemotingReplicaListeners();
 
-        
     }
 }
