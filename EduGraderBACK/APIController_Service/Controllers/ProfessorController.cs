@@ -7,6 +7,5 @@ namespace APIController_Service.Controllers
     public class ProfessorController : Controller
     {
 
-       
     }
 }

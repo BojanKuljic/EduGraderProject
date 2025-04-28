@@ -12,8 +12,8 @@ namespace Common.Models
         [BsonElement("versionNumber")]
         public int VersionNumber { get; set; }
 
-        [BsonElement("fileUrl")]
-        public string FileUrl { get; set; }
+        [BsonElement("file")]
+        public byte[] File { get; set; }
 
         [BsonElement("uploadedAt")]
         public DateTime UploadedAt { get; set; }

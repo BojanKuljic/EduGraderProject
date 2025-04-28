@@ -16,7 +16,7 @@ namespace Common.Models
         public string Id { get; set; }
 
         [BsonElement("email")]
-        public string email { get; set; }
+        public string Email { get; set; }
 
         [BsonElement("course")]
         public string Course { get; set; }
@@ -28,7 +28,7 @@ namespace Common.Models
         public List<UploadVersion> Versions { get; set; } = new List<UploadVersion>();
 
         [BsonElement("activeVersion")]
-        public uint activeVersion { get; set; }
+        public uint ActiveVersion { get; set; }
 
         [BsonElement("status")]
         public Status Status { get; set; }
@@ -37,7 +37,7 @@ namespace Common.Models
         public DateTime UploadDate { get; set; }
 
         [BsonElement("usualReviewTime")]
-        public DateTime? usualReviewTime { get; set; }
+        public DateTime? UsualReviewTime { get; set; }
 
         [BsonElement("reiew")]
         public Review Review { get; set; }

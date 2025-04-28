@@ -32,10 +32,9 @@ namespace APIController_Service.Controllers
         public async Task<IActionResult> UpdateUser(string email, User user)
         {
             var result = await _allUserService.UpdateUser(email, user);
-            if (!result) return BadRequest("Nije uspelo");
+            if (!result) return BadRequest("Nije uspela izmena");
             return NoContent();
         }
-
 
        
     }
