@@ -16,9 +16,9 @@ namespace Common.Models
         public string Errors { get; set; } 
 
         [BsonElement("improvements")]
-        public List<string> Improvements { get; set; } 
+        public string Improvements { get; set; } 
 
         [BsonElement("recommendations")]
-        public List<string> Recommendations { get; set; }
+        public string Recommendations { get; set; }
     }
 }
