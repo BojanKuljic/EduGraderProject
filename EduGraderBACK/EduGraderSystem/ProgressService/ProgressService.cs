@@ -4,33 +4,72 @@ using System.Fabric;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Common.Models;
+using Common.Services;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
 using Microsoft.ServiceFabric.Services.Runtime;
+using Microsoft.ServiceFabric.Services.Remoting.Runtime;
 
 namespace ProgressService
 {
     /// <summary>
     /// An instance of this class is created for each service instance by the Service Fabric runtime.
     /// </summary>
-    internal sealed class ProgressService : StatelessService
+    internal sealed class ProgressService : StatelessService, IProgressService
     {
         public ProgressService(StatelessServiceContext context)
             : base(context)
         { }
 
-        /// <summary>
-        /// Optional override to create listeners (e.g., TCP, HTTP) for this service replica to handle client or user requests.
-        /// </summary>
-        /// <returns>A collection of listeners.</returns>
-        protected override IEnumerable<ServiceInstanceListener> CreateServiceInstanceListeners()
+        private string FindMostCommonMistake(List<StudentUpload> studentWorks)
         {
-            return new ServiceInstanceListener[0];
+            var allErrors = studentWorks
+                .Where(w => w.Review != null && w.Review.Errors != null)
+                .Select(w => w.Review.Errors).ToList();
+
+            if (allErrors.Count == 0)
+            {
+                return "No mistakes found.";
+            }
+
+            var groupedErrors = allErrors
+                .GroupBy(e => e)
+                .OrderByDescending(g => g.Count())
+                .ToList();
+
+            if (groupedErrors.Count < 2 || groupedErrors.First().Count() == 1)
+            {
+                return "No common mistakes";
+            }
+
+            return groupedErrors.First().Key;
         }
 
-        /// <summary>
-        /// This is the main entry point for your service instance.
-        /// </summary>
-        /// <param name="cancellationToken">Canceled when Service Fabric needs to shut down this service instance.</param>
+
+
+        public async Task<UploadProgress> GenerateStudentProgress(string email, List<StudentUpload> studentWorks)
+        {
+            var relevantWorks = studentWorks.Where(w => w.Email == email && w.Review != null).ToList();
+
+            int uploadNum = relevantWorks.Count;
+            double averageGrade = uploadNum > 0
+                ? relevantWorks.Average(w => w.Review.Grade)
+                : 0;
+
+            var scoreHistory = relevantWorks
+                .OrderBy(w => w.UploadDate)
+                .ToDictionary(w => w.UploadDate, w => w.Review.Grade);
+
+            return new UploadProgress
+            {
+                Email = email,
+                TotalWorks = uploadNum,
+                AverageGrade = Math.Round(averageGrade, 2),
+            };
+        }
+
+
+        protected override IEnumerable<ServiceInstanceListener> CreateServiceInstanceListeners() => this.CreateServiceRemotingInstanceListeners();
         protected override async Task RunAsync(CancellationToken cancellationToken)
         {
             // TODO: Replace the following sample code with your own logic 

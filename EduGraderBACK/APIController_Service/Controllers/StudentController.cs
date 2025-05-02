@@ -15,11 +15,20 @@ namespace APIController_Service.Controllers
     {
 
         private readonly IUploadService _uploadService = ServiceProxy.Create<IUploadService>(new Uri("fabric:/EduGraderSystem/UploadService"), new ServicePartitionKey(0), TargetReplicaSelector.PrimaryReplica);
-        //private readonly IAllUsersService _allUserService = ServiceProxy.Create<IAllUsersService>(new Uri("fabric:/EduGraderSystem/AllUsersService"), new ServicePartitionKey(0), TargetReplicaSelector.PrimaryReplica);
+        private readonly IProgressService _progressService = ServiceProxy.Create<IProgressService>(new Uri("fabric:/EduGraderSystem/ProgressService"));
+        private readonly IAllUsersService _allUserService = ServiceProxy.Create<IAllUsersService>(new Uri("fabric:/EduGraderSystem/AllUsersService"), new ServicePartitionKey(0), TargetReplicaSelector.PrimaryReplica);
 
         [HttpPost("student/upload")]
         public async Task<IActionResult> UploadWork([FromForm] UploadRequest upload)
         {
+            bool restricted = await _allUserService.IsUserRestricted("upload", upload.email);
+            if (restricted)
+                return BadRequest("You are restricted from uploading work.");
+            if (upload == null)
+                return BadRequest("Invalid upload request.");
+            if (string.IsNullOrEmpty(upload.email) || string.IsNullOrEmpty(upload.title) || string.IsNullOrEmpty(upload.course))
+                return BadRequest("Invalid upload request. Missing email, title or course.");
+
             IFormFile file = upload.file;
             if (file == null || file.Length == 0)
                 return BadRequest("Invalid file");
@@ -45,6 +54,7 @@ namespace APIController_Service.Controllers
         [HttpPut("student/update")]
         public async Task<IActionResult> UpdateWork([FromForm] IFormFile file, [FromQuery] string uploadId)
         {
+
             if (file == null || file.Length == 0)
                 return BadRequest("Invalid file.");
 
@@ -77,8 +87,8 @@ namespace APIController_Service.Controllers
         [HttpGet("student/{email}/allUploads")]
         public async Task<ActionResult<IEnumerable<StudentUpload>>> GetWorksOfStudent(string email)
         {
-            var statuses = await _uploadService.GetAllStudentUploads(email);
-            return statuses != null ? Ok(statuses) : NotFound("No uploads found for the given student.");
+            var uploads = await _uploadService.GetAllStudentUploads(email);
+            return uploads != null ? Ok(uploads) : NotFound("No uploads found for the given student.");
         }
 
         [HttpGet("upload/{uploadId}/review")]
@@ -86,6 +96,18 @@ namespace APIController_Service.Controllers
         {
             var feedback = await _uploadService.GetReview(uploadId);
             return feedback != null ? Ok(feedback) : NotFound("Review not available for this work.");
+        }
+
+        [HttpGet("student/{email}/progress")]
+        public async Task<ActionResult<UploadProgress>> GetProgress(string email)
+        {
+            bool restricted = await _allUserService.IsUserRestricted("progress", email);
+            if (restricted)
+                return BadRequest("You are restricted from progress service.");
+
+            var uploads = await _uploadService.GetAllStudentUploads(email);
+            var progress = await _progressService.GenerateStudentProgress(email, uploads);
+            return progress != null ? Ok(progress) : NotFound("Unable to generate prgress.");
         }
 
     }

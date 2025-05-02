@@ -16,6 +16,7 @@ namespace APIController_Service.Controllers
         [HttpPut("professor/review")]
         public async Task<IActionResult> ProfessorsWorkAnalysis([FromBody] Review review, [FromQuery] string uploadId)
         {
+
             if (review == null || string.IsNullOrEmpty(uploadId))
             {
                 return BadRequest("Invalid request data.");

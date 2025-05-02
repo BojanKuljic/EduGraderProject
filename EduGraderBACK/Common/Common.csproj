@@ -196,6 +196,7 @@
     <Compile Include="Database\UserDatabase.cs" />
     <Compile Include="Models\Review.cs" />
     <Compile Include="Models\StudentUpload.cs" />
+    <Compile Include="Models\UploadProgress.cs" />
     <Compile Include="Models\UploadVersion.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

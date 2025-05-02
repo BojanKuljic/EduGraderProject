@@ -1,4 +1,5 @@
-﻿using Microsoft.ServiceFabric.Services.Remoting;
+﻿using Common.Models;
+using Microsoft.ServiceFabric.Services.Remoting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,5 +10,6 @@ namespace Common.Services
 {
     public interface IProgressService : IService
     {
+        Task<UploadProgress> GenerateStudentProgress(string email, List<StudentUpload> studentWorks);
     }
 }

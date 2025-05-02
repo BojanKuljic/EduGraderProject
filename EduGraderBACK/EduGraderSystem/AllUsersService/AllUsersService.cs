@@ -100,6 +100,19 @@ namespace AllUsersService
             return true;
         }
 
+        public async Task<bool> IsUserRestricted(string restriction, string email)
+        {
+            var user = await _userDatabase.GetUserByEmail(email);
+            if (user == null) return true;
+
+            if (user.restrictions.Contains(restriction))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         public async Task<bool> ChangeUserRole(string email, string newRole)
         {
             return await _userDatabase.ChangeUserRoleAsync(email, newRole);

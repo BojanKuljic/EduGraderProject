@@ -28,10 +28,8 @@ namespace APIController_Service.Controllers
             var user = await _allUserService.Login(request);
             if (user == null) return Unauthorized("Invalid credentials");
 
-            return Ok(user);
-
-            //var isRestricted = await _allUserService.IsUserRestricted("login", user.Id);
-            //return isRestricted ? Unauthorized("User login is restricted") : Ok(user);
+            var isRestricted = await _allUserService.IsUserRestricted("login", user.email);
+            return isRestricted ? Unauthorized("User login is restricted") : Ok(user);
         }
 
     }
