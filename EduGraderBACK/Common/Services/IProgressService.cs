@@ -11,5 +11,8 @@ namespace Common.Services
     public interface IProgressService : IService
     {
         Task<UploadProgress> GenerateStudentProgress(string email, List<StudentUpload> studentWorks);
+        Task<List<string>> FindMostCommonMistakes();
+        Task<double> CalculateAverageGrade();
+        Task<List<(DateTime Timestamp, double Grade)>> GetAllGradesWithTimestamps();
     }
 }
