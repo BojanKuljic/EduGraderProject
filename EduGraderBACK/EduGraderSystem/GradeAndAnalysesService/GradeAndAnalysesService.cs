@@ -14,6 +14,7 @@ using Microsoft.ServiceFabric.Services.Runtime;
 using Microsoft.ServiceFabric.Services.Remoting.Runtime;
 using Common.Models;
 using Common.Services;
+using Common.Database;
 
 namespace GradeAndAnalysesService
 {
@@ -22,19 +23,17 @@ namespace GradeAndAnalysesService
     /// </summary>
     internal sealed class GradeAndAnalysesService : StatefulService, IGradeAndAnalysesService
     {
+        private readonly UploadDatabase _uploadDatabase;
         public GradeAndAnalysesService(StatefulServiceContext context)
             : base(context)
-        { }
-
-        private readonly HttpClient _httpClient = new HttpClient();
-        private const string GEMINI_API_KEY = "AIzaSyBPBbg4TNRyJdcEehNJdF447G2WpsyiBlI";
-        private const string GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
-
-        private IReliableDictionary<string, string> _promptTemplates;
+        {
+            _uploadDatabase = new UploadDatabase("mongodb://localhost:27017", "UploadDatabase", "Uploads");
+        }
 
         protected override async Task RunAsync(CancellationToken cancellationToken)
         {
             _promptTemplates = await this.StateManager.GetOrAddAsync<IReliableDictionary<string, string>>("PromptTemplates");
+
             using (var tx = this.StateManager.CreateTransaction())
             {
                 await _promptTemplates.AddOrUpdateAsync(tx, "error", "Identify any errors in the following student work(file of any type). List as few errors as possible with a very brief explanation, and return no empty lines:\n{0}", (key, value) => value);
@@ -42,7 +41,43 @@ namespace GradeAndAnalysesService
                 await _promptTemplates.AddOrUpdateAsync(tx, "score", "Evaluate the following work(file of any type). Provide a score between 0 and 100:\n{0}", (key, value) => value);
                 await tx.CommitAsync();
             }
+
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                try
+                {
+                    var uploads = await _uploadDatabase.GetAllUploads();
+                    if (uploads != null)
+                    {
+
+                        foreach (var upload in uploads)
+                        {
+
+                            if (upload.Review == null)
+                            {
+                                var review = await AnalyzeWork(upload);
+                                upload.Review = review;
+
+                                await _uploadDatabase.UpdateUpload(upload.Id, upload);
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ServiceEventSource.Current.ServiceMessage(Context, $"Error in background review processing: {ex.Message}");
+                }
+
+                await Task.Delay(TimeSpan.FromMinutes(3), cancellationToken);
+            }
         }
+
+
+        private readonly HttpClient _httpClient = new HttpClient();
+        private const string GEMINI_API_KEY = "AIzaSyBPBbg4TNRyJdcEehNJdF447G2WpsyiBlI";
+        private const string GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
+
+        private IReliableDictionary<string, string> _promptTemplates;
 
         public async Task<bool> SetPrompts(string errorPrompt, string improvementPrompt, string scorePrompt)
         {
