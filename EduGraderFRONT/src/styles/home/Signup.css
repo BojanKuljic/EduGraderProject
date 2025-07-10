@@ -12,8 +12,14 @@ body {
     justify-content: center;
     align-items: center;
     background: #23252a;
+    font-size: 25px;
 }
 
+.SignUp {
+    font-weight: 400;
+    font-size: 30px;
+    margin-top: 10px;
+}
 .Box2 {
     position: relative;
     width: 440px;
@@ -80,12 +86,16 @@ body {
     position: relative;
     width: 370px;
     margin-top: 40px;
+     -webkit-appearance: none;
+  appearance: none;
 }
 
 .InputBox2 input {
     position: relative;
     width: 100%;
-    padding: 25px 10px 25px 10px ;
+    /* height: 20px; */
+    padding: 25px 10px  ;
+    
     background: transparent;
     outline: none;
     border: none;

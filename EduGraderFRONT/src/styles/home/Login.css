@@ -23,6 +23,7 @@ body {
     border-radius: 10px;
     overflow: hidden;
     margin-top: 45px;
+    font-size: 20px;
 }
 
 
@@ -84,7 +85,8 @@ body {
     position: relative;
     width: 370px;
     margin-top: 50px;
-  
+    font-weight: bold;
+    font-size: 25px;
 }
 
 .inputBox input {
@@ -162,6 +164,7 @@ body {
   align-items: flex-start;
   margin-top:  30px;
   color: #b5acaf;
+  font-size: 25px;
 }
 
 .roleBox span {
