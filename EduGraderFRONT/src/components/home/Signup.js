@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-import "../styles/Signup.css";
+import "../../styles/home/Signup.css";
+import axios from "axios";
+import "react-toastify/dist/ReactToastify.css";
 
 const Signup = () => {
   const [form, setForm] = useState({
@@ -27,18 +29,15 @@ const Signup = () => {
     formData.append("role", form.role);
 
     try {
-      const response = await fetch("http://localhost:5000/signup", {
-        method: "POST",
-        body: formData,
-        credentials: "include",
+      const response = await axios.post("http://localhost:8845/signup", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
       });
 
-      if (response.ok) {
+      if (response.status === 200) {
         toast.success("Registration successful!");
         setTimeout(() => navigate("/login"), 1500);
       } else {
-        const errorData = await response.json();
-        toast.error(errorData.error || "Registration failed");
+        toast.error(response.data?.error || "Registration failed");
       }
     } catch (error) {
       toast.error("Network or server error!");
@@ -104,8 +103,8 @@ const Signup = () => {
               <input
                 type="radio"
                 name="role"
-                value="Profesor"
-                checked={form.role === "Profesor"}
+                value="Professor"
+                checked={form.role === "Professor"}
                 onChange={handleChange}
               />
               Professor

@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-import { useAuth } from "./AuthContext";
-import "../styles/Login.css";
+import { useAuth } from "../auth/AuthContext";
+import "../../styles/home/Login.css";
+import axios from "axios";
+import "react-toastify/dist/ReactToastify.css";
 
 const Login = () => {
   const { login } = useAuth();
@@ -20,34 +22,33 @@ const Login = () => {
     formData.append("role", role);
 
     try {
-      const response = await fetch("http://localhost:5000/login", {
-        method: "POST",
-        body: formData,
-        credentials: "include",
+      const response = await axios.post("http://localhost:8845/login", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
       });
 
-      if (response.ok) {
-        const data = await response.json();
+      if (response.status === 200) {
+        toast.success("Login successful!");
+        const data = response.data;
+
         login(data.role, email);
         sessionStorage.setItem("email", email);
 
         // Navigacija na osnovu role
         switch (data.role) {
           case "Admin":
-            navigate("/admin-dashboard");
+            navigate("/manageusers");
             break;
-          case "Profesor":
-            navigate("/professor-dashboard");
+          case "Professor":
+            navigate("/studentsuploads");
             break;
           case "Student":
-            navigate("/student-dashboard");
+            navigate("/upload");
             break;
           default:
-            navigate("/"); // fallback
+            navigate("/");
         }
       } else {
-        const errorData = await response.json();
-        toast.error(errorData.error || "Login failed");
+        toast.error(response.data.error || "Login failed");
       }
     } catch (error) {
       toast.error("Network or server error!");

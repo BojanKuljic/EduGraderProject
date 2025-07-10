@@ -1,0 +1,36 @@
+/* styles/home/Wellcome.css */
+
+.welcome-container {
+  max-width: 800px;
+  margin: 4rem auto;
+  padding: 2rem;
+  text-align: left;
+  background-color: #ffffffdd;
+  border-radius: 16px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+}
+
+.welcome-container h1 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: #1e1e2f;
+}
+
+.welcome-container p {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  line-height: 1.6;
+  color: #333;
+}
+
+.welcome-container ul {
+  margin-top: 0.5rem;
+  margin-left: 1.5rem;
+}
+
+.welcome-container .footer-note {
+  margin-top: 2rem;
+  font-style: italic;
+  font-weight: bold;
+  color: #0077aa;
+}

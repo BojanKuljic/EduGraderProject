@@ -112,7 +112,7 @@ namespace AllUsersService
 
             return false;
         }
-
+        
         public async Task<bool> ChangeUserRole(string email, string newRole)
         {
             return await _userDatabase.ChangeUserRoleAsync(email, newRole);

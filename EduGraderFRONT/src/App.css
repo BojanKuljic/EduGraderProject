@@ -1,6 +1,9 @@
 .App {
+  display: flex;
+  justify-content: center;
   text-align: center;
   background-color: #414344;
+  align-items: center;
   width: 100vw;  /* Širina prema veličini prozora */
   height: 100vh; /* Visina prema veličini prozora */
   overflow: auto;

@@ -48,3 +48,4 @@ export const PrivateRoute = ({ allowedRoles, children }) => {
 
   return children;
 };
+
