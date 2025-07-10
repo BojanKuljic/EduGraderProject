@@ -34,12 +34,16 @@ namespace AllUsersService
                 return false;
             }
 
+            // Ako nije validna rola, dodeli default "Student"
+            var validRoles = new List<string> { "Student", "Professor", "Admin" };
+            var roleToAssign = validRoles.Contains(user.role) ? user.role : "Student";
+
             var newUser = new User
             {
                 name = user.name,
                 email = user.email,
                 password = user.password,
-                role = "Student",
+                role = roleToAssign,
                 restrictions = new List<string>()
             };
 
