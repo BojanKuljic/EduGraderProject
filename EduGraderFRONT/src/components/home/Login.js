@@ -34,15 +34,17 @@ const Login = () => {
         sessionStorage.setItem("email", email);
 
         // Navigacija na osnovu role
+        // Izmeniti ovo posle kada implementiram stranice ostale i podesiti tosty za logovanje i onu automatsku popunjavanje bolje da moze al da sklonim ono belo okolo
+
         switch (data.role) {
           case "Admin":
-            navigate("/manageusers");
+            navigate("/welcome");
             break;
           case "Professor":
-            navigate("/studentsuploads");
+            navigate("/welcome");
             break;
           case "Student":
-            navigate("/upload");
+            navigate("/");
             break;
           default:
             navigate("/");
@@ -66,6 +68,7 @@ const Login = () => {
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+             autoComplete="off"
           />
           <span>Email</span>
           <i></i>
@@ -76,6 +79,7 @@ const Login = () => {
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+             autoComplete="off"
           />
           <span>Password</span>
           <i></i>

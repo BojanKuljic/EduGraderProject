@@ -48,7 +48,7 @@ const Signup = () => {
     <div className="Box2">
       <span className="BorderLine2"></span>
       <form onSubmit={handleSubmit}>
-        <h2>Sign Up</h2>
+        <h2 className="SignUp">Sign Up</h2>
 
         <div className="InputBox2">
           <input
@@ -57,6 +57,7 @@ const Signup = () => {
             name="name"
             value={form.name}
             onChange={handleChange}
+             autoComplete="off"
           />
           <span>Full Name</span>
           <i></i>
@@ -69,6 +70,7 @@ const Signup = () => {
             name="email"
             value={form.email}
             onChange={handleChange}
+             autoComplete="off"
           />
           <span>Email</span>
           <i></i>

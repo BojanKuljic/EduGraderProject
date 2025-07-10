@@ -36,15 +36,16 @@ const Navig = () => {
       {storedRole === "Guest" && (
         <nav className="navbar">
           <ul className="navbar-list">
+             <li className="navbar-item">
+              <NavLink to="/" className="navbar-link">Welcome</NavLink>
+            </li>
             <li className="navbar-item">
               <NavLink to="/login" className="navbar-link">Login</NavLink>
             </li>
             <li className="navbar-item">
               <NavLink to="/signup" className="navbar-link">Sign Up</NavLink>
             </li>
-            <li className="navbar-item">
-              <NavLink to="/" className="navbar-link">Welcome</NavLink>
-            </li>
+           
           </ul>
         </nav>
       )}
