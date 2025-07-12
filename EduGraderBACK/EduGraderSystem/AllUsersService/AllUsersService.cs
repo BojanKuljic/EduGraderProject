@@ -54,7 +54,7 @@ namespace AllUsersService
         public async Task<User> Login(Login request)
         {
             var user = await _userDatabase.GetUserByEmail(request.email);
-            if (user != null && user.password == request.password)
+            if (user != null && user.password == request.password && user.role == request.role)
             {
                 return user;
             }
