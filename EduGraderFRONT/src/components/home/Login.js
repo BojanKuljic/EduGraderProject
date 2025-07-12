@@ -44,7 +44,7 @@ const Login = () => {
             navigate("/welcome");
             break;
           case "Student":
-            navigate("/");
+            navigate("/upload");
             break;
           default:
             navigate("/");
@@ -53,8 +53,15 @@ const Login = () => {
         toast.error(response.data.error || "Login failed");
       }
     } catch (error) {
-      toast.error("Network or server error!");
-    }
+  if (error.response) {
+    // Backend je odgovorio sa error statusom (npr. 400, 401)
+    const errMsg = error.response.data || "Invalid credentials or role";
+    toast.error(typeof errMsg === "string" ? errMsg : JSON.stringify(errMsg));
+  } else {
+    // Mrežna greška
+    toast.error("Network error. Try again later.");
+  }
+}
   };
 
   return (
