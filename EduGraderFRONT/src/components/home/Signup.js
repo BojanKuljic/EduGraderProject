@@ -16,11 +16,24 @@ const Signup = () => {
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleRoleChange = (value) => {
+    setForm((prev) => ({
+      ...prev,
+      role: prev.role === value ? "" : value,
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!form.role) {
+      toast.error("Please select a role.");
+      return;
+    }
 
     const formData = new FormData();
     formData.append("name", form.name);
@@ -47,17 +60,17 @@ const Signup = () => {
   return (
     <div className="Box2">
       <span className="BorderLine2"></span>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} autoComplete="off">
         <h2 className="SignUp">Sign Up</h2>
 
         <div className="InputBox2">
           <input
             type="text"
-            required
             name="name"
+            required
             value={form.name}
             onChange={handleChange}
-             autoComplete="off"
+            autoComplete="off"
           />
           <span>Full Name</span>
           <i></i>
@@ -66,11 +79,11 @@ const Signup = () => {
         <div className="InputBox2">
           <input
             type="email"
-            required
             name="email"
+            required
             value={form.email}
             onChange={handleChange}
-             autoComplete="off"
+            autoComplete="off"
           />
           <span>Email</span>
           <i></i>
@@ -79,54 +92,47 @@ const Signup = () => {
         <div className="InputBox2">
           <input
             type="password"
-            required
             name="password"
+            required
             value={form.password}
             onChange={handleChange}
+            autoComplete="new-password"
           />
           <span>Password</span>
           <i></i>
         </div>
 
         <div className="roleBox">
-          <span>Role</span>
+          <span className={form.role ? "roleLabel active" : "roleLabel"}>Role</span>
           <div className="roleOptions">
-            <label>
-              <input
-                type="radio"
-                name="role"
-                value="Student"
-                checked={form.role === "Student"}
-                onChange={handleChange}
-              />
-              Student
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="role"
-                value="Professor"
-                checked={form.role === "Professor"}
-                onChange={handleChange}
-              />
-              Professor
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="role"
-                value="Admin"
-                checked={form.role === "Admin"}
-                onChange={handleChange}
-              />
-              Admin
-            </label>
+            {["Student", "Professor", "Admin"].map((role) => (
+              <label key={role}>
+                <input
+                  type="radio"
+                  name="role"
+                  value={role}
+                  checked={form.role === role}
+                  onChange={() => handleRoleChange(role)}
+                />
+                {role}
+              </label>
+            ))}
           </div>
         </div>
 
         <input type="submit" id="Submit2" value="Sign Up" />
+
+        <ToastContainer
+          position="top-center"
+          autoClose={2000}
+          hideProgressBar={false}
+          closeOnClick
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          style={{ marginTop: "60px" }}
+        />
       </form>
-      <ToastContainer />
     </div>
   );
 };

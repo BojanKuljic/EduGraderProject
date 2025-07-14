@@ -30,11 +30,10 @@ const Login = () => {
         toast.success("Login successful!");
         const data = response.data;
 
+        setTimeout(() => {
+          
         login(data.role, email);
         sessionStorage.setItem("email", email);
-
-        // Navigacija na osnovu role
-        // Izmeniti ovo posle kada implementiram stranice ostale i podesiti tosty za logovanje i onu automatsku popunjavanje bolje da moze al da sklonim ono belo okolo
 
         switch (data.role) {
           case "Admin":
@@ -49,6 +48,7 @@ const Login = () => {
           default:
             navigate("/");
         }
+         }, 2000);
       } else {
         toast.error(response.data.error || "Login failed");
       }
@@ -75,7 +75,7 @@ const Login = () => {
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-             autoComplete="off"
+            //  autoComplete="off"
           />
           <span>Email</span>
           <i></i>
@@ -86,23 +86,26 @@ const Login = () => {
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-             autoComplete="off"
+            //  autoComplete="off"
           />
           <span>Password</span>
           <i></i>
         </div>
 
         <div className="roleBox">
-          <span>Role</span>
-          <div className="roleOptions">
+          <span className={role ? "roleLabel active" : "roleLabel"}>
+            Role
+          </span>        
+            <div className="roleOptions">
             <label>
               <input
                 type="radio"
                 name="role"
                 value="Student"
                 checked={role === "Student"}
-                onChange={(e) => setRole(e.target.value)}
-              />
+                onChange={(e) => {
+                  setRole((prev) => (prev === e.target.value ? "" : e.target.value));
+                }} />
               Student
             </label>
             <label>
@@ -111,8 +114,9 @@ const Login = () => {
                 name="role"
                 value="Professor"
                 checked={role === "Professor"}
-                onChange={(e) => setRole(e.target.value)}
-              />
+                onChange={(e) => {
+                  setRole((prev) => (prev === e.target.value ? "" : e.target.value));
+                }} />
               Professor
             </label>
             <label>
@@ -121,8 +125,9 @@ const Login = () => {
                 name="role"
                 value="Admin"
                 checked={role === "Admin"}
-                onChange={(e) => setRole(e.target.value)}
-              />
+                onChange={(e) => {
+                  setRole((prev) => (prev === e.target.value ? "" : e.target.value));
+                }} />
               Admin
             </label>
           </div>
@@ -130,7 +135,17 @@ const Login = () => {
 
         <input type="submit" id="submit" value="Login" />
       </form>
-      <ToastContainer />
+      <ToastContainer
+        position="top-center"
+        autoClose={2000}
+        style={{ marginTop: "60px" }}
+        hideProgressBar={false}
+        newestOnTop={true}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover />
     </div>
   );
 };

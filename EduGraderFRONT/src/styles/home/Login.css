@@ -91,13 +91,16 @@ body {
 
 .inputBox input {
     position: relative;
+    border-radius: 5px;
     width: 100%;
-    padding: 25px 10px 25px 10px ;
+    height: 35px;
+    padding: 25px 10px 25px 8px;
+    margin: 25px 0px 15px 0px;
     background: transparent;
     outline: none;
     border: none;
-    color: #23252a;    
-    font-size: 0.9em;
+    color: #23252a;
+    font-size: 0.85em;
     letter-spacing: 0.05em;
     transition: 0.5s;
     z-index: 10;
@@ -126,6 +129,7 @@ body {
     left: 0;
     bottom: 0;
     width: 100%;
+    /* padding-top: 20px; */
     height: 2px;
     background: #fff;
     color: #1c1c1c;
@@ -167,6 +171,18 @@ body {
   font-size: 25px;
 }
 
+.roleLabel {
+  color: #b5acaf;
+  font-weight: normal;
+  transition: color 0.3s ease, font-weight 0.3s ease;
+}
+
+.roleLabel.active {
+  color: #fff;
+  font-weight: bold;
+}
+
+
 .roleBox span {
   margin-bottom: 15px;
 }
@@ -177,6 +193,10 @@ body {
   gap: 5px;
   font-size: 21px;
   margin-left: -15px;
+}
+
+.roleOptions input:checked {
+  accent-color: #32d9fa; /* Plavkasta nijansa kao u login dugmetu */
 }
 
 .roleOptions label {
