@@ -25,12 +25,28 @@ namespace APIController_Service.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromForm] Login request)
         {
-            var user = await _allUserService.Login(request);
-            if (user == null) return Unauthorized("Invalid credentials");
+            if (string.IsNullOrEmpty(request.email) )
+                return BadRequest("Email is required.");
+            if ( string.IsNullOrEmpty(request.password))
+                return BadRequest("Password is required.");
+            if ( string.IsNullOrEmpty(request.role))
+                return BadRequest("Role is required.");
+
+            var user = await _allUserService.GetUserByEmail(request.email);
+            if (user == null)
+                return Unauthorized("Incorrect email address.");
+
+            if (user.password != request.password)
+                return Unauthorized("Incorrect password.");
+
+            if (!string.Equals(user.role, request.role, StringComparison.OrdinalIgnoreCase))
+                return Unauthorized("Selected role does not match your account.");
 
             var isRestricted = await _allUserService.IsUserRestricted("login", user.email);
-            return isRestricted ? Unauthorized("User login is restricted") : Ok(user);
-        }
+            if (isRestricted)
+                return Unauthorized("User login is restricted.");
 
+            return Ok(user);
+        }
     }
 }
