@@ -1,0 +1,165 @@
+.status-container {
+  position: fixed;
+  top: 75px;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 90vh;
+  min-width: 45vw;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  background: rgba(25, 31, 48, 0.5);
+  padding: 20px 50px;
+  border-radius: 20px;
+  overflow-y: auto;
+  backdrop-filter: blur(10px); 
+  color: #ffffff;
+  font-family: "Poppins", sans-serif;
+  box-shadow: 0 0 10px rgba(136, 81, 191, 0.9);
+  z-index: 10;
+
+  scrollbar-width: none;          
+  -ms-overflow-style: none;        
+}
+
+.status-container::-webkit-scrollbar {
+  display: none;                  
+}
+
+.status-under-review {
+  color: #dea92f;
+  font-weight: bold;
+}
+
+.status-feedback {
+  color: #35fcad;
+  font-weight: bold;
+}
+
+.status-rejected {
+  color: #c84a4a;
+  font-weight: bold;
+}
+
+
+.status-title {
+  font-size: 36px;
+  margin-bottom: 10px;
+  color: #45f3ff;
+  text-shadow: 0 0 10px #45f3ff;
+}
+
+.no-uploads {
+  font-size: 22px;
+  color: #b5acaf;
+}
+
+.status-card {
+  background: #191f30;
+  padding: 20px;
+  margin: 25px;
+  width: 600px;
+  border-radius: 12px;
+  box-shadow: 0 0 8px #32d9fa;
+  transition: transform 0.5s ease;
+}
+
+.status-card:hover {
+  transform: translateY(-5px);
+}
+
+.status-card h3 {
+  font-size: 28px;
+color:  #45f3ff
+}
+
+.status-card p {
+  font-size: 18px;
+  margin: 5px 0;
+}
+
+
+.status-edit-toggle {
+  margin-top: 15px;
+  padding: 10px 18px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #0f131f;
+  background-color: #45f3ff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.status-edit-toggle:hover {
+  opacity: 0.85;
+}
+
+.status-edit-section {
+  margin-top: 20px;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  box-shadow: 0 0 8px #32d9fa;
+   display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 560px;
+}
+
+
+.status-edit-section label {
+  font-weight: 400;
+  font-size: 20px;
+}
+
+.upload-new-version,
+.revert-version {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  width: 90%;
+  margin: 10px auto;
+}
+
+/* INPUT za file i number */
+.upload-new-version input[type="file"],
+.revert-version input[type="number"] {
+  background-color: #2c2f3f;
+  border: 1px solid #45f3ff;
+  padding: 5px;
+  color: #fff;
+  border-radius: 6px;
+  font-size: 14px;
+  height: 45px;
+  flex: 1; /* zauzima sav prostor osim dugmeta */
+  box-sizing: border-box;
+}
+
+/* Dugmad za obe sekcije */
+.upload-new-version button,
+.revert-version button {
+  height: 45px;
+  padding: 0 16px;
+  font-size: 14px;
+  background-color: #45f3ff;
+  color: #0f131f;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  width: 100px;
+  flex-shrink: 0;
+
+}
+
+.upload-new-version button:hover,
+.revert-version button:hover {
+  opacity: 0.9;
+}
+

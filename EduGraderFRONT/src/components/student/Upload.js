@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import '../../styles/student/Upload.css';
 import { AuthContext } from '../auth/AuthContext';
-import toast from 'react-hot-toast';
+import { ToastContainer, toast } from "react-toastify";
 
 const Upload = () => {
   const { email } = useContext(AuthContext);
@@ -68,7 +68,13 @@ const Upload = () => {
         />
 
         <button type="submit" className="upload-button">Upload</button>
+      <ToastContainer
+        position="top-center"
+        autoClose={2000}
+        style={{ marginTop: "60px" }}
+        />
       </form>
+      
     </div>
   );
 };

@@ -9,7 +9,7 @@
   background: #0f131f;
   padding: 30px 40px;
   border-radius: 10px;
-  box-shadow: 0 0 10px #45f3ff;
+  box-shadow: 0 0 10px rgba(136, 81, 191, 0.9);
   display: flex;
   flex-direction: column;
   gap: 25px;
