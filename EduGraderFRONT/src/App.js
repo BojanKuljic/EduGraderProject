@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import Navig from "./components/home/Navig";
 import { PrivateRoute } from "./components/auth/AuthContext";
@@ -7,6 +7,8 @@ import { PrivateRoute } from "./components/auth/AuthContext";
 import Login from "./components/home/Login";
 import Signup from "./components/home/Signup";
 import Welcome from "./components/home/Welcome";
+import { useAuth } from "./components/auth/AuthContext";
+
 
 import Forbidden from "./components/auth/Forbidden";
 
@@ -28,9 +30,18 @@ import Suggestions from "./components/professor/Suggestions";
 import ManageAllUsers from "./components/admin/ManageAllUsers";
 import SystemsSettings from "./components/admin/SystemsSettings";
 
-import "./App.css";
 
+import "./App.css";
 function App() {
+  const { logout } = useAuth();
+
+  useEffect(() => {
+    // Resetuj sesiju i lokalni storage kad se aplikacija pokrene
+    logout(); // resetuje i React context
+    sessionStorage.clear();
+    localStorage.removeItem("authState");
+  }, []);
+
   return (
     <div className="App">
       <Navig />
@@ -42,106 +53,28 @@ function App() {
         <Route path="/forbidden" element={<Forbidden />} />
 
         {/* Student routes */}
-        <Route
-          path="/upload"
-          element={
-            <PrivateRoute allowedRoles={["Student"]}>
-              <Upload />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/status"
-          element={
-            <PrivateRoute allowedRoles={["Student"]}>
-              <Status />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/review"
-          element={
-            <PrivateRoute allowedRoles={["Student"]}>
-              <Review />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/recommendation"
-          element={
-            <PrivateRoute allowedRoles={["Student"]}>
-              <Recommendation />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/progress"
-          element={
-            <PrivateRoute allowedRoles={["Student"]}>
-              <Progress />
-            </PrivateRoute>
-          }
-        />
+        <Route element={<PrivateRoute allowedRoles={["Student"]} />}>
+          <Route path="/upload" element={<Upload />} />
+          <Route path="/status" element={<Status />} />
+          <Route path="/review" element={<Review />} />
+          <Route path="/recommendation" element={<Recommendation />} />
+          <Route path="/progress" element={<Progress />} />
+        </Route>
 
         {/* Professor routes */}
-        <Route
-          path="/studentsuploads"
-          element={
-            <PrivateRoute allowedRoles={["Professor"]}>
-              <StudentsUploads />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/grades"
-          element={
-            <PrivateRoute allowedRoles={["Professor"]}>
-              <Grades />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/generatedreport"
-          element={
-            <PrivateRoute allowedRoles={["Professor"]}>
-              <GeneratedReport />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/studentsprogress"
-          element={
-            <PrivateRoute allowedRoles={["Professor"]}>
-              <StudentsProgress />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/suggestions"
-          element={
-            <PrivateRoute allowedRoles={["Professor"]}>
-              <Suggestions />
-            </PrivateRoute>
-          }
-        />
+        <Route element={<PrivateRoute allowedRoles={["Professor"]} />}>
+          <Route path="/studentsuploads" element={<StudentsUploads />} />
+          <Route path="/grades" element={<Grades />} />
+          <Route path="/generatedreport" element={<GeneratedReport />} />
+          <Route path="/studentsprogress" element={<StudentsProgress />} />
+          <Route path="/suggestions" element={<Suggestions />} />
+        </Route>
 
         {/* Admin routes */}
-        <Route
-          path="/manageusers"
-          element={
-            <PrivateRoute allowedRoles={["Admin"]}>
-              <ManageAllUsers />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/systemsettings"
-          element={
-            <PrivateRoute allowedRoles={["Admin"]}>
-              <SystemsSettings />
-            </PrivateRoute>
-          }
-        />
+        <Route element={<PrivateRoute allowedRoles={["Admin"]} />}>
+          <Route path="/manageusers" element={<ManageAllUsers />} />
+          <Route path="/systemsettings" element={<SystemsSettings />} />
+        </Route>
       </Routes>
     </div>
   );

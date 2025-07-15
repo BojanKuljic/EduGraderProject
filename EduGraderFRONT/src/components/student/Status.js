@@ -6,6 +6,7 @@ import { ToastContainer, toast } from "react-toastify";
 const Status = () => {
     const [uploads, setUploads] = useState([]);
     const [expandedCard, setExpandedCard] = useState(null);
+    const [selectedFiles, setSelectedFiles] = useState({});
 
 
 
@@ -60,6 +61,7 @@ const Status = () => {
             link.href = URL.createObjectURL(blob);
             link.download = `${title}.pdf`;
             link.click();
+            toast.success("Download successful!");
         } catch (error) {
             toast.error("Download failed");
             console.error("Download error:", error);
@@ -72,15 +74,20 @@ const Status = () => {
 
     const handleUpdate = async (e, uploadId) => {
         const file = e.target.files[0];
-        if (!file) return;
+        if (!file) {
+            toast.error("Please select a file first.");
+            return;
+        }
         const formData = new FormData();
         formData.append("file", file);
         try {
             await axios.put(`http://localhost:8845/student/update?uploadId=${uploadId}`, formData, {
                 headers: { "Content-Type": "multipart/form-data" }
+                
             });
             toast.success("New version uploaded!");
-        } catch {
+        } catch(err) {
+             console.error("Upload failed:", err);
             toast.error("Upload failed.");
         }
     };
@@ -146,10 +153,29 @@ const Status = () => {
                                     </div>
 
                                     {/* Upload new version */}
-                                     <label >Upload New Version</label>
-                                    <div className="upload-new-version">                                       
-                                        <input  className="upload-input" type="file" accept=".pdf,.doc,.docx" onChange={(e) => handleUpdate(e, upload.id)} />
-                                        <button type="submit" >Upload</button>
+                                    <label>Upload New Version</label>
+                                    <div className="upload-new-version">
+                                        <input
+                                            className="upload-input"
+                                            type="file"
+                                            accept=".pdf,.doc,.docx"
+                                            
+                                            onChange={(e) =>
+                                                setSelectedFiles((prev) => ({
+                                                    ...prev,
+                                                    [upload.id]: e.target.files[0]
+                                                }))
+                                            }
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={(e) => {
+                                                const fileInputEvent = { target: { files: [selectedFiles[upload.id]] } };
+                                                handleUpdate(fileInputEvent, upload.id);
+                                            }}
+                                        >
+                                            Upload
+                                        </button>
                                     </div>
 
                                     {/* Revert version */}
@@ -172,7 +198,7 @@ const Status = () => {
             <ToastContainer
                 position="top-center"
                 autoClose={2000}
-                style={{ marginTop: "80px" }} />
+                style={{ marginTop: "0px" }} />
         </div>
     );
 };

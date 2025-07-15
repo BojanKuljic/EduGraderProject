@@ -9,7 +9,7 @@ const Welcome = () => {
         EduGrader is a smart system for automatic analysis and grading of educational work —
         including essays, code projects, and research tasks — powered by microservices and AI.
       </p>
-      <p className="description">
+      <div className="description">
         With EduGrader, you can:
         <ul>
           <li>📤 Upload your work and track different versions over time</li>
@@ -18,15 +18,15 @@ const Welcome = () => {
           <li>👨‍🏫 Receive expert feedback from professors</li>
           <li>🛠 Administrators can manage users and rules effortlessly</li>
         </ul>
-      </p>
-      <p className="roles">
-        👥 There are three roles in the system:
+      </div>
+      <label className="roles2">There are three roles in the system: 👥 </label>
+      <div className="roles">        
         <ul>
           <li><strong>Students</strong> – upload work and monitor progress</li>
           <li><strong>Professors</strong> – review and assess student work</li>
           <li><strong>Admins</strong> – manage users and system settings</li>
         </ul>
-      </p>
+      </div>
       <h4 className="footer-note">
         🔑 Log in or create an account to get started! 🔐
       </h4>

@@ -35,7 +35,9 @@ export const AuthContextProvider = ({ children }) => {
 export const useAuth = () => useContext(AuthContext);
 
 // Ruta za zaštitu stranica po rolama
-export const PrivateRoute = ({ allowedRoles, children }) => {
+import { Outlet } from "react-router-dom";
+
+export function PrivateRoute({ allowedRoles }) {
   const { isAuthenticated, role } = useAuth();
 
   if (!isAuthenticated) {
@@ -46,6 +48,6 @@ export const PrivateRoute = ({ allowedRoles, children }) => {
     return <Navigate to="/forbidden" replace />;
   }
 
-  return children;
-};
+  return <Outlet />;
+}
 

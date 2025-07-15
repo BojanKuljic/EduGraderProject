@@ -39,6 +39,12 @@ body {
   margin-bottom: 25px;
   color: #32d9fa;
 }
+.description,
+.roles
+{
+  font-size: 18px;
+  font-weight: 500;
+}
 
 .welcome-container p {
   font-size: 18px;
@@ -48,13 +54,24 @@ body {
 
 }
 
-.welcome-container ul {
+.description ul {
   margin-top: 10px;
-  padding-left: 20px;
+  padding-left: 30px;
+}
+
+.roles ul{
+  margin-top: 10px;
+  padding-left: 30px;
+}
+.roles2{
+  font-size: 20px;
+  /* margin-left: -20px; */
 }
 
 .welcome-container li {
   margin-bottom: 8px;
+    color: #e3e3e3;
+
 }
 
 .footer-note {

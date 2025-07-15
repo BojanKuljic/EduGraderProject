@@ -101,7 +101,7 @@ color:  #45f3ff
 .status-edit-section {
   margin-top: 20px;
   padding: 15px;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.03);
   border-radius: 10px;
   box-shadow: 0 0 8px #32d9fa;
    display: flex;
