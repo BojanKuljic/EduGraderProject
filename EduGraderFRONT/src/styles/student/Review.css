@@ -4,7 +4,7 @@
   left: 50%;
   transform: translateX(-50%);
   max-height: 85vh;
-  min-width: 50vw;
+  width: 750px;
   margin: 40px auto;
   padding: 30px 30px;
   background-color: #1c1f2b;
@@ -19,6 +19,7 @@
 
 .review-container h2 {
   text-align: center;
+  font-size: 30px;
   color: #45f3ff;
   margin-bottom: 20px;
 }
@@ -41,6 +42,7 @@
   max-height: 58vh;      
   overflow-y: auto;
  font-size: 18px;
+  box-shadow: 0 0 10px #45f3ff;
 
   /* Sakrivanje scrollbara */
   scrollbar-width: none;          
@@ -51,10 +53,12 @@
   display: none;
 }
 .review-details .grade {
-  color: #fa78d5;
   font-weight: bold;
-  font-size: 24px;
+  font-size: 25px;
+  margin-left: 10px;
 }
+
+
 
 .review-section {
   margin-top: 20px;

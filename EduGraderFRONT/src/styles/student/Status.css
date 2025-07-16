@@ -1,34 +1,40 @@
 .status-container {
   position: fixed;
-  top: 75px;
+  top: 65px;
   left: 50%;
   transform: translateX(-50%);
-  height: 90vh;
-  min-width: 45vw;
-
+  height: 86vh;
+  width: 750px;
+  margin: 40px auto;
   display: flex;
-  flex-direction: column;
+  flex-direction: column; 
   align-items: center;
-
-  background: rgba(25, 31, 48, 0.5);
-  padding: 20px 50px;
+  background-color: #1c1f2b;
+  padding: 20px;
   border-radius: 20px;
-  backdrop-filter: blur(10px); 
   color: #ffffff;
   font-family: "Poppins", sans-serif;
-  box-shadow: 0 0 10px rgba(136, 81, 191, 0.9);
+  box-shadow: 0 0 10px #45f3ff;
   z-index: 10;
   overflow: hidden;
 
-       
 }
 
 .status-list{
-  margin: 30px;
-  max-height: 80vh;
+  margin: 20px 0px ;
+width: 700px;
    overflow-y: auto;
   scrollbar-width: none;          
   -ms-overflow-style: none;  
+}
+
+.status-card {
+  background: #2c2f3f;
+  padding: 20px;
+  margin: 30px 10px;
+  border-radius: 12px;
+  box-shadow: 0 0 8px #32d9fa;
+  transition: transform 0.5s ease;
 }
 
 .status-container::-webkit-scrollbar {
@@ -63,23 +69,20 @@
   color: #b5acaf;
 }
 
-.status-card {
-  background: #191f30;
-  padding: 20px;
-  margin: 25px;
-  width: 600px;
-  border-radius: 12px;
-  box-shadow: 0 0 8px #32d9fa;
-  transition: transform 0.5s ease;
-}
+
 
 .status-card:hover {
   transform: translateY(-5px);
 }
 
 .status-card h3 {
-  font-size: 28px;
-color:  #45f3ff
+  color:  #45f3ff;
+    font-size: 25px;
+}
+
+.status-container h2 {
+  color:  #45f3ff;
+    font-size: 30px;
 }
 
 .status-card p {
@@ -116,7 +119,7 @@ color:  #45f3ff
   justify-content: center;
   align-items: center;
   text-align: center;
-  width: 560px;
+  width: 640px;
 }
 
 

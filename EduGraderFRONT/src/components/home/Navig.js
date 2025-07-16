@@ -57,8 +57,8 @@ const Navig = () => {
             <li className="navbar-item"><NavLink to="/upload" className="navbar-link">Upload</NavLink></li>
             <li className="navbar-item"><NavLink to="/status" className="navbar-link">Status</NavLink></li>
             <li className="navbar-item"><NavLink to="/review" className="navbar-link">Review</NavLink></li>
-            <li className="navbar-item"><NavLink to="/recommendation" className="navbar-link">Recommendation</NavLink></li>
             <li className="navbar-item"><NavLink to="/progress" className="navbar-link">Progress</NavLink></li>
+            <li className="navbar-item"><NavLink to="/recommendation" className="navbar-link">Recommendation</NavLink></li>
             <li className="navbar-item"><button className="logout-button" onClick={handleLogout}>Logout</button></li>
           </ul>
         </nav>

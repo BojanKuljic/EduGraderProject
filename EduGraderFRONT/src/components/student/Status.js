@@ -83,11 +83,11 @@ const Status = () => {
         try {
             await axios.put(`http://localhost:8845/student/update?uploadId=${uploadId}`, formData, {
                 headers: { "Content-Type": "multipart/form-data" }
-                
+
             });
             toast.success("New version uploaded!");
-        } catch(err) {
-             console.error("Upload failed:", err);
+        } catch (err) {
+            console.error("Upload failed:", err);
             toast.error("Upload failed.");
         }
     };
@@ -123,6 +123,25 @@ const Status = () => {
         return isNaN(date.getTime()) ? "Invalid date" : date.toLocaleString();
     };
 
+
+   const formatReviewTime = (milliseconds) => {
+  if (!milliseconds || isNaN(milliseconds)) return "N/A";
+
+  const totalSeconds = Math.floor(milliseconds / 1000);
+  const hrs = Math.floor(totalSeconds / 3600);
+  const mins = Math.floor((totalSeconds % 3600) / 60);
+  const secs = totalSeconds % 60;
+
+  const parts = [];
+  if (hrs > 0) parts.push(`${hrs}h`);
+  if (mins > 0) parts.push(`${mins}m`);
+  if (secs > 0 || parts.length === 0) parts.push(`${secs}s`);
+
+  return parts.join(" ");
+};
+
+
+
     return (
         <div className="status-container">
             <h2>Status of All Student Works </h2>
@@ -137,7 +156,7 @@ const Status = () => {
                             <p><strong>Active version:</strong> {upload.activeVersion}</p>
                             <p><strong>Status:</strong> {formatStatus(upload.status)}</p>
                             <p><strong>Upload date:</strong> {formatDate(upload.uploadDate)}</p>
-                            <p><strong>Estimated review time:</strong> {formatDate(upload.usualReviewTime)}</p>
+                            <p><strong>Estimated review time:</strong> {formatReviewTime(upload.usualReviewTime)}</p>
 
                             <button className="status-edit-toggle" onClick={() => toggleEditSection(upload.id)}>
                                 {expandedCard === upload.id ? "Close Edit Panel" : "Edit Upload"}
@@ -146,10 +165,10 @@ const Status = () => {
                             {expandedCard === upload.id && (
                                 <div className="status-edit-section">
                                     {/* Download */}
-                                     <label>Download Current File </label> 
-                                    <div className="upload-new-version ">                                        
+                                    <label>Download Current File </label>
+                                    <div className="upload-new-version ">
                                         <button onClick={() => handleDownload(upload.id, upload.title)}>Download</button>
-                                        
+
                                     </div>
 
                                     {/* Upload new version */}
@@ -159,7 +178,7 @@ const Status = () => {
                                             className="upload-input"
                                             type="file"
                                             accept=".pdf,.doc,.docx"
-                                            
+
                                             onChange={(e) =>
                                                 setSelectedFiles((prev) => ({
                                                     ...prev,
@@ -180,7 +199,7 @@ const Status = () => {
 
                                     {/* Revert version */}
                                     <label>Revert to Version</label>
-                                    <div className="revert-version">                                        
+                                    <div className="revert-version">
                                         <input
                                             type="number"
                                             placeholder="e.g. 1"

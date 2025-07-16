@@ -1,0 +1,59 @@
+.progress-container {
+  position: fixed;
+  top: 65px;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 86vh;
+  width: 750px; 
+  margin: 40px auto;
+  padding: 30px 40px;
+  background-color: #1c1f2b;
+  border-radius: 12px;
+  box-shadow: 0 0 10px #45f3ff;
+  color: #ffffff;
+  overflow-y: none;
+}
+
+.progress-container h2 {
+  text-align: center;
+  font-size: 30px;
+  margin-bottom: 25px;
+  color: #45f3ff;
+}
+
+.progress-details {
+  background: #2c2f3f;
+  padding: 20px;
+  border-radius: 8px;
+  font-size: 18px;
+  line-height: 1.6;
+  box-shadow: 0 0 8px #45f3ff;
+
+}
+
+.no-data {
+  text-align: center;
+  margin-top: 40px;
+  font-size: 18px;
+  color: #ccc;
+}
+
+
+.chart-container {
+  margin-top: 40px;
+  padding: 20px;
+  background: #2c2f3f;
+  border-radius: 10px;
+  box-shadow: 0 0 8px #45f3ff;
+  text-align: center;
+height: auto;
+  overflow-y: auto;
+  scrollbar-width: none;          
+  -ms-overflow-style: none;  
+}
+
+.chart-container h3 {
+  margin-bottom: 20px;
+  font-size: 25px;
+  color: #45f3ff;
+}
