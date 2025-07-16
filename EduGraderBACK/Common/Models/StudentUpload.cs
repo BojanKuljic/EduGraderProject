@@ -37,7 +37,7 @@ namespace Common.Models
         public DateTime UploadDate { get; set; }
 
         [BsonElement("usualReviewTime")]
-        public DateTime? UsualReviewTime { get; set; }
+        public long? UsualReviewTime { get; set; }
 
         [BsonElement("reiew")]
         public Review Review { get; set; }

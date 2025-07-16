@@ -62,7 +62,11 @@ namespace ProgressService
             List<StudentUpload> studentWorks = await _uploadDatabase.GetAllUploads();
 
             var graded = studentWorks
-                .Where(w => w.Review != null)
+                .Where(w =>
+                    w.Review != null &&
+                    w.Review.Grade >= 5 && w.Review.Grade <= 10 &&
+                    !string.Equals(w.Review.Errors?.Trim(), "Error when automatic grading", StringComparison.OrdinalIgnoreCase)
+                )
                 .Select(w => w.Review.Grade)
                 .ToList();
 
@@ -71,6 +75,7 @@ namespace ProgressService
 
             return Math.Round(graded.Average(), 2);
         }
+
 
         public async Task<List<(DateTime Timestamp, double Grade)>> GetAllGradesWithTimestamps()
         {
@@ -96,24 +101,30 @@ namespace ProgressService
 
         public async Task<UploadProgress> GenerateStudentProgress(string email, List<StudentUpload> studentWorks)
         {
-            var relevantWorks = studentWorks.Where(w => w.Email == email && w.Review != null).ToList();
+            // Filtriraj samo radove za datog studenta koji imaju validan review i ocenu od 5 do 10
+            var relevantWorks = studentWorks
+                .Where(w =>
+                    w.Email == email &&
+                    w.Review != null &&
+                    w.Review.Grade >= 5 && w.Review.Grade <= 10 &&
+                    !string.Equals(w.Review.Errors?.Trim(), "Error when automatic grading", StringComparison.OrdinalIgnoreCase)
+                )
+                .ToList();
 
             int uploadNum = relevantWorks.Count;
-            double averageGrade = uploadNum > 0
-                ? relevantWorks.Average(w => w.Review.Grade)
-                : 0;
 
-            var scoreHistory = relevantWorks
-                .OrderBy(w => w.UploadDate)
-                .ToDictionary(w => w.UploadDate, w => w.Review.Grade);
+            double averageGrade = uploadNum > 0
+                ? Math.Round(relevantWorks.Average(w => w.Review.Grade), 2)
+                : 0;
 
             return new UploadProgress
             {
                 Email = email,
                 TotalWorks = uploadNum,
-                AverageGrade = Math.Round(averageGrade, 2),
+                AverageGrade = averageGrade
             };
         }
+
 
 
         protected override IEnumerable<ServiceInstanceListener> CreateServiceInstanceListeners() => this.CreateServiceRemotingInstanceListeners();

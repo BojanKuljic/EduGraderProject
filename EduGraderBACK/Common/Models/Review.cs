@@ -16,7 +16,10 @@ namespace Common.Models
         public string Errors { get; set; } 
 
         [BsonElement("improvements")]
-        public string Improvements { get; set; } 
+        public string Improvements { get; set; }
+
+        [BsonIgnore] // ovo sprečava da se snima u Review dokument u bazi
+        public long UsualReviewTime { get; set; }
 
         [BsonElement("recommendations")]
         public string Recommendations { get; set; }
