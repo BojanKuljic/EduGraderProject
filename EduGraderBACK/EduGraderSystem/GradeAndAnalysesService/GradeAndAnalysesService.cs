@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Fabric;
 using System.Globalization;
@@ -39,6 +39,10 @@ namespace GradeAndAnalysesService
                 await _promptTemplates.AddOrUpdateAsync(tx, "error", "Identify any errors in the following student work(file of any type). List as few errors as possible with a very brief explanation, and return no empty lines:\n{0}", (key, value) => value);
                 await _promptTemplates.AddOrUpdateAsync(tx, "improvement", "Suggest improvements for the following work(file of any type). Provide brief actionable feedback, and return no empty lines:\n{0}", (key, value) => value);
                 await _promptTemplates.AddOrUpdateAsync(tx, "score", "Evaluate the following work(file of any type). Provide a score between 0 and 100:\n{0}", (key, value) => value);
+                await _promptTemplates.AddOrUpdateAsync(tx, "recommendation",
+                    "Based on the analysis of this student work, provide personalized recommendations for further learning. Include relevant online resources such as courses, articles, or books. Format as a list with links if possible:\n{0}",
+                     (key, value) => value);
+
                 await tx.CommitAsync();
             }
 
@@ -57,6 +61,17 @@ namespace GradeAndAnalysesService
                             {
                                 var review = await AnalyzeWork(upload);
                                 upload.Review = review;
+                                upload.UsualReviewTime = review.UsualReviewTime;
+
+                                // Ako je ocena 0 ili došlo do greške — odbij
+                                if (review.Grade == 0 || string.IsNullOrWhiteSpace(review.Improvements))
+                                {
+                                    upload.Status = Status.Rejected;
+                                }
+                                else
+                                {
+                                    upload.Status = Status.FeedbackReady;
+                                }
 
                                 await _uploadDatabase.UpdateUpload(upload.Id, upload);
                             }
@@ -120,6 +135,8 @@ namespace GradeAndAnalysesService
 
             UploadVersion versionToAnalyze = studentUpload.Versions.FirstOrDefault(v => v.VersionNumber == studentUpload.ActiveVersion);
 
+
+
             if (versionToAnalyze == null)
                 return new Review { Grade = 0, Errors = "Invalid work version"  };
 
@@ -128,19 +145,33 @@ namespace GradeAndAnalysesService
                 return new Review { Grade = 0, Errors = "Failed to download file"  };
 
             string extractedText = Encoding.UTF8.GetString(fileData);
-            return await GetAIAnalysis(extractedText);
+
+            // Početak merenja vremena
+            var stopwatch = System.Diagnostics.Stopwatch.StartNew();
+
+            //Analiza
+            var review = await GetAIAnalysis(extractedText);
+
+            //Kraj merenja
+            stopwatch.Stop();
+            review.UsualReviewTime = stopwatch.ElapsedMilliseconds; // u milisekundama (long)
+            return review;
+
         }
 
         private async Task<Review> GetAIAnalysis(string textContent)
         {
             try
             {
-                string errorPrompt, improvementPrompt, scorePrompt;
+                string errorPrompt, improvementPrompt, scorePrompt, recommendationPrompt;
                 using (var tx = this.StateManager.CreateTransaction())
                 {
                     var errorResult = await _promptTemplates.TryGetValueAsync(tx, "error").ConfigureAwait(false);
                     var improvementResult = await _promptTemplates.TryGetValueAsync(tx, "improvement").ConfigureAwait(false);
                     var scoreResult = await _promptTemplates.TryGetValueAsync(tx, "score").ConfigureAwait(false);
+                    var recommendationResult = await _promptTemplates.TryGetValueAsync(tx, "recommendation").ConfigureAwait(false);
+                    recommendationPrompt = string.Format(recommendationResult.HasValue ? recommendationResult.Value : "", textContent);
+
 
                     errorPrompt = string.Format(errorResult.HasValue ? errorResult.Value : "", textContent);
                     improvementPrompt = string.Format(improvementResult.HasValue ? improvementResult.Value : "", textContent);
@@ -151,6 +182,7 @@ namespace GradeAndAnalysesService
                 string errors = await GetAIResponse(errorPrompt);
                 string improvements = await GetAIResponse(improvementPrompt);
                 string scoreResponse = await GetAIResponse(scorePrompt);
+                string recommendations = await GetAIResponse(recommendationPrompt);
 
                 int score = ExtractScore(scoreResponse);
 
@@ -159,7 +191,7 @@ namespace GradeAndAnalysesService
                     Grade = score,
                     Errors = errors,
                     Improvements = improvements,
-                    Recommendations = "No recommendations available"
+                    Recommendations = recommendations
                 };
             }
             catch (Exception ex)
@@ -190,19 +222,29 @@ namespace GradeAndAnalysesService
             return result?.candidates?.FirstOrDefault()?.content?.parts?.FirstOrDefault()?.text ?? "No response";
         }
 
+
         private int ExtractScore(string aiResponse)
         {
             if (string.IsNullOrEmpty(aiResponse))
-                return 0;
+                return 5;
 
             var match = Regex.Match(aiResponse, @"\b([0-9]{1,3})\b");
-            if (match.Success && int.TryParse(match.Value, out int score))
+            if (match.Success && int.TryParse(match.Value, out int rawScore))
             {
-                return Math.Clamp(score, 0, 100);
+                int clamped = Math.Clamp(rawScore, 0, 100);
+
+                // 🎓 Mapiraj na akademsku skalu od 5 do 10
+                if (clamped < 50) return 5;              // Ne prolazi
+                if (clamped < 60) return 6;
+                if (clamped < 70) return 7;
+                if (clamped < 85) return 8;
+                if (clamped < 95) return 9;
+                return 10;                               // Najveća ocena
             }
 
-            return 50;
+            return 5;
         }
+
 
 
         protected override IEnumerable<ServiceReplicaListener> CreateServiceReplicaListeners() => this.CreateServiceRemotingReplicaListeners();
