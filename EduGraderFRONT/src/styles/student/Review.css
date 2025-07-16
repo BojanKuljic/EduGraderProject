@@ -1,0 +1,71 @@
+.review-container {
+  position: fixed;
+  top: 65px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-height: 85vh;
+  min-width: 50vw;
+  margin: 40px auto;
+  padding: 30px 30px;
+  background-color: #1c1f2b;
+  border-radius: 12px;
+  box-shadow: 0 0 10px #45f3ff;
+  color: #ffffff;
+
+
+  overflow-y: none; 
+  z-index: 10;      
+}
+
+.review-container h2 {
+  text-align: center;
+  color: #45f3ff;
+  margin-bottom: 20px;
+}
+
+.review-container select {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0 30px;
+  border: 1px solid #45f3ff;
+  background-color: #2c2f3f;
+  color: white;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+.review-details {
+  background: #2c2f3f;
+  padding: 20px;
+  border-radius: 8px;
+  max-height: 58vh;      
+  overflow-y: auto;
+ font-size: 18px;
+
+  /* Sakrivanje scrollbara */
+  scrollbar-width: none;          
+  -ms-overflow-style: none;
+}
+
+.review-details::-webkit-scrollbar {
+  display: none;
+}
+.review-details .grade {
+  color: #fa78d5;
+  font-weight: bold;
+  font-size: 24px;
+}
+
+.review-section {
+  margin-top: 20px;
+}
+
+.review-section h4 {
+  color: #45f3ff;
+  margin-bottom: 8px;
+}
+
+.review-section p {
+  line-height: 1.6;
+  white-space: pre-line;
+}

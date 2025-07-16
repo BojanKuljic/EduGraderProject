@@ -13,15 +13,22 @@
   background: rgba(25, 31, 48, 0.5);
   padding: 20px 50px;
   border-radius: 20px;
-  overflow-y: auto;
   backdrop-filter: blur(10px); 
   color: #ffffff;
   font-family: "Poppins", sans-serif;
   box-shadow: 0 0 10px rgba(136, 81, 191, 0.9);
   z-index: 10;
+  overflow: hidden;
 
+       
+}
+
+.status-list{
+  margin: 30px;
+  max-height: 80vh;
+   overflow-y: auto;
   scrollbar-width: none;          
-  -ms-overflow-style: none;        
+  -ms-overflow-style: none;  
 }
 
 .status-container::-webkit-scrollbar {
