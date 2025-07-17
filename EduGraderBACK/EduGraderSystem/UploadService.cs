@@ -80,6 +80,12 @@ namespace UploadService
             return uploads;
         }
 
+        public async Task<List<StudentUpload>> GetAllUploads()
+        {
+            var allUploads = await _uploadDatabase.GetAllUploads();
+            return allUploads ?? new List<StudentUpload>();
+        }
+
         public async Task<Review> GetReview(string uploadId)
         {
             var upload = await _uploadDatabase.GetUpload(uploadId);

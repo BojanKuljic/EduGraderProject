@@ -16,6 +16,8 @@ namespace Common.Services
         Task<StudentUpload> GetStudentUpload(string id);
 
         Task<List<StudentUpload>> GetAllStudentUploads(string email);
+        Task<List<StudentUpload>> GetAllUploads();
+
 
         Task<Review> GetReview(string id);
 

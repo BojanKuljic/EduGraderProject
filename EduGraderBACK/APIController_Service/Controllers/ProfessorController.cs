@@ -30,6 +30,17 @@ namespace APIController_Service.Controllers
             return Ok();
         }
 
+        [HttpGet("professor/allUploads")]
+        public async Task<IActionResult> GetAllStudentUploads()
+        {
+            var all = await _uploadService.GetAllUploads();
+
+            if (all == null || !all.Any())
+                return NotFound("No uploads found.");
+
+            return Ok(all);
+        }
+
         [HttpPut("professor/commonMistakeReport")]
         public async Task<IActionResult> ProfessorsReport()
         {
