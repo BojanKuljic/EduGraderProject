@@ -78,7 +78,7 @@ const Review = () => {
                     </div>
                     <div className="review-section">
                         <h4>Recommendations</h4>
-                        <p>"For Personalized Recommendations by system click on Recommendation tab"</p>
+                        <p>"For Personalized Recommendations by System or Professor click on Recommendation tab"</p>
                         {/* <p>{review.recommendations || "No recommendations provided."}</p> */}
                     </div>
                 </div>
