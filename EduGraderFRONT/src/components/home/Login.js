@@ -40,7 +40,7 @@ const Login = () => {
             navigate("/welcome");
             break;
           case "Professor":
-            navigate("/welcome");
+            navigate("/studentsuploads");
             break;
           case "Student":
             navigate("/upload");

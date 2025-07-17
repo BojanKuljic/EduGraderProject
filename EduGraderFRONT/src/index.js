@@ -7,10 +7,15 @@ import reportWebVitals from './reportWebVitals';
 import { AuthContextProvider } from './components/auth/AuthContext';
 import { Toaster } from 'react-hot-toast';
 
-// 🔁 Resetuj sve pre nego se app učita
-localStorage.removeItem("authState");
-sessionStorage.removeItem("email");
-sessionStorage.removeItem("role");
+// Reset session only on first full page load (not refresh)
+const navEntry = performance.getEntriesByType("navigation")[0];
+const isFirstLoad = navEntry?.type === "navigate";
+
+if (isFirstLoad && window.location.hostname === "localhost") {
+  console.log("First load - clearing session");
+  sessionStorage.clear();
+  localStorage.removeItem("authState");
+}
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 

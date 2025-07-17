@@ -68,8 +68,8 @@ const Navig = () => {
       {storedRole === 'Professor' && (
         <nav className="navbar">
           <ul className="navbar-list">
-            <li className="navbar-item"><NavLink to="/studentsuploads" className="navbar-link">Student Uploads</NavLink></li>
-            <li className="navbar-item"><NavLink to="/grades" className="navbar-link">Grades</NavLink></li>
+            <li className="navbar-item"><NavLink to="/studentsuploads" className="navbar-link">Overview Uploads</NavLink></li>
+            {/* <li className="navbar-item"><NavLink to="/grades" className="navbar-link">Grades</NavLink></li> */}
             <li className="navbar-item"><NavLink to="/generatedreport" className="navbar-link">Generated Report</NavLink></li>
             <li className="navbar-item"><NavLink to="/studentsprogress" className="navbar-link">Students Progress</NavLink></li>
             <li className="navbar-item"><NavLink to="/suggestions" className="navbar-link">Suggestions</NavLink></li>

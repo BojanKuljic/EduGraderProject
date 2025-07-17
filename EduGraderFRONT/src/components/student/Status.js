@@ -18,7 +18,7 @@ const Status = () => {
                 const response = await axios.get(`http://localhost:8845/student/${email}/allUploads`);
                 setUploads(response.data);
             } catch (error) {
-                toast.error("Failed to load uploads");
+                toast.error("Failed to load or student does`t uploads");
             }
         };
 

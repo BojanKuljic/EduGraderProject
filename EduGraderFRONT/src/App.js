@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import Navig from "./components/home/Navig";
 import { PrivateRoute } from "./components/auth/AuthContext";
@@ -8,7 +8,6 @@ import Login from "./components/home/Login";
 import Signup from "./components/home/Signup";
 import Welcome from "./components/home/Welcome";
 import { useAuth } from "./components/auth/AuthContext";
-
 
 import Forbidden from "./components/auth/Forbidden";
 
@@ -32,15 +31,8 @@ import SystemsSettings from "./components/admin/SystemsSettings";
 
 
 import "./App.css";
-function App() {
-  const { logout } = useAuth();
 
-  useEffect(() => {
-    // Resetuj sesiju i lokalni storage kad se aplikacija pokrene
-    logout(); // resetuje i React context
-    sessionStorage.clear();
-    localStorage.removeItem("authState");
-  }, []);
+function App() {
 
   return (
     <div className="App">
