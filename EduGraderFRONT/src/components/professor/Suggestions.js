@@ -14,7 +14,8 @@ function Suggestions() {
         const fetchUploads = async () => {
             try {
                 const response = await axios.get("http://localhost:8845/professor/allUploads");
-                setUploads(response.data);
+                 const sortedUploads = response.data.sort((a, b) => new Date(b.uploadDate) - new Date(a.uploadDate));
+                setUploads(sortedUploads);
             } catch (error) {
                 console.error("Error fetching uploads:", error);
             }

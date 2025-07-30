@@ -11,18 +11,19 @@ function StudentsUploads() {
     }
 
 
-    useEffect(() => {
-        const fetchUploads = async () => {
-            try {
-                const response = await axios.get("http://localhost:8845/professor/allUploads");
-                setUploads(response.data);
-            } catch (error) {
-                console.error("Error fetching uploads:", error);
-            }
-        };
+useEffect(() => {
+    const fetchUploads = async () => {
+        try {
+            const response = await axios.get("http://localhost:8845/professor/allUploads");
+            const sortedUploads = response.data.sort((a, b) => new Date(b.uploadDate) - new Date(a.uploadDate));
+            setUploads(sortedUploads);
+        } catch (error) {
+            console.error("Error fetching uploads:", error);
+        }
+    };
 
-        fetchUploads();
-    }, []);
+    fetchUploads();
+}, []);
 
     const formatStatus = (status) => {
         switch (status) {

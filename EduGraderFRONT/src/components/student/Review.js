@@ -13,7 +13,8 @@ const Review = () => {
         const fetchUploads = async () => {
             try {
                 const res = await axios.get(`http://localhost:8845/student/${email}/allUploads`);
-                setUploads(res.data || []);
+                 const sortedUploads = res.data.sort((a, b) => new Date(b.uploadDate) - new Date(a.uploadDate));
+                setUploads(sortedUploads || []);
             } catch (error) {
                 toast.error("Failed to fetch uploads.");
             }

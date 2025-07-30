@@ -16,7 +16,8 @@ const Status = () => {
         const fetchUploads = async () => {
             try {
                 const response = await axios.get(`http://localhost:8845/student/${email}/allUploads`);
-                setUploads(response.data);
+                 const sortedUploads = response.data.sort((a, b) => new Date(b.uploadDate) - new Date(a.uploadDate));
+                setUploads(sortedUploads);
             } catch (error) {
                 toast.error("Failed to load or student does`t uploads");
             }
