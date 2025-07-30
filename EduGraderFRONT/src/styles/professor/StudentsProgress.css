@@ -1,0 +1,50 @@
+@import "./StudentsUploads.css";
+
+.filters {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.filters input,
+.filters select {
+  padding: 8px;
+  border: 1px solid #3c4ccb;
+  border-radius: 6px;
+  background-color: #1c1f2b;
+  color: #fff;
+  font-size: 14px;
+  flex: 1;
+}
+
+.filters button {
+ display: block;
+margin: 0 auto;
+  padding: 10px 20px;
+  background-color: #3c4ccb;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.filters button:hover {
+  transform: scale(1.03);
+}
+
+.report-box {
+  margin-top: 15px;
+  background-color: #2c2f3f;
+  border: 1px solid #3c4ccb;
+  border-radius: 8px;
+  padding: 15px;
+  color: #fff;
+  font-size: 16px;
+  text-align: center;
+  box-shadow: 0 0 8px #3c4ccb;
+}
+

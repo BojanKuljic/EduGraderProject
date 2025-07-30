@@ -15,15 +15,15 @@ import Forbidden from "./components/auth/Forbidden";
 import Upload from "./components/student/Upload";
 import Status from "./components/student/Status";
 import Review from "./components/student/Review";
-import Recommendation from "./components/student/Recommendation";
 import Progress from "./components/student/Progress";
+import Recommendation from "./components/student/Recommendation";
 
 // Professor Components
 import StudentsUploads from "./components/professor/StudentsUploads";
-import Grades from "./components/professor/Grades";
-import GeneratedReport from "./components/professor/GeneratedReport";
-import StudentsProgress from "./components/professor/Studentsprogress";
 import Suggestions from "./components/professor/Suggestions";
+import StudentsProgress from "./components/professor/StudentsProgress";
+import GeneratedReport from "./components/professor/GeneratedReport";
+
 
 // Admin Components
 import ManageAllUsers from "./components/admin/ManageAllUsers";
@@ -49,17 +49,17 @@ function App() {
           <Route path="/upload" element={<Upload />} />
           <Route path="/status" element={<Status />} />
           <Route path="/review" element={<Review />} />
-          <Route path="/recommendation" element={<Recommendation />} />
-          <Route path="/progress" element={<Progress />} />
+           <Route path="/progress" element={<Progress />} />
+          <Route path="/recommendation" element={<Recommendation />} />         
         </Route>
 
         {/* Professor routes */}
         <Route element={<PrivateRoute allowedRoles={["Professor"]} />}>
           <Route path="/studentsuploads" element={<StudentsUploads />} />
-          <Route path="/grades" element={<Grades />} />
-          <Route path="/generatedreport" element={<GeneratedReport />} />
-          <Route path="/studentsprogress" element={<StudentsProgress />} />
           <Route path="/suggestions" element={<Suggestions />} />
+          <Route path="/studentsprogress" element={<StudentsProgress />} />
+          <Route path="/generatedreport" element={<GeneratedReport />} />
+                    
         </Route>
 
         {/* Admin routes */}
