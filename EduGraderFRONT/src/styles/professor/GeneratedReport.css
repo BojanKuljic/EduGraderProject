@@ -1,0 +1,52 @@
+.students-uploads-container {
+  position: fixed;
+  top: 65px;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 86vh;
+  width: 750px;
+  margin: 40px auto;
+  padding: 30px 40px;
+  background-color: #1c1f2b;
+  border-radius: 12px;
+  box-shadow: 0px 0px 25px rgba(73, 143, 255, 0.9);
+  color: #ffffff;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.students-uploads-container h2 {
+  text-align: center;
+  font-size: 30px;
+  margin-bottom: 25px;
+  color: #3c4ccb;
+  text-shadow: 0px 0px 2px #ffffff;
+}
+
+.report-box {
+  background: #2c2f3f;
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 20px;
+  box-shadow: 0px 0px 12px rgba(73, 143, 255, 0.7);
+}
+
+.report-box h3 {
+  color: #3c4ccb;
+  margin-bottom: 10px;
+  text-shadow: 0px 0px 2px #ffffff;
+}
+
+.report-box ul {
+  padding-left: 20px;
+}
+
+.report-box li {
+  margin-bottom: 6px;
+  font-size: 16px;
+}
+
+.chart-container {
+  margin-top: 25px;
+}
