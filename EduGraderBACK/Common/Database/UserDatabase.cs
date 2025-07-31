@@ -31,8 +31,24 @@ namespace Common.Database
 
         public async Task<bool> UpdateUser(string email, User updatedUser)
         {
-            var result = await _users.ReplaceOneAsync(u => u.email == email, updatedUser);
+            var filter = Builders<User>.Filter.Eq(u => u.email, email);
+            var update = Builders<User>.Update
+                .Set(u => u.name, updatedUser.name)
+                .Set(u => u.email, updatedUser.email)
+                .Set(u => u.password, updatedUser.password);
+
+            var result = await _users.UpdateOneAsync(filter, update);
             return result.ModifiedCount > 0;
+        }
+
+
+        public async Task<IEnumerable<User>> GetAllSystemUsers()
+        {
+            var allUsers = await _users.Find(Builders<User>.Filter.Empty).ToListAsync();
+
+            return allUsers
+                .OrderBy(u => u.role == "Admin" ? 0 : u.role == "Professor" ? 1 : 2)  // Sort: Admin < Professor < Student
+                .ThenBy(u => u.name); // dodatno po imenu unutar svake grupe
         }
 
         public async Task<List<User>> GetAllUsers()

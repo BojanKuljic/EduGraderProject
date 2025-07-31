@@ -18,8 +18,26 @@ namespace APIController_Service.Controllers
         [HttpPost("signup")]
         public async Task<IActionResult> Register([FromForm] Register request)
         {
+            if (string.IsNullOrWhiteSpace(request.name))
+                return BadRequest("Full name is required.");
+
+            if (string.IsNullOrWhiteSpace(request.email))
+                return BadRequest("Email is required.");
+
+            if (string.IsNullOrWhiteSpace(request.password))
+                return BadRequest("Password is required.");
+
+            if (string.IsNullOrWhiteSpace(request.role))
+                return BadRequest("Role is required.");
+
+            // Provera da li već postoji korisnik sa istim emailom
+            var existingUser = await _allUserService.GetUserByEmail(request.email);
+            if (existingUser != null)
+                return BadRequest("A user with this email already exists.");
+
+            // Ako je sve u redu, registruj
             var result = await _allUserService.Register(request);
-            return result ? Ok(result) : BadRequest(result);
+            return result ? Ok(result) : BadRequest("Registration failed.");
         }
 
         [HttpPost("login")]

@@ -70,11 +70,16 @@ namespace AllUsersService
         {
             return await _userDatabase.GetAllStudents();
         }
+        public async Task<IEnumerable<User>> GetAllSystemUsers()
+        {
+            return await _userDatabase.GetAllSystemUsers();
+        }
 
         public async Task<bool> UpdateUser(string email, User user)
         {
             return await _userDatabase.UpdateUser(email, user);
         }
+
 
         public async Task<bool> AddUserRestriction(string restriction, string email)
         {

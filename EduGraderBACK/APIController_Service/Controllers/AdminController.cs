@@ -1,4 +1,5 @@
-﻿using Common.Requests;
+﻿using Common.Models;
+using Common.Requests;
 using Common.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.ServiceFabric.Services.Client;
@@ -45,6 +46,20 @@ namespace APIController_Service.Controllers
             return NoContent();
         }
 
+        [HttpGet("admin/all-users")]
+        public async Task<IActionResult> GetAllSystemUsers()
+        {
+            var users = await _allUserService.GetAllSystemUsers();
+            return Ok(users);
+        }
+
+        [HttpPut("admin/update/{email}")]
+        public async Task<IActionResult> UpdateUser(string email, User user)
+        {
+            var result = await _allUserService.UpdateUser(email, user);
+            if (!result) return BadRequest("Unable to update user!");
+            return NoContent();
+        }
 
 
 

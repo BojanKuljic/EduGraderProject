@@ -17,6 +17,7 @@ namespace Common.Services
         Task<User> GetUserByEmail(string email);
 
         Task<IEnumerable<User>> GetAllStudents();
+        Task<IEnumerable<User>> GetAllSystemUsers();
 
         Task<bool> UpdateUser(string email, User user);
 
