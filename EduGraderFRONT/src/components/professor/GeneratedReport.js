@@ -101,7 +101,7 @@ const chartData = Object.entries(studentStats).map(([email, gradesWithDates]) =>
         </div>
       </div>
 {chartData.length > 0 && (
-  <div className="chart-container">
+  <div className="chart-container-2">
     <h3>Student Progress Overview</h3>
 
    

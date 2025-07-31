@@ -37,7 +37,7 @@ body {
     left: -50%;
     width: 440px;
     height: 700px;
-    background: linear-gradient(0deg, transparent, transparent, #fa78d5, #fa78d5);
+    background: linear-gradient(0deg, transparent, transparent, #b066f7, #b066f7);
     z-index: 1;
     transform-origin: bottom right;
     animation: animate2 6s linear infinite;

@@ -42,9 +42,8 @@ const Signup = () => {
     formData.append("role", form.role);
 
     try {
-      const response = await axios.post("http://localhost:8845/signup", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+const response = await axios.post("http://localhost:8845/signup", formData);
+
 
       if (response.status === 200) {
         toast.success("Registration successful!");

@@ -37,7 +37,7 @@ const Login = () => {
 
         switch (data.role) {
           case "Admin":
-            navigate("/welcome");
+            navigate("/manageusers");
             break;
           case "Professor":
             navigate("/studentsuploads");

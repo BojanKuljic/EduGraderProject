@@ -62,8 +62,7 @@ const Progress = () => {
             <LineChart data={gradeHistory}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="date" />
-              <YAxis domain={[5, 10]} />
-              <Tooltip />
+              <YAxis domain={[5, 10]} />              
               <Line type="monotone" dataKey="grade" stroke="#45f3ff" strokeWidth={3} />
             </LineChart>
           </ResponsiveContainer>

@@ -50,6 +50,7 @@ height: auto;
   overflow-y: auto;
   scrollbar-width: none;          
   -ms-overflow-style: none;  
+  
 }
 
 .chart-container h3 {
