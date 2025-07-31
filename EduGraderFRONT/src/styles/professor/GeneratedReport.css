@@ -1,52 +1,95 @@
-.students-uploads-container {
-  position: fixed;
-  top: 65px;
-  left: 50%;
-  transform: translateX(-50%);
-  height: 86vh;
-  width: 750px;
-  margin: 40px auto;
-  padding: 30px 40px;
-  background-color: #1c1f2b;
-  border-radius: 12px;
-  box-shadow: 0px 0px 25px rgba(73, 143, 255, 0.9);
-  color: #ffffff;
-  overflow-y: auto;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-.students-uploads-container h2 {
-  text-align: center;
-  font-size: 30px;
-  margin-bottom: 25px;
-  color: #3c4ccb;
-  text-shadow: 0px 0px 2px #ffffff;
-}
-
-.report-box {
-  background: #2c2f3f;
+.chart-container {
+  margin-top: 30px;
+  background-color: #2c2f3f;
   padding: 20px;
   border-radius: 8px;
-  margin-top: 20px;
-  box-shadow: 0px 0px 12px rgba(73, 143, 255, 0.7);
+  box-shadow: 0 0 8px #3c4ccb;
 }
 
-.report-box h3 {
+.chart-container h3 {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 20px;
   color: #3c4ccb;
-  margin-bottom: 10px;
   text-shadow: 0px 0px 2px #ffffff;
 }
 
-.report-box ul {
-  padding-left: 20px;
-}
-
-.report-box li {
-  margin-bottom: 6px;
+ul {
+  list-style: disc;
+  padding-left: 25px;
+  color: #ffffff;
   font-size: 16px;
+  line-height: 1.6;
 }
 
-.chart-container {
-  margin-top: 25px;
+ul li {
+  margin-bottom: 10px;
+}
+
+.bar-label {
+  fill: #fff;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.p-font p{
+  color: #fff;
+   font-size: 18px;
+   font-weight: bold;
+  margin: 2px 0;
+  text-shadow: none;
+}
+
+.chart-legend {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  margin: 10px 0 10px 5px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #ccc;
+}
+
+.legend-color {
+  width: 20px;
+  height: 6px;
+  border-radius: 3px;
+}
+
+.class-line {
+  background-color: #3c4ccb;
+}
+
+.student-bar {
+  background-color: #45f3ff;
+}
+.review-details-section ul {
+  padding-left: 20px; 
+  list-style-position: inside; /* marker ulazi u isti blok sa tekstom */
+}
+.report-box {
+  white-space: pre-wrap; /* omogućava \n u tekstu */
+}
+
+.chart-filter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 10px 0 20px 5px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
+}
+.chart-filter select {
+  padding: 5px;
+  position: flex;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #3c4ccb;
 }

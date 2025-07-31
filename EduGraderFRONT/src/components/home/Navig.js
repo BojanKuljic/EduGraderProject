@@ -72,7 +72,7 @@ const Navig = () => {
             {/* <li className="navbar-item"><NavLink to="/grades" className="navbar-link">Grades</NavLink></li> */}
             <li className="navbar-item"><NavLink to="/suggestions" className="navbar-link">Suggestions</NavLink></li>
             <li className="navbar-item"><NavLink to="/studentsprogress" className="navbar-link">Students Progress</NavLink></li>
-            <li className="navbar-item"><NavLink to="/generatedreport" className="navbar-link">Generated Report</NavLink></li>
+            <li className="navbar-item"><NavLink to="/generatedreport" className="navbar-link">Statistical Report</NavLink></li>
             <li className="navbar-item"><button className="logout-button" onClick={handleLogout}>Logout</button></li>
           </ul>
         </nav>

@@ -99,6 +99,7 @@ function StudentsProgress() {
               {expandedStudent === student.email && (
                 <div className="review-details-section">
                   <h3>Uploads</h3>
+                  <hr />
                   {student.uploads.map((u, i) => (
                     <div key={i} >
                       <p><strong>Course:</strong> {u.course}</p>
