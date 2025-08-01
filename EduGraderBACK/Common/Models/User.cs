@@ -22,6 +22,6 @@ namespace Common.Models
         [BsonElement("role")]
         public string role { get; set; }
         [BsonElement("restrictions")]
-        public List<string> restrictions { get; set; }
+        public List<string> restrictions { get; set; } = new List<string>();
     }
 }

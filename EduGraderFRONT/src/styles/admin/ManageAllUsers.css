@@ -4,109 +4,138 @@
   left: 50%;
   transform: translateX(-50%);
   height: 86vh;
-  width: auto;
+  width: 750px;
   margin: 40px auto;
   padding: 30px 40px;
   background-color: #1c1f2b;
   border-radius: 12px;
-  box-shadow: 0px 0px 20px #4f1f8d;
+  box-shadow: 0px 0px 25px #4f1f8d;
   color: #ffffff;
   overflow-y: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
 
+
 .manage-users-container h2 {
   text-align: center;
   font-size: 30px;
   margin-bottom: 25px;
   color: #4f1f8d;
-  text-shadow: 0px 0px 2px #000;
+  text-shadow: 0px 0px 2px #ffffff;
 }
 
-.users-table {
-  width: 90%;
-  border-collapse: collapse;
-  margin-top: 20px;
-  background-color: #2a2d3c;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 0 15px #4f1f8d;
-}
-
-.users-table th,
-.users-table td {
-  padding: 12px 16px;
-  text-align: center;
-  border-bottom: 1px solid #3c3f58;
-  font-size: 16px;
-  vertical-align: middle;
-}
-
-.users-table th {
-  background-color: #4f1f8d;
-  color: #ffffff;
-}
-
-/* Rola i Save dugme u jednom redu */
-.users-table td .role-action-container {
+.users-list {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.user-card {
+  background: #2c2f3f;
+  padding: 20px;
+  border-radius: 8px;
+  font-size: 17px;
+  line-height: 1.6;
+  box-shadow: 0px 0px 12px #4f1f8d;
+  
+}
+
+.manage-btn {
+  margin-top: 15px;
+  padding: 10px 20px;
+  background-color: #4f1f8d;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.manage-btn:hover {
+  transform: scale(1.05);
+  background-color: #372a6d;
+}
+
+.manage-section {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #1f2230;
+  border-radius: 8px;
+  box-shadow: 0 0 8px #4f1f8d;
+  display: flex;
+  flex-direction: column;
   gap: 10px;
 }
 
-.users-table td select {
-  padding: 6px 10px;
-  font-size: 14px;
+.edit-input-2 {
+  padding: 8px 12px;
   border-radius: 6px;
   background-color: #1c1f2b;
-  color: #ffffff;
   border: 1px solid #4f1f8d;
-  min-width: 130px;
+  color: #fff;
+  font-size: 14px;
+    width: 60%;
+    margin-bottom: 5px;
+  box-sizing: border-box;
 }
 
-.action-btn {
-  padding: 6px 12px;
-  background-color: #4f1f8d;
+
+.edit-input {
+  padding: 8px 12px;
+  border-radius: 6px;
+  background-color: #1c1f2b;
+  border: 1px solid #4f1f8d;
+  color: #fff;
+  font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.manage-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.update-btn {
+  background-color: #415e34;
+  color: white;
   border: none;
+  padding: 8px 14px;
   border-radius: 6px;
   cursor: pointer;
-  color: #ffffff;
   font-weight: bold;
   transition: 0.3s;
 }
 
-.action-btn:hover {
-  transform: scale(1.05);
-  background-color: #372a6d;
+.update-btn:hover {
+  background-color: #1f4413;
 }
 
 .restriction-btn {
-  padding: 6px 12px;
-  border-radius: 6px;
-  background-color: #4f1f8d;
-  color: #ffffff;
+  background-color: #c27232;
+  color: white;
   border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
   cursor: pointer;
   font-weight: bold;
   transition: 0.3s;
 }
 
-.restriction-btn.restricted {
-  background-color: #6a5ea5;
-}
-
 .restriction-btn:hover {
-  transform: scale(1.05);
-  background-color: #372a6d;
+  background-color: #63331e;
+;
 }
 
 .delete-btn {
-  background-color: #4f1f8d;
+  background-color: #d9534f;
   color: white;
   border: none;
-  padding: 6px 12px;
+  padding: 8px 14px;
   border-radius: 6px;
   cursor: pointer;
   font-weight: bold;
@@ -114,56 +143,39 @@
 }
 
 .delete-btn:hover {
-  transform: scale(1.05);
-  background-color: #372a6d;
-}
-.edit-input {
-  padding: 6px 10px;
-  border-radius: 6px;
-  background-color: #1c1f2b;
-  border: 1px solid #4f1f8d;
-  color: #fff;
-  font-size: 14px;
-   width: auto;
-  min-width: 100px;
+  background-color: #5f1411;
 }
 
-.edit-btn {
-  background-color: #4f1f8d;
-  color: white;
-  border: none;
-  padding: 6px 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-  margin-right: 6px;
-  transition: 0.3s;
-}
 
-.edit-btn:hover {
-  background-color: #372a6d;
-  transform: scale(1.05);
-}
-
-.update-btn {
-  background-color: #6a5ea5;
-  color: white;
-  border: none;
-  padding: 6px 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-  margin-right: 6px;
-  transition: 0.3s;
-}
-
-.update-btn:hover {
-  background-color: #4f1f8d;
-  transform: scale(1.05);
-}
-.action-buttons {
+.create-user-form {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
   gap: 10px;
+  margin-bottom: 20px;
+  background: #1c1c1c;
+  padding: 15px;
+  border-radius: 8px;
+
+}
+
+.create-btn {
+  display: block;
+  margin: auto;
+  background-color: #4f1f8d;
+  color: white;
+  padding: 10px 20px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 15px;
+  transition: 0.3s;
+  text-align: center;
+  box-shadow: 0px 0px 6px #4f1f8d;
+}
+
+.create-btn:hover {
+  background-color: #372a6d;
+  transform: scale(1.05);
 }

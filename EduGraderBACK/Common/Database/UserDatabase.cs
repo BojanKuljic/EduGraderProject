@@ -35,7 +35,8 @@ namespace Common.Database
             var update = Builders<User>.Update
                 .Set(u => u.name, updatedUser.name)
                 .Set(u => u.email, updatedUser.email)
-                .Set(u => u.password, updatedUser.password);
+                .Set(u => u.password, updatedUser.password)
+                .Set(u => u.restrictions, updatedUser.restrictions);
 
             var result = await _users.UpdateOneAsync(filter, update);
             return result.ModifiedCount > 0;

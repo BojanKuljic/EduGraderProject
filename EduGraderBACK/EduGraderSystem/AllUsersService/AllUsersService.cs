@@ -86,6 +86,9 @@ namespace AllUsersService
             var user = await _userDatabase.GetUserByEmail(email);
             if (user == null) return false;
 
+            if (user.restrictions == null)
+                user.restrictions = new List<string>();
+
             if (!user.restrictions.Contains(restriction))
             {
                 user.restrictions.Add(restriction);
@@ -100,6 +103,9 @@ namespace AllUsersService
             var user = await _userDatabase.GetUserByEmail(email);
             if (user == null) return false;
 
+            if (user.restrictions == null)
+                user.restrictions = new List<string>();
+
             if (user.restrictions.Contains(restriction))
             {
                 user.restrictions.Remove(restriction);
@@ -108,7 +114,6 @@ namespace AllUsersService
 
             return true;
         }
-
         public async Task<bool> IsUserRestricted(string restriction, string email)
         {
             var user = await _userDatabase.GetUserByEmail(email);

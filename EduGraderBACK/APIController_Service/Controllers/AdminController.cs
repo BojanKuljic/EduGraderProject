@@ -14,19 +14,34 @@ namespace APIController_Service.Controllers
     {
         private readonly IAllUsersService _allUserService = ServiceProxy.Create<IAllUsersService>(new Uri("fabric:/EduGraderSystem/AllUsersService"), new ServicePartitionKey(0), TargetReplicaSelector.PrimaryReplica);
         private readonly IUploadService _uploadService = ServiceProxy.Create<IUploadService>(new Uri("fabric:/EduGraderSystem/UploadService"), new ServicePartitionKey(0), TargetReplicaSelector.PrimaryReplica);
-
         [HttpPost("admin/restrict")]
         public async Task<IActionResult> AddUserRestriction([FromBody] RestrictionForm request)
         {
+            if (request == null)
+            {
+                Console.WriteLine(" RestrictionForm is NULL!");
+                return BadRequest("RestrictionForm is null or invalid.");
+            }
+
+            Console.WriteLine($" [RESTRICT] Email: {request.email}, Restriction: {request.restriction}");
+
             var result = await _allUserService.AddUserRestriction(request.restriction, request.email);
-            return result ? Ok() : BadRequest();
+            return result ? Ok() : BadRequest("Failed to add restriction.");
         }
 
         [HttpPost("admin/unrestrict")]
         public async Task<IActionResult> RemoveUserRestriction([FromBody] RestrictionForm request)
         {
+            if (request == null)
+            {
+                Console.WriteLine(" RestrictionForm is NULL!");
+                return BadRequest("RestrictionForm is null or invalid.");
+            }
+
+            Console.WriteLine($" [UNRESTRICT] Email: {request.email}, Restriction: {request.restriction}");
+
             var result = await _allUserService.RemoveUserRestriction(request.restriction, request.email);
-            return result ? Ok() : BadRequest();
+            return result ? Ok() : BadRequest("Failed to remove restriction.");
         }
 
 
