@@ -40,6 +40,12 @@
   box-shadow: 0px 0px 12px #4f1f8d;
   
 }
+.user-card h3{
+  font-size: 25px;
+  color: #4f1f8d;
+ text-shadow: 0px 0px 2px #fff;
+ margin-top: -10px;
+}
 
 .manage-btn {
   margin-top: 15px;
@@ -101,14 +107,15 @@
 }
 
 .update-btn {
-  background-color: #415e34;
+  background-color: #236834;
   color: white;
-  border: none;
   padding: 8px 14px;
   border-radius: 6px;
   cursor: pointer;
   font-weight: bold;
   transition: 0.3s;
+  border: none;
+ 
 }
 
 .update-btn:hover {

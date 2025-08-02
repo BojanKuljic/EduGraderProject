@@ -24,6 +24,8 @@ namespace GradeAndAnalysesService
     internal sealed class GradeAndAnalysesService : StatefulService, IGradeAndAnalysesService
     {
         private readonly UploadDatabase _uploadDatabase;
+        private IReliableDictionary<string, SystemSettings> _systemSettings;
+
         public GradeAndAnalysesService(StatefulServiceContext context)
             : base(context)
         {
@@ -33,6 +35,8 @@ namespace GradeAndAnalysesService
         protected override async Task RunAsync(CancellationToken cancellationToken)
         {
             _promptTemplates = await this.StateManager.GetOrAddAsync<IReliableDictionary<string, string>>("PromptTemplates");
+            _systemSettings = await this.StateManager.GetOrAddAsync<IReliableDictionary<string, SystemSettings>>("SystemSettings");
+
 
             using (var tx = this.StateManager.CreateTransaction())
             {
@@ -93,6 +97,30 @@ namespace GradeAndAnalysesService
         private const string GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
 
         private IReliableDictionary<string, string> _promptTemplates;
+
+
+        public async Task<SystemSettings> GetSystemSettings()
+        {
+            using (var tx = this.StateManager.CreateTransaction())
+            {
+                var dict = await StateManager.GetOrAddAsync<IReliableDictionary<string, SystemSettings>>("SystemSettings");
+                var result = await dict.TryGetValueAsync(tx, "settings");
+                return result.HasValue ? result.Value : new SystemSettings();
+            }
+        }
+
+        public async Task<bool> SetSystemSettings(SystemSettings settings)
+        {
+            using (var tx = this.StateManager.CreateTransaction())
+            {
+                var dict = await StateManager.GetOrAddAsync<IReliableDictionary<string, SystemSettings>>("SystemSettings");
+                await dict.SetAsync(tx, "settings", settings);
+                await tx.CommitAsync();
+                return true;
+            }
+        }
+
+
 
         public async Task<bool> SetPrompts(string errorPrompt, string improvementPrompt, string scorePrompt)
         {

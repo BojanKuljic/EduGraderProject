@@ -148,118 +148,123 @@ const ManageAllUsers = () => {
   };
 
   return (
-    <div className="manage-users-container">
-      <h2>All Users in System</h2>
-      <div className="users-list">
-        <button
-          className="create-btn"
-          onClick={() => setShowCreateCard((prev) => !prev)}
-        >
-          {showCreateCard ? "🢁 Close Form 🢁 " : "+ Create New User +"}
-        </button>
+    <div>
+      <div className="manage-users-container">
+        <h2>All Users in System</h2>
+        <div className="users-list">
+          <button
+            className="create-btn"
+            onClick={() => setShowCreateCard((prev) => !prev)}
+          >
+            {showCreateCard ? "🢁 Close Form 🢁 " : "+ Create New User +"}
+          </button>
 
-        {showCreateCard && (
+          {showCreateCard && (
 
-         <div className="user-card" autoComplete="off">
-  <p><strong>Create New User</strong></p>
-  <input
-    className="edit-input-2"
-    placeholder="Name"
-    value={createUserState.name}
-    onChange={(e) => setCreateUserState({ ...createUserState, name: e.target.value })}
-    autoComplete="off"
-  />
-  <input
-    className="edit-input-2"
-    placeholder="Email"
-    value={createUserState.email}
-    onChange={(e) => setCreateUserState({ ...createUserState, email: e.target.value })}
-    autoComplete="off"
-    name="new-user-email"
-  />
-  <input
-    className="edit-input-2"
-    type="password"
-    placeholder="Password"
-    value={createUserState.password}
-    onChange={(e) => setCreateUserState({ ...createUserState, password: e.target.value })}
-    autoComplete="new-password"
-    name="BIG-password"  // ovo sprečava autofill
-  />
-  <select
-    className="edit-input-2"
-    value={createUserState.role}
-    onChange={(e) => setCreateUserState({ ...createUserState, role: e.target.value })}
-    autoComplete="off"
-    name="new-user-role"
-  >
-    <option value="Student">Student</option>
-    <option value="Professor">Professor</option>
-    <option value="Admin">Admin</option>
-  </select>
-  <button className="create-btn" onClick={handleCreateUser}>Create</button>
-</div>
+            <div className="user-card" autoComplete="off">
+              <h3><strong>Create New User</strong></h3>
+              <input
+                className="edit-input-2"
+                placeholder="Name"
+                value={createUserState.name}
+                onChange={(e) => setCreateUserState({ ...createUserState, name: e.target.value })}
+                autoComplete="off"
+              />
+              <input
+                className="edit-input-2"
+                placeholder="Email"
+                value={createUserState.email}
+                onChange={(e) => setCreateUserState({ ...createUserState, email: e.target.value })}
+                autoComplete="off"
+                name="new-user-email"
+              />
+              <input
+                className="edit-input-2"
+                type="password"
+                placeholder="Password"
+                value={createUserState.password}
+                onChange={(e) => setCreateUserState({ ...createUserState, password: e.target.value })}
+                autoComplete="new-password"
+                name="BIG-password"  // ovo sprečava autofill
+              />
+              <select
+                className="edit-input-2"
+                value={createUserState.role}
+                onChange={(e) => setCreateUserState({ ...createUserState, role: e.target.value })}
+                autoComplete="off"
+                name="new-user-role"
+              >
+                <option value="Student">Student</option>
+                <option value="Professor">Professor</option>
+                <option value="Admin">Admin</option>
+              </select>
+              <button className="create-btn" onClick={handleCreateUser}>Create</button>
+            </div>
 
-        )}
+          )}
 
 
-        {users.map((user) => (
-          <div key={user.email} className="user-card">
-            <p><strong>Name:</strong> {user.name}</p>
-            <p><strong>Email:</strong> {user.email}</p>
-            <p><strong>Role:</strong> {user.role}</p>
-            <p><strong>Status:</strong> {restrictionMap[user.email] ? "Restricted" : "Unrestricted"}</p>
-            <button className="manage-btn" onClick={() => toggleCard(user.email)}>
-              {activeCard === user.email ? "Close" : "Manage"}
-            </button>
+          {users.map((user) => (
+            <div key={user.email} className="user-card">
+              <p><strong>Name:</strong> {user.name}</p>
+              <p><strong>Email:</strong> {user.email}</p>
+              <p><strong>Role:</strong> {user.role}</p>
+              <p><strong>Status:</strong> {restrictionMap[user.email] ? "Restricted" : "Unrestricted"}</p>
+              <button className="manage-btn" onClick={() => toggleCard(user.email)}>
+                {activeCard === user.email ? "Close" : "Manage"}
+              </button>
 
-            {activeCard === user.email && (
-              <div className="manage-section">
-                <input
-                  className="edit-input"
-                  value={editState[user.email]?.name || ""}
-                  onChange={(e) => handleChange(user.email, "name", e.target.value)}
-                  placeholder="Name"
-                  autoComplete="off"
-                />
-                <input
-                  className="edit-input"
-                  value={editState[user.email]?.email || ""}
-                  onChange={(e) => handleChange(user.email, "email", e.target.value)}
-                  placeholder="Email"
-                  autoComplete="off"
-                />
-                <input
-                  className="edit-input"
-                  type="password"
-                  value={editState[user.email]?.password || ""}
-                  onChange={(e) => handleChange(user.email, "password", e.target.value)}
-                  placeholder="New Password"
-                  autoComplete="new-password"
-                />
-                <select
-                  className="edit-input"
-                  value={editState[user.email]?.role}
-                  onChange={(e) => handleRoleChange(user.email, e.target.value)}
-                >
-                  <option value="Student">Student</option>
-                  <option value="Professor">Professor</option>
-                  <option value="Admin">Admin</option>
-                </select>
+              {activeCard === user.email && (
+                <div className="manage-section">
+                  <input
+                    className="edit-input"
+                    value={editState[user.email]?.name || ""}
+                    onChange={(e) => handleChange(user.email, "name", e.target.value)}
+                    placeholder="Name"
+                    autoComplete="off"
+                  />
+                  <input
+                    className="edit-input"
+                    value={editState[user.email]?.email || ""}
+                    onChange={(e) => handleChange(user.email, "email", e.target.value)}
+                    placeholder="Email"
+                    autoComplete="off"
+                  />
+                  <input
+                    className="edit-input"
+                    type="password"
+                    value={editState[user.email]?.password || ""}
+                    onChange={(e) => handleChange(user.email, "password", e.target.value)}
+                    placeholder="New Password"
+                    autoComplete="new-password"
+                  />
+                  <select
+                    className="edit-input"
+                    value={editState[user.email]?.role}
+                    onChange={(e) => handleRoleChange(user.email, e.target.value)}
+                  >
+                    <option value="Student">Student</option>
+                    <option value="Professor">Professor</option>
+                    <option value="Admin">Admin</option>
+                  </select>
 
-                <div className="manage-actions">
-                  <button className="update-btn" onClick={() => handleUpdate(user.email)}>Save Changes</button>
-                  <button className="restriction-btn" onClick={() => toggleRestriction(user.email)}>
-                    {restrictionMap[user.email] ? "Unrestrict" : "Restrict"}
-                  </button>
-                  <button className="delete-btn" onClick={() => handleDelete(user.email)}>Delete</button>
+                  <div className="manage-actions">
+                    <button className="update-btn" onClick={() => handleUpdate(user.email)}>Save Changes</button>
+                    <button className="restriction-btn" onClick={() => toggleRestriction(user.email)}>
+                      {restrictionMap[user.email] ? "Unrestrict" : "Restrict"}
+                    </button>
+                    <button className="delete-btn" onClick={() => handleDelete(user.email)}>Delete</button>
+                  </div>
                 </div>
-              </div>
-            )}
-          </div>
-        ))}
+              )}
+            </div>
+
+          ))}
+
+        </div>
       </div>
-      <ToastContainer position="bottom-right" />
+      <ToastContainer position="top-center" autoClose={2000} style={{ marginTop: "55px" }} />
+
     </div>
   );
 };

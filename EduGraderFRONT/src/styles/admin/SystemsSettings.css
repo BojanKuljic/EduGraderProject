@@ -1,0 +1,92 @@
+.manage-users-container {
+    position: fixed;
+    top: 65px;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 86vh;
+    width: 750px;
+    margin: 40px auto;
+    padding: 30px 40px;
+    background-color: #1c1f2b;
+    border-radius: 12px;
+    box-shadow: 0px 0px 25px #4f1f8d;
+    color: #ffffff;
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.manage-users-container h2 {
+    text-align: center;
+    font-size: 30px;
+    margin-bottom: 25px;
+    color: #4f1f8d;
+    text-shadow: 0px 0px 2px #ffffff;
+}
+
+.user-card {
+    background: #2c2f3f;
+    padding: 20px;
+    border-radius: 8px;
+    font-size: 17px;
+    line-height: 1.6;
+    box-shadow: 0px 0px 12px #4f1f8d;
+}
+
+.manage-section h3 {
+    font-size: 25px;
+    color: #4f1f8d;
+    text-shadow: 0px 0px 2px #fff;
+    margin-top: 0px;
+    margin-bottom: 10px;
+}
+
+.manage-section label {
+    font-size: 20px;
+    text-shadow: 0px 0px 5px #4f1f8d;
+}
+
+.manage-section {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #1f2230;
+    border-radius: 8px;
+    box-shadow: 0 0 8px #4f1f8d;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.edit-input-2 {
+    padding: 8px 12px;
+    border-radius: 6px;
+    background-color: #1c1f2b;
+    border: 1px solid #4f1f8d;
+    color: #fff;
+    font-size: 14px;
+    width: 100%;
+    margin-bottom: 5px;
+    box-sizing: border-box;
+}
+
+.manage-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.update-btn {
+    background-color: #236834;
+    color: white;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+    border: none;
+}
+
+.update-btn:hover {
+    background-color: #1f4413;
+}
