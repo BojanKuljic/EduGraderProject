@@ -47,27 +47,18 @@
 }
 
 .manage-section {
-    margin-top: 20px;
-    padding: 20px;
-    background-color: #1f2230;
-    border-radius: 8px;
-    box-shadow: 0 0 8px #4f1f8d;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #1f2230;
+  border-radius: 8px;
+  box-shadow: 0 0 8px #4f1f8d;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
 }
 
-.edit-input-2 {
-    padding: 8px 12px;
-    border-radius: 6px;
-    background-color: #1c1f2b;
-    border: 1px solid #4f1f8d;
-    color: #fff;
-    font-size: 14px;
-    width: 100%;
-    margin-bottom: 5px;
-    box-sizing: border-box;
-}
 
 .manage-actions {
     display: flex;

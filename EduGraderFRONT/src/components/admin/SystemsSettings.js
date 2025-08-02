@@ -44,19 +44,19 @@ const SystemSettings = () => {
             } = settings;
 
             const reportText = `
-                                Current System Configuration Report
+Current System Configuration Report
 
-                                • Analysis Method: ${analysisMethod || "Not selected"}
-                                • Evaluation Style: ${evaluationStyle || "Not selected"}
-                                • Language: ${language || "Not selected"}
-                                • Upload Limit: ${maxUploads || "0"} uploads
-                                • Upload Period: ${period || "Not selected"}
+• Analysis Method: ${analysisMethod || "Not selected"}
+• Evaluation Style: ${evaluationStyle || "Not selected"}
+• Language: ${language || "Not selected"}
+• Upload Limit: ${maxUploads || "0"} uploads
+• Upload Period: ${period || "Not selected"}
 
-                                General Status:
-                                ${analysisMethod && evaluationStyle && language && maxUploads && period
-                                                    ? "✔️ System is fully configured and ready for analysis."
-                                                    : "⚠️ Some settings are missing. Please complete configuration before usage."
-                                                }
+General Status:
+${analysisMethod && evaluationStyle && language && maxUploads && period
+                    ? "✔️ System is fully configured and ready for analysis."
+                    : "⚠️ Some settings are missing. Please complete configuration before usage."
+                }
 `;
 
             setReport(reportText.trim());
@@ -130,7 +130,7 @@ const SystemSettings = () => {
                     <div className="user-card">
                         <label>Analysis Method</label>
                         <select
-                            className="edit-input-2"
+                            className="edit-input"
                             value={settings.analysisMethod}
                             onChange={(e) => handleChange("analysisMethod", e.target.value)}
                         >
@@ -142,7 +142,7 @@ const SystemSettings = () => {
 
                         <label>Evaluation Style</label>
                         <select
-                            className="edit-input-2"
+                            className="edit-input"
                             value={settings.evaluationStyle}
                             onChange={(e) => handleChange("evaluationStyle", e.target.value)}
                         >
@@ -154,7 +154,7 @@ const SystemSettings = () => {
 
                         <label>Language</label>
                         <select
-                            className="edit-input-2"
+                            className="edit-input"
                             value={settings.language}
                             onChange={(e) => handleChange("language", e.target.value)}
                         >
@@ -169,7 +169,7 @@ const SystemSettings = () => {
                     <div className="user-card">
                         <label>Max Uploads</label>
                         <input
-                            className="edit-input-2"
+                            className="edit-input"
                             type="number"
                             min={0}
                             value={settings.maxUploads}
@@ -178,7 +178,7 @@ const SystemSettings = () => {
 
                         <label>Upload Period</label>
                         <select
-                            className="edit-input-2"
+                            className="edit-input"
                             value={settings.period}
                             onChange={(e) => handleChange("period", e.target.value)}
                         >
