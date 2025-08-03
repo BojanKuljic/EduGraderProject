@@ -42,8 +42,14 @@ namespace APIController_Service.Controllers
             }
 
             var result = await _uploadService.NewUpload(upload.email, fileBytes, upload.title, upload.course);
+
+            if (!result)
+                return StatusCode(403, "Upload limit exceeded for this period.");
+
             return result ? Ok("Sucessfuly uploaded") : BadRequest("Unable to upload");
         }
+
+
         [HttpGet("student/getUpload/{uploadId}")]
         public async Task<ActionResult<StudentUpload>> GetStudentWork(string uploadId)
         {

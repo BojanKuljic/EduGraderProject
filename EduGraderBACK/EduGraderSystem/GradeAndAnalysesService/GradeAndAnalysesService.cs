@@ -101,23 +101,12 @@ namespace GradeAndAnalysesService
 
         public async Task<SystemSettings> GetSystemSettings()
         {
-            using (var tx = this.StateManager.CreateTransaction())
-            {
-                var dict = await StateManager.GetOrAddAsync<IReliableDictionary<string, SystemSettings>>("SystemSettings");
-                var result = await dict.TryGetValueAsync(tx, "settings");
-                return result.HasValue ? result.Value : new SystemSettings();
-            }
+            return await _uploadDatabase.GetSystemSettings();
         }
 
         public async Task<bool> SetSystemSettings(SystemSettings settings)
         {
-            using (var tx = this.StateManager.CreateTransaction())
-            {
-                var dict = await StateManager.GetOrAddAsync<IReliableDictionary<string, SystemSettings>>("SystemSettings");
-                await dict.SetAsync(tx, "settings", settings);
-                await tx.CommitAsync();
-                return true;
-            }
+            return await _uploadDatabase.SetSystemSettings(settings);
         }
 
 

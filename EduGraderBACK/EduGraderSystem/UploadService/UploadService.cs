@@ -13,6 +13,7 @@ using Microsoft.ServiceFabric.Services.Communication.Runtime;
 using Microsoft.ServiceFabric.Services.Remoting.Runtime;
 using Microsoft.ServiceFabric.Services.Runtime;
 
+
 namespace UploadService
 {
     /// <summary>
@@ -27,14 +28,44 @@ namespace UploadService
             _uploadDatabase = new UploadDatabase("mongodb://localhost:27017", "UploadDatabase", "Uploads");
         }
 
-        public Task<bool> NewUpload(string email, byte[] file, string title, string course)
+        public async Task<bool> NewUpload(string email, byte[] file, string title, string course)
         {
-            List<UploadVersion> versions = new List<UploadVersion>();
-            versions.Add(new UploadVersion { File = file, VersionNumber = 0, UploadedAt = DateTime.Now });
-            StudentUpload newUpload = new StudentUpload { ActiveVersion = 0, Email = email, Course = course, Title = title, UploadDate = DateTime.Now, Versions = versions };
-            
-            return _uploadDatabase.AddUpload(newUpload);
+            var settings = await _uploadDatabase.GetSystemSettings();
+            if (settings != null && settings.MaxUploads > 0)
+            {
+                var uploads = await _uploadDatabase.GetStudentUploadsByEmail(email);
+
+                DateTime threshold = settings.Period.ToLower() switch
+                {
+                    "daily" => DateTime.UtcNow.AddDays(-1),
+                    "weekly" => DateTime.UtcNow.AddDays(-7),
+                    "monthly" => DateTime.UtcNow.AddMonths(-1),
+                    _ => DateTime.MinValue
+                };
+
+                int count = uploads.Count(u => u.UploadDate >= threshold);
+                if (count >= settings.MaxUploads)
+                    return false; // Prešao limit
+            }
+
+            List<UploadVersion> versions = new List<UploadVersion>
+    {
+        new UploadVersion { File = file, VersionNumber = 0, UploadedAt = DateTime.Now }
+    };
+
+            StudentUpload newUpload = new StudentUpload
+            {
+                ActiveVersion = 0,
+                Email = email,
+                Course = course,
+                Title = title,
+                UploadDate = DateTime.Now,
+                Versions = versions
+            };
+
+            return await _uploadDatabase.AddUpload(newUpload);
         }
+
 
         public async Task<StudentUpload> GetStudentUpload(string id)
         {

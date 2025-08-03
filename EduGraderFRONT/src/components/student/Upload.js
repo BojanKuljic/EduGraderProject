@@ -11,34 +11,39 @@ const Upload = () => {
   const [title, setTitle] = useState('');
 
   const handleUpload = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (!file || !course || !title) {
-      toast.error("Please fill in all fields and select a file.");
-      return;
+  if (!file || !course || !title) {
+    toast.error("Please fill in all fields and select a file.");
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append('email', email);
+  formData.append('course', course);
+  formData.append('title', title);
+  formData.append('file', file);
+
+  try {
+    const response = await axios.post('http://localhost:8845/student/upload', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+
+    toast.success("Upload successful!");
+    setFile(null);
+    setCourse('');
+    setTitle('');
+  } catch (err) {
+    if (err.response?.status === 403) {
+      toast.error("Upload limit reached for the selected period.");
+    } else {
+      toast.error("Upload failed. Please try again.");
     }
+  }
+};
 
-    const formData = new FormData();
-    formData.append('email', email);
-    formData.append('course', course);
-    formData.append('title', title);
-    formData.append('file', file);
-
-    try {
-      const response = await axios.post('http://localhost:8845/student/upload', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      });
-
-      toast.success("Upload successful!");
-      setFile(null);
-      setCourse('');
-      setTitle('');
-    } catch (err) {
-      toast.error("Upload failed: " + (err.response?.data || "Server error"));
-    }
-  };
 
   return (
     <div className="upload-container">
@@ -68,13 +73,13 @@ const Upload = () => {
         />
 
         <button type="submit" className="upload-button">Upload</button>
-      <ToastContainer
-        position="top-center"
-        autoClose={2000}
-        style={{ marginTop: "60px" }}
+        <ToastContainer
+          position="top-center"
+          autoClose={2000}
+          style={{ marginTop: "60px" }}
         />
       </form>
-      
+
     </div>
   );
 };

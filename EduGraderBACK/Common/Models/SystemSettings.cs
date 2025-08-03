@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MongoDB.Bson.Serialization.Attributes;
+
 
 namespace Common.Models
 {
+
+    [BsonIgnoreExtraElements]
     public class SystemSettings
     {
         public string AnalysisMethod { get; set; }

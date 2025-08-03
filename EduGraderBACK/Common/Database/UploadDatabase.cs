@@ -12,12 +12,37 @@ namespace Common.Database
     {
         private readonly IMongoCollection<StudentUpload> _uploads;
 
+        private readonly IMongoCollection<SystemSettings> _settings;
+
         public UploadDatabase(string connectionString, string databaseName, string collectionName)
         {
             var client = new MongoClient(connectionString);
             var database = client.GetDatabase(databaseName);
+
             _uploads = database.GetCollection<StudentUpload>(collectionName);
+            _settings = database.GetCollection<SystemSettings>("Settings"); // nova kolekcija
         }
+
+        public async Task<SystemSettings> GetSystemSettings()
+        {
+            return await _settings.Find(_ => true).FirstOrDefaultAsync();
+        }
+
+        public async Task<bool> SetSystemSettings(SystemSettings settings)
+        {
+            var existing = await _settings.Find(_ => true).FirstOrDefaultAsync();
+            if (existing != null)
+            {
+                var result = await _settings.ReplaceOneAsync(_ => true, settings);
+                return result.ModifiedCount > 0;
+            }
+
+            await _settings.InsertOneAsync(settings);
+            return true;
+        }
+
+
+
 
         public async Task<StudentUpload> GetUpload(string id)
         {
