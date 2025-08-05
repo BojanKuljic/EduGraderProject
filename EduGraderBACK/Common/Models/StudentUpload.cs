@@ -28,7 +28,7 @@ namespace Common.Models
         public List<UploadVersion> Versions { get; set; } = new List<UploadVersion>();
 
         [BsonElement("activeVersion")]
-        public uint ActiveVersion { get; set; }
+        public int ActiveVersion { get; set; }
 
         [BsonElement("status")]
         public Status Status { get; set; }
@@ -39,7 +39,7 @@ namespace Common.Models
         [BsonElement("usualReviewTime")]
         public long? UsualReviewTime { get; set; }
 
-        [BsonElement("reiew")]
+        [BsonElement("review")]
         public Review Review { get; set; }
     }
 

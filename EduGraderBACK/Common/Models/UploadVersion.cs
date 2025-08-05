@@ -17,5 +17,12 @@ namespace Common.Models
 
         [BsonElement("uploadedAt")]
         public DateTime UploadedAt { get; set; }
+
+
+        [BsonElement("fileName")]
+        public string FileName { get; set; }
+
+        [BsonElement("review")]
+        public Review Review { get; set; }
     }
 }

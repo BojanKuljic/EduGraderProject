@@ -3,12 +3,15 @@ import axios from 'axios';
 import '../../styles/student/Upload.css';
 import { AuthContext } from '../auth/AuthContext';
 import { ToastContainer, toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const Upload = () => {
   const { email } = useContext(AuthContext);
   const [file, setFile] = useState(null);
   const [course, setCourse] = useState('');
   const [title, setTitle] = useState('');
+  const navigate = useNavigate();
+
 
   const handleUpload = async (e) => {
   e.preventDefault();
@@ -35,6 +38,10 @@ const Upload = () => {
     setFile(null);
     setCourse('');
     setTitle('');
+
+    
+setTimeout(() => navigate("/status"), 2000);
+    
   } catch (err) {
     if (err.response?.status === 403) {
       toast.error("Upload limit reached for the selected period.");

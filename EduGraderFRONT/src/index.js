@@ -7,6 +7,7 @@ import reportWebVitals from './reportWebVitals';
 import { AuthContextProvider } from './components/auth/AuthContext';
 import { Toaster } from 'react-hot-toast';
 
+
 // Reset session only on first full page load (not refresh)
 const navEntry = performance.getEntriesByType("navigation")[0];
 const isFirstLoad = navEntry?.type === "navigate";

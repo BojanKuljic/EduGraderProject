@@ -12,8 +12,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="ClosedXML" Version="0.105.0" />
+    <PackageReference Include="itext7" Version="8.0.0" />
     <PackageReference Include="Microsoft.ServiceFabric.Services" Version="7.1.2493" />
     <PackageReference Include="Microsoft.ServiceFabric.Services.Remoting" Version="7.1.2493" />
+    <PackageReference Include="System.Globalization" Version="4.3.0" />
+    <PackageReference Include="Tesseract" Version="5.2.0" />
+    <PackageReference Include="Xceed.Words.NET" Version="5.0.25228.6154" />
   </ItemGroup>
 
   <ItemGroup>

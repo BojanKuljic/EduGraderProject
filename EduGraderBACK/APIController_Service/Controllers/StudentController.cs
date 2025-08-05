@@ -40,8 +40,9 @@ namespace APIController_Service.Controllers
                 await file.CopyToAsync(memoryStream);
                 fileBytes = memoryStream.ToArray();
             }
+            var fileName = upload.file.FileName;
+            var result = await _uploadService.NewUpload(upload.email, fileBytes, upload.title, upload.course, fileName);
 
-            var result = await _uploadService.NewUpload(upload.email, fileBytes, upload.title, upload.course);
 
             if (!result)
                 return StatusCode(403, "Upload limit exceeded for this period.");

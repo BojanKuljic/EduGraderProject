@@ -2,34 +2,42 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "../../styles/student/Status.css";
 import { ToastContainer, toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const Status = () => {
     const [uploads, setUploads] = useState([]);
     const [expandedCard, setExpandedCard] = useState(null);
     const [selectedFiles, setSelectedFiles] = useState({});
+    const [revertVersions, setRevertVersions] = useState({});
+    const navigate = useNavigate();
+
+
+    const fetchUploads = async () => {
+        try {
+            const response = await axios.get(`http://localhost:8845/student/${email}/allUploads`);
+            const sortedUploads = response.data.sort((a, b) => new Date(b.uploadDate) - new Date(a.uploadDate));
+            setUploads(sortedUploads);
+        } catch (error) {
+            toast.error("Failed to load or student does`t uploads");
+        }
+    };
 
 
 
     const email = sessionStorage.getItem("email");
 
     useEffect(() => {
-        const fetchUploads = async () => {
-            try {
-                const response = await axios.get(`http://localhost:8845/student/${email}/allUploads`);
-                 const sortedUploads = response.data.sort((a, b) => new Date(b.uploadDate) - new Date(a.uploadDate));
-                setUploads(sortedUploads);
-            } catch (error) {
-                toast.error("Failed to load or student does`t uploads");
-            }
-        };
-
         fetchUploads();
+        const interval = setInterval(() => {
+            fetchUploads();
+        }, 2000); // osvežava na svakih 2 sekunde
+
+        return () => clearInterval(interval);
     }, [email]);
 
     const toggleEditSection = (uploadId) => {
         setExpandedCard(prev => (prev === uploadId ? null : uploadId));
     };
-
 
     const handleDownload = async (uploadId, title) => {
         if (!uploadId || uploadId.length !== 24) {
@@ -44,32 +52,45 @@ const Status = () => {
 
             if (!version || !version.file || typeof version.file !== "string") {
                 toast.error("File not available or invalid format.");
-                console.log("Raw file object:", version?.file);
                 return;
             }
 
-            // Ovo je sada čist base64 string (PDF u base64)
             const base64Data = version.file;
+            const fileName = version.fileName || `${title}`;
+            const extension = fileName.split('.').pop().toLowerCase();
 
-            // Pretvori base64 string u bajtove
+            const mimeTypes = {
+                pdf: "application/pdf",
+                doc: "application/msword",
+                docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                txt: "text/plain",
+                jpg: "image/jpeg",
+                jpeg: "image/jpeg",
+                png: "image/png",
+                gif: "image/gif",
+                xlsx: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                csv: "text/csv",
+                zip: "application/zip"
+            };
+
+            const mimeType = mimeTypes[extension] || "application/octet-stream";
+
             const byteCharacters = atob(base64Data);
             const byteNumbers = Array.from(byteCharacters, c => c.charCodeAt(0));
             const byteArray = new Uint8Array(byteNumbers);
 
-            // Napravi Blob i započni download
-            const blob = new Blob([byteArray], { type: "application/pdf" });
+            const blob = new Blob([byteArray], { type: mimeType });
+
             const link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
-            link.download = `${title}.pdf`;
+            link.download = fileName;
             link.click();
+
             toast.success("Download successful!");
         } catch (error) {
-            toast.error("Download failed");
-            console.error("Download error:", error);
+            console.err
         }
-    };
-
-
+    }
 
 
 
@@ -87,6 +108,8 @@ const Status = () => {
 
             });
             toast.success("New version uploaded!");
+            setTimeout(() => window.location.reload(), 2000);
+
         } catch (err) {
             console.error("Upload failed:", err);
             toast.error("Upload failed.");
@@ -95,8 +118,11 @@ const Status = () => {
 
     const handleRevert = async (uploadId, version) => {
         try {
-            await axios.put(`http://localhost:8845/student/changeVersion?uploadId=${uploadId}&verison=${version}`);
+            await axios.put(`http://localhost:8845/student/changeVersion?uploadId=${uploadId}&verison=${version - 1}`);
             toast.success("Version reverted!");
+            fetchUploads();
+            setTimeout(() => window.location.reload(), 2000);
+
         } catch {
             toast.error("Revert failed.");
         }
@@ -125,25 +151,26 @@ const Status = () => {
     };
 
 
-   const formatReviewTime = (milliseconds) => {
-  if (!milliseconds || isNaN(milliseconds)) return "N/A";
+    const formatReviewTime = (milliseconds) => {
+        if (!milliseconds || isNaN(milliseconds)) return "N/A";
 
-  const totalSeconds = Math.floor(milliseconds / 1000);
-  const hrs = Math.floor(totalSeconds / 3600);
-  const mins = Math.floor((totalSeconds % 3600) / 60);
-  const secs = totalSeconds % 60;
+        const totalSeconds = Math.floor(milliseconds / 1000);
+        const hrs = Math.floor(totalSeconds / 3600);
+        const mins = Math.floor((totalSeconds % 3600) / 60);
+        const secs = totalSeconds % 60;
 
-  const parts = [];
-  if (hrs > 0) parts.push(`${hrs}h`);
-  if (mins > 0) parts.push(`${mins}m`);
-  if (secs > 0 || parts.length === 0) parts.push(`${secs}s`);
+        const parts = [];
+        if (hrs > 0) parts.push(`${hrs}h`);
+        if (mins > 0) parts.push(`${mins}m`);
+        if (secs > 0 || parts.length === 0) parts.push(`${secs}s`);
 
-  return parts.join(" ");
-};
+        return parts.join(" ");
+    };
 
 
 
     return (
+        <div>
         <div className="status-container">
             <h2>Status of All Student Works </h2>
             {uploads.length === 0 ? (
@@ -154,7 +181,8 @@ const Status = () => {
                         <div key={upload.id} className="status-card">
                             <h3>{upload.title}</h3>
                             <p><strong>Course:</strong> {upload.course}</p>
-                            <p><strong>Active version:</strong> {upload.activeVersion}</p>
+                            <p><strong>Total versions:</strong> {upload.versions?.length ?? 0}</p>
+                            <p><strong>Current Active version:</strong> {upload.activeVersion + 1}</p>
                             <p><strong>Status:</strong> {formatStatus(upload.status)}</p>
                             <p><strong>Upload date:</strong> {formatDate(upload.uploadDate)}</p>
                             <p><strong>Estimated review time:</strong> {formatReviewTime(upload.usualReviewTime)}</p>
@@ -204,8 +232,22 @@ const Status = () => {
                                         <input
                                             type="number"
                                             placeholder="e.g. 1"
-                                            onChange={(e) => upload.revertVersion = e.target.value} />
-                                        <button onClick={() => handleRevert(upload.id, upload.revertVersion)}>Revert</button>
+                                            value={revertVersions[upload.id] || ""}
+                                            onChange={(e) => {
+                                                const val = parseInt(e.target.value);
+                                                if (!isNaN(val) && val >= 1 && val <= (upload.versions?.length || 1)) {
+                                                    setRevertVersions((prev) => ({
+                                                        ...prev,
+                                                        [upload.id]: val
+                                                    }));
+                                                }
+                                            }}
+                                        />
+
+                                        <button onClick={() => handleRevert(upload.id, revertVersions[upload.id])}>
+                                            Revert
+                                        </button>
+
                                     </div>
                                 </div>
                             )}
@@ -215,10 +257,12 @@ const Status = () => {
                     ))}
                 </div>
             )}
-            <ToastContainer
+            
+        </div>
+        <ToastContainer
                 position="top-center"
                 autoClose={2000}
-                style={{ marginTop: "0px" }} />
+                style={{ marginTop: "55px" }} />
         </div>
     );
 };
