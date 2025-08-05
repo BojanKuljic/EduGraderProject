@@ -22,5 +22,8 @@ namespace Common.Services
         Task<Review> GetReview(string id);
 
         Task<bool> ProfessorReview(string id, Review review);
+
+        Task<bool> UpdateGrade(string uploadId, double grade);
+
     }
 }

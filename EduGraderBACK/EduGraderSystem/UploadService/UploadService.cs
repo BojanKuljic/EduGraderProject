@@ -184,6 +184,29 @@ namespace UploadService
             return success;
         }
 
+        public async Task<bool> UpdateGrade(string uploadId, double grade)
+            {
+                        var upload = await _uploadDatabase.GetUpload(uploadId);
+
+                        if (upload == null) return false;
+
+                if (upload.Review == null)
+                    upload.Review = new Review();
+
+                upload.Review.Grade = grade;
+
+            if (upload.Versions != null && upload.ActiveVersion >= 0 && upload.ActiveVersion < upload.Versions.Count)
+            {
+                if (upload.Versions[upload.ActiveVersion].Review == null)
+                    upload.Versions[upload.ActiveVersion].Review = new Review();
+
+                upload.Versions[upload.ActiveVersion].Review.Grade = grade;
+            }
+
+            return await _uploadDatabase.UpdateUpload(uploadId, upload);
+            }
+
+
         protected override IEnumerable<ServiceReplicaListener> CreateServiceReplicaListeners() => this.CreateServiceRemotingReplicaListeners();
     }
 }

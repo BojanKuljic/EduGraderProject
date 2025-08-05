@@ -69,5 +69,24 @@ namespace APIController_Service.Controllers
             return Ok(result);
         }
 
+
+        [HttpPut("professor/updateGrade/{uploadId}")]
+        public async Task<IActionResult> UpdateGrade(string uploadId, [FromBody] GradeUpdateModel model)
+        {
+            if (string.IsNullOrEmpty(uploadId) || model == null || model.Grade < 5 || model.Grade > 10)
+                return BadRequest("Invalid input");
+
+            var result = await _uploadService.UpdateGrade(uploadId, model.Grade);
+            if (!result)
+                return BadRequest("Failed to update grade.");
+
+            return Ok("Grade updated successfully.");
+        }
+
+        public class GradeUpdateModel
+        {
+            public double Grade { get; set; }
+        }
+
     }
 }
