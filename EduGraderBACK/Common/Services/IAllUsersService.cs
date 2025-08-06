@@ -25,6 +25,9 @@ namespace Common.Services
 
         Task<bool> RemoveUserRestriction(string restriction, string email);
         Task<bool> IsUserRestricted(string restriction, string email);
+        Task<List<string>> GetUserRestrictions(string email);
+        Task<bool> SetUserRestrictions(string email, List<string> restrictions);
+        Task<bool> RemoveAllRestrictions(string email);
 
         Task<bool> ChangeUserRole(string email, string newRole);
 

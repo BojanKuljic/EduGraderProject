@@ -233,6 +233,7 @@
     <Compile Include="Requests\Login.cs" />
     <Compile Include="Requests\Register.cs" />
     <Compile Include="Requests\RestrictionForm.cs" />
+    <Compile Include="Requests\RestrictionRequest.cs" />
     <Compile Include="Requests\UploadRequest.cs" />
     <Compile Include="Services\IAllUsersService.cs" />
     <Compile Include="Services\IGradeAndAnalysesService.cs" />

@@ -126,7 +126,24 @@ namespace AllUsersService
 
             return false;
         }
-        
+
+        public async Task<List<string>> GetUserRestrictions(string email)
+        {
+            var user = await _userDatabase.GetUserByEmail(email);
+            return user?.restrictions ?? new List<string>();
+        }
+        public async Task<bool> SetUserRestrictions(string email, List<string> restrictions)
+        {
+            return await _userDatabase.SetUserRestrictions(email, restrictions);
+        }
+
+        public async Task<bool> RemoveAllRestrictions(string email)
+        {
+            return await _userDatabase.SetUserRestrictions(email, new List<string>());
+        }
+
+
+
         public async Task<bool> ChangeUserRole(string email, string newRole)
         {
             return await _userDatabase.ChangeUserRoleAsync(email, newRole);

@@ -28,9 +28,17 @@ namespace APIController_Service.Controllers
             return Ok(students);
         }
 
-        
 
-       
+        [HttpGet("user/{email}/restrictions")]
+        public async Task<IActionResult> GetUserRestrictions(string email)
+        {
+            var restrictions = await _allUserService.GetUserRestrictions(email);
+            if (restrictions == null) return NotFound();
+            return Ok(restrictions);
+        }
+
+
+
     }
 }
 

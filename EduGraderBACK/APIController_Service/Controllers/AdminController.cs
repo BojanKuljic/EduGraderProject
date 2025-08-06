@@ -44,6 +44,25 @@ namespace APIController_Service.Controllers
             return result ? Ok() : BadRequest("Failed to remove restriction.");
         }
 
+        [HttpPost("admin/set-restrictions")]
+        public async Task<IActionResult> SetRestrictions([FromBody] RestrictionRequest request)
+        {
+            var result = await _allUserService.SetUserRestrictions(request.email, request.restrictions);
+            if (!result) return BadRequest("Failed to set restrictions");
+            return Ok();
+        }
+
+        [HttpPost("admin/remove-all-restrictions")]
+        public async Task<IActionResult> RemoveAllRestrictions([FromBody] RestrictionForm request)
+        {
+            if (request == null || string.IsNullOrWhiteSpace(request.email))
+                return BadRequest("Invalid request. Don`t restrictions for user!");
+
+            var result = await _allUserService.RemoveAllRestrictions(request.email);
+            if (!result) return BadRequest("Failed to remove all restrictions");
+            return Ok();
+        }
+
 
         [HttpPut("admin/role/{email}")]
         public async Task<IActionResult> ChangeUserRole(string email, [FromBody] string newRole)

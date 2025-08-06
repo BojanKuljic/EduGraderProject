@@ -42,6 +42,14 @@ namespace Common.Database
             return result.ModifiedCount > 0;
         }
 
+        public async Task<bool> SetUserRestrictions(string email, List<string> restrictions)
+        {
+            var update = Builders<User>.Update.Set(u => u.restrictions, restrictions);
+            var result = await _users.UpdateOneAsync(u => u.email == email, update);
+            return result.ModifiedCount > 0;
+        }
+
+
 
         public async Task<IEnumerable<User>> GetAllSystemUsers()
         {
