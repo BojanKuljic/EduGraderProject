@@ -27,6 +27,8 @@ const Status = () => {
     const email = sessionStorage.getItem("email");
 
     useEffect(() => {
+
+        if (!email) return;
         fetchUploads();
         const interval = setInterval(() => {
             fetchUploads();

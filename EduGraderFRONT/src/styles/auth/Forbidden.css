@@ -1,0 +1,16 @@
+.forbidden-container {
+  margin-top: 100px;
+  color: white;
+  text-align: center;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.forbidden-container h1 {
+  font-size: 3rem;
+  color: #e74c3c;
+}
+
+.forbidden-container p {
+  font-size: 1.5rem;
+  color: #ccc;
+}

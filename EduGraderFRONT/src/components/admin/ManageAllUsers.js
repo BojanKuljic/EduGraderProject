@@ -1,3 +1,4 @@
+// ManageAllUsers.js
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "../../styles/admin/ManageAllUsers.css";
@@ -8,8 +9,15 @@ const ManageAllUsers = () => {
   const [users, setUsers] = useState([]);
   const [activeCard, setActiveCard] = useState(null);
   const [editState, setEditState] = useState({});
-  const [restrictionMap, setRestrictionMap] = useState({});
+  const [selectedRestrictions, setSelectedRestrictions] = useState({});
   const [showCreateCard, setShowCreateCard] = useState(false);
+
+  const availableRestrictions = {
+    Student: ["upload", "status", "review", "progress", "recommendation", "login"],
+    Professor: ["studentsuploads", "suggestions", "studentsprogress", "generatedreport", "login"],
+    Admin: ["manageusers", "systemsettings", "login"],
+  };
+
   const [createUserState, setCreateUserState] = useState({
     name: "",
     email: "",
@@ -25,11 +33,12 @@ const ManageAllUsers = () => {
     try {
       const response = await axios.get("http://localhost:8845/admin/all-users");
       setUsers(response.data);
-      const map = {};
+
+      const initialSelected = {};
       response.data.forEach((u) => {
-        map[u.email] = u.restrictions && u.restrictions.includes("login");
+        initialSelected[u.email] = "";
       });
-      setRestrictionMap(map);
+      setSelectedRestrictions(initialSelected);
     } catch (error) {
       toast.error("Failed to fetch users.");
     }
@@ -88,31 +97,74 @@ const ManageAllUsers = () => {
     }
   };
 
-  const toggleRestriction = async (email) => {
-    const isRestricted = restrictionMap[email];
-    const route = isRestricted ? "unrestrict" : "restrict";
+  const handleRestrictionChange = (email, value) => {
+    setSelectedRestrictions((prev) => ({
+      ...prev,
+      [email]: value,
+    }));
+  };
+
+  const handleRestrict = async (email) => {
+    const selected = selectedRestrictions[email];
+    const role = users.find((u) => u.email === email)?.role;
+
+    if (!selected) {
+      toast.warn("Please select a restriction.");
+      return;
+    }
+   
+
+    const restrictionsToSend = selected === "__ALL__"
+      ? availableRestrictions[role]
+      : [selected];
 
     try {
-      const response = await axios.post(
-        `http://localhost:8845/admin/${route}`,
-        { restriction: "login", email },
-        { headers: { "Content-Type": "application/json" } }
-      );
+      await axios.post("http://localhost:8845/admin/set-restrictions", {
+        email,
+        restrictions: restrictionsToSend,
+      });
+      toast.success("Restriction(s) applied.");
+      fetchUsers();
+    } catch (err) {
+    toast.error("Failed! Restriction already applied.");
 
-      if (response.status === 200) {
-        toast.success(isRestricted ? "Restriction removed." : "Restriction added.");
-        setRestrictionMap((prev) => ({ ...prev, [email]: !isRestricted }));
-      } else {
-        toast.error("Server rejected restriction request.");
-      }
-    } catch (error) {
-      console.error("RESTRICT ERROR FULL:", error);
-      const msg = error.response?.data || "Unknown error.";
-      toast.error(`Server error: ${JSON.stringify(msg)}`);
     }
   };
 
-  const handleDelete = async (email) => {
+
+
+  const handleUnrestrict = async (email) => {
+    const selected = selectedRestrictions[email];
+    const role = users.find((u) => u.email === email)?.role;
+
+    if (!selected) {
+      toast.warn("Please select a restriction.");
+      return;
+    }
+
+    if (selected === "__ALL__") {
+      try {
+        await axios.post("http://localhost:8845/admin/remove-all-restrictions", { email });
+        toast.success("All restrictions removed.");
+        fetchUsers();
+      } catch (err) {
+        toast.error("Failed to remove all restrictions.");
+      }
+    } else {
+      try {
+        await axios.post("http://localhost:8845/admin/unrestrict", {
+          email,
+          restriction: selected,
+        });
+        toast.success(`Restriction '${selected}' removed.`);
+        fetchUsers();
+      } catch (err) {
+        toast.error("Failed to remove restriction.");
+      }
+    }
+  };
+
+    const handleDelete = async (email) => {
     try {
       await axios.delete(`http://localhost:8845/admin/delete/${email}`);
       toast.success("User deleted.");
@@ -130,10 +182,7 @@ const ManageAllUsers = () => {
     formData.append("role", createUserState.role);
 
     try {
-      const response = await axios.post("http://localhost:8845/signup", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-
+      const response = await axios.post("http://localhost:8845/signup", formData);
       if (response.status === 200) {
         toast.success("User created successfully.");
         setCreateUserState({ name: "", email: "", password: "", role: "Student" });
@@ -148,124 +197,115 @@ const ManageAllUsers = () => {
   };
 
   return (
-    <div>
-      <div className="manage-users-container">
-        <h2>All Users in System</h2>
-        <div className="users-list">
-          <button
-            className="create-btn"
-            onClick={() => setShowCreateCard((prev) => !prev)}
+        <div>
+    <div className="manage-users-container">
+      <h2>All Users in System</h2>
+      <button className="create-btn" onClick={() => setShowCreateCard((prev) => !prev)}>
+        {showCreateCard ? "🢁 Close Form 🢁" : "+ Create New User +"}
+      </button>
+
+      {showCreateCard && (
+        <div className="user-card">
+          <h3>Create New User</h3>
+          <input
+            className="edit-input-2"
+            placeholder="Name"
+            value={createUserState.name}
+            onChange={(e) => setCreateUserState({ ...createUserState, name: e.target.value })}
+          />
+          <input
+            className="edit-input-2"
+            placeholder="Email"
+            value={createUserState.email}
+            onChange={(e) => setCreateUserState({ ...createUserState, email: e.target.value })}
+          />
+          <input
+            className="edit-input-2"
+            type="password"
+            placeholder="Password"
+            value={createUserState.password}
+            onChange={(e) => setCreateUserState({ ...createUserState, password: e.target.value })}
+          />
+          <select
+            className="edit-input-2"
+            value={createUserState.role}
+            onChange={(e) => setCreateUserState({ ...createUserState, role: e.target.value })}
           >
-            {showCreateCard ? "🢁 Close Form 🢁 " : "+ Create New User +"}
+            <option value="Student">Student</option>
+            <option value="Professor">Professor</option>
+            <option value="Admin">Admin</option>
+          </select>
+          <button className="create-btn" onClick={handleCreateUser}>Create</button>
+        </div>
+      )}
+
+      {users.map((user) => (
+        <div key={user.email} className="user-card">
+          <p><strong>Name:</strong> {user.name}</p>
+          <p><strong>Email:</strong> {user.email}</p>
+          <p><strong>Role:</strong> {user.role}</p>
+          <p><strong>Status:</strong> {user.restrictions?.length > 0 ? "Restricted" : "Unrestricted"}</p>
+          <p><strong>Restrictions:</strong> {user.restrictions?.join(", ") || "None"}</p>
+
+          <button className="manage-btn" onClick={() => toggleCard(user.email)}>
+            {activeCard === user.email ? "Close" : "Manage"}
           </button>
 
-          {showCreateCard && (
-
-            <div className="user-card" autoComplete="off">
-              <h3><strong>Create New User</strong></h3>
+          {activeCard === user.email && (
+            <div className="manage-section">
               <input
-                className="edit-input-2"
-                placeholder="Name"
-                value={createUserState.name}
-                onChange={(e) => setCreateUserState({ ...createUserState, name: e.target.value })}
-                autoComplete="off"
+                className="edit-input"
+                value={editState[user.email]?.name || ""}
+                onChange={(e) => handleChange(user.email, "name", e.target.value)}
               />
               <input
-                className="edit-input-2"
-                placeholder="Email"
-                value={createUserState.email}
-                onChange={(e) => setCreateUserState({ ...createUserState, email: e.target.value })}
-                autoComplete="off"
-                name="new-user-email"
+                className="edit-input"
+                value={editState[user.email]?.email || ""}
+                onChange={(e) => handleChange(user.email, "email", e.target.value)}
               />
               <input
-                className="edit-input-2"
+                className="edit-input"
                 type="password"
-                placeholder="Password"
-                value={createUserState.password}
-                onChange={(e) => setCreateUserState({ ...createUserState, password: e.target.value })}
-                autoComplete="new-password"
-                name="BIG-password"  // ovo sprečava autofill
+                value={editState[user.email]?.password || ""}
+                onChange={(e) => handleChange(user.email, "password", e.target.value)}
               />
               <select
-                className="edit-input-2"
-                value={createUserState.role}
-                onChange={(e) => setCreateUserState({ ...createUserState, role: e.target.value })}
-                autoComplete="off"
-                name="new-user-role"
+                className="edit-input"
+                value={editState[user.email]?.role}
+                onChange={(e) => handleRoleChange(user.email, e.target.value)}
               >
                 <option value="Student">Student</option>
                 <option value="Professor">Professor</option>
                 <option value="Admin">Admin</option>
               </select>
-              <button className="create-btn" onClick={handleCreateUser}>Create</button>
-            </div>
 
+              <select
+                className="edit-input"
+                value={selectedRestrictions[user.email] || ""}
+                onChange={(e) => handleRestrictionChange(user.email, e.target.value)}
+              >
+                <option value="">Select restriction</option>
+                <option value="__ALL__">-- Apply All Restrictions --</option>
+                {availableRestrictions[user.role]?.map((res) => (
+                  <option key={res} value={res}>{`-- ${res} --`}</option>
+                ))}
+              </select>
+
+              <div className="manage-actions">
+                <button className="update-btn" onClick={() => handleUpdate(user.email)}>Save Changes</button>
+                <button className="restriction-btn" onClick={() => handleRestrict(user.email)}>Restrict</button>
+                <button className="restriction-btn" onClick={() => handleUnrestrict(user.email)}>Unrestrict</button>
+                   <button className="delete-btn" onClick={() => handleDelete(user.email)}>Delete</button>
+              </div>
+            </div>
           )}
-
-
-          {users.map((user) => (
-            <div key={user.email} className="user-card">
-              <p><strong>Name:</strong> {user.name}</p>
-              <p><strong>Email:</strong> {user.email}</p>
-              <p><strong>Role:</strong> {user.role}</p>
-              <p><strong>Status:</strong> {restrictionMap[user.email] ? "Restricted" : "Unrestricted"}</p>
-              <button className="manage-btn" onClick={() => toggleCard(user.email)}>
-                {activeCard === user.email ? "Close" : "Manage"}
-              </button>
-
-              {activeCard === user.email && (
-                <div className="manage-section">
-                  <input
-                    className="edit-input"
-                    value={editState[user.email]?.name || ""}
-                    onChange={(e) => handleChange(user.email, "name", e.target.value)}
-                    placeholder="Name"
-                    autoComplete="off"
-                  />
-                  <input
-                    className="edit-input"
-                    value={editState[user.email]?.email || ""}
-                    onChange={(e) => handleChange(user.email, "email", e.target.value)}
-                    placeholder="Email"
-                    autoComplete="off"
-                  />
-                  <input
-                    className="edit-input"
-                    type="password"
-                    value={editState[user.email]?.password || ""}
-                    onChange={(e) => handleChange(user.email, "password", e.target.value)}
-                    placeholder="New Password"
-                    autoComplete="new-password"
-                  />
-                  <select
-                    className="edit-input"
-                    value={editState[user.email]?.role}
-                    onChange={(e) => handleRoleChange(user.email, e.target.value)}
-                  >
-                    <option value="Student">Student</option>
-                    <option value="Professor">Professor</option>
-                    <option value="Admin">Admin</option>
-                  </select>
-
-                  <div className="manage-actions">
-                    <button className="update-btn" onClick={() => handleUpdate(user.email)}>Save Changes</button>
-                    <button className="restriction-btn" onClick={() => toggleRestriction(user.email)}>
-                      {restrictionMap[user.email] ? "Unrestrict" : "Restrict"}
-                    </button>
-                    <button className="delete-btn" onClick={() => handleDelete(user.email)}>Delete</button>
-                  </div>
-                </div>
-              )}
-            </div>
-
-          ))}
-
         </div>
-      </div>
-      <ToastContainer position="top-center" autoClose={2000} style={{ marginTop: "55px" }} />
+      ))}
 
     </div>
+          <ToastContainer position="top-center" autoClose={2000} style={{ marginTop: "55px" }} />
+
+</div>
   );
 };
 

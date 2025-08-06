@@ -24,32 +24,45 @@ const Login = () => {
     try {
       const response = await axios.post("http://localhost:8845/login", formData, {
         headers: { "Content-Type": "multipart/form-data" },
+
       });
 
       if (response.status === 200) {
-        toast.success("Login successful!");
-        const data = response.data;
+  toast.success("Login successful!");
 
-        setTimeout(() => {
-          
-        login(data.role, email);
-        sessionStorage.setItem("email", email);
+  const data = response.data;
+        console.log("LOGIN response data:", data);
 
-        switch (data.role) {
-          case "Admin":
-            navigate("/manageusers");
-            break;
-          case "Professor":
-            navigate("/studentsuploads");
-            break;
-          case "Student":
-            navigate("/upload");
-            break;
-          default:
-            navigate("/");
-        }
-         }, 2000);
-      } else {
+  // Sacuvaj restrikcije lokalno
+  sessionStorage.setItem("email", data.email);
+  sessionStorage.setItem("role", data.role);
+  sessionStorage.setItem("restrictions", JSON.stringify(data.restrictions || []));
+
+  login({
+    
+  role: data.role,
+  email: data.email,
+  restrictions: data.restrictions || [],
+  
+});
+
+
+  setTimeout(() => {
+    switch (data.role) {
+      case "Admin":
+        navigate("/manageusers");
+        break;
+      case "Professor":
+        navigate("/studentsuploads");
+        break;
+      case "Student":
+        navigate("/upload");
+        break;
+      default:
+        navigate("/");
+    }
+  }, 2000);
+} else {
         toast.error(response.data.error || "Login failed");
       }
     } catch (error) {

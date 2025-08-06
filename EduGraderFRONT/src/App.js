@@ -1,14 +1,13 @@
-import { useEffect } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Navig from "./components/home/Navig";
-import { PrivateRoute } from "./components/auth/AuthContext";
+import {  PrivateRoute } from "./components/auth/AuthContext";
+import { useAuth } from "./components/auth/AuthContext"; // ili tvoj tačan path
+
 
 // Home/Auth
 import Login from "./components/home/Login";
 import Signup from "./components/home/Signup";
 import Welcome from "./components/home/Welcome";
-import { useAuth } from "./components/auth/AuthContext";
-
 import Forbidden from "./components/auth/Forbidden";
 
 // Student Components
@@ -24,52 +23,121 @@ import Suggestions from "./components/professor/Suggestions";
 import StudentsProgress from "./components/professor/StudentsProgress";
 import GeneratedReport from "./components/professor/GeneratedReport";
 
-
 // Admin Components
 import ManageAllUsers from "./components/admin/ManageAllUsers";
 import SystemsSettings from "./components/admin/SystemsSettings";
-
-
 
 import "./App.css";
 
 function App() {
 
- 
-
   return (
     <div className="App">
       <Navig />
       <Routes>
-        {/* Public routes */}
+        {/* Public */}
         <Route path="/" element={<Welcome />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/forbidden" element={<Forbidden />} />
 
-        {/* Student routes */}
-        <Route element={<PrivateRoute allowedRoles={["Student"]} />}>
-          <Route path="/upload" element={<Upload />} />
-          <Route path="/status" element={<Status />} />
-          <Route path="/review" element={<Review />} />
-           <Route path="/progress" element={<Progress />} />
-          <Route path="/recommendation" element={<Recommendation />} />         
-        </Route>
+        {/* Student */}
+        <Route
+          path="/upload"
+          element={
+            <PrivateRoute allowedRoles={["Student"]} routeKey="upload">
+              <Upload />
+            </PrivateRoute>
+          }
+        />
+          <Route
+          path="/status"
+          element={
+            <PrivateRoute allowedRoles={["Student"]} routeKey="status">
+              <Status />
+            </PrivateRoute>
+          }
+       />
+        
+        <Route
+          path="/review"
+          element={
+            <PrivateRoute allowedRoles={["Student"]} routeKey="review">
+              <Review />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/progress"
+          element={
+            <PrivateRoute allowedRoles={["Student"]} routeKey="progress">
+              <Progress />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/recommendation"
+          element={
+            <PrivateRoute allowedRoles={["Student"]} routeKey="recommendation">
+              <Recommendation />
+            </PrivateRoute>
+          }
+        />
 
-        {/* Professor routes */}
-        <Route element={<PrivateRoute allowedRoles={["Professor"]} />}>
-          <Route path="/studentsuploads" element={<StudentsUploads />} />
-          <Route path="/suggestions" element={<Suggestions />} />
-          <Route path="/studentsprogress" element={<StudentsProgress />} />
-          <Route path="/generatedreport" element={<GeneratedReport />} />
-                    
-        </Route>
+        {/* Professor */}
+        <Route
+          path="/studentsuploads"
+          element={
+            <PrivateRoute allowedRoles={["Professor"]} routeKey="studentsuploads">
+              <StudentsUploads />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/suggestions"
+          element={
+            <PrivateRoute allowedRoles={["Professor"]} routeKey="suggestions">
+              <Suggestions />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/studentsprogress"
+          element={
+            <PrivateRoute allowedRoles={["Professor"]} routeKey="studentsprogress">
+              <StudentsProgress />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/generatedreport"
+          element={
+            <PrivateRoute allowedRoles={["Professor"]} routeKey="generatedreport">
+              <GeneratedReport />
+            </PrivateRoute>
+          }
+        />
 
-        {/* Admin routes */}
-        <Route element={<PrivateRoute allowedRoles={["Admin"]} />}>
-          <Route path="/manageusers" element={<ManageAllUsers />} />
-          <Route path="/systemsettings" element={<SystemsSettings />} />
-        </Route>
+        {/* Admin */}
+        <Route
+          path="/manageusers"
+          element={
+            <PrivateRoute allowedRoles={["Admin"]} routeKey="manageusers">
+              <ManageAllUsers />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/systemsettings"
+          element={
+            <PrivateRoute allowedRoles={["Admin"]} routeKey="systemsettings">
+              <SystemsSettings />
+            </PrivateRoute>
+          }
+        />
+
+        {/* Fallback */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </div>
   );
