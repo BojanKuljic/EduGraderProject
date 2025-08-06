@@ -171,95 +171,95 @@ const Status = () => {
 
     return (
         <div>
-        <div className="status-container">
-            <h2>Status of All Student Works </h2>
-            {uploads.length === 0 ? (
-                <p>No uploads found.</p>
-            ) : (
-                <div className="status-list">
-                    {uploads.map((upload) => (
-                        <div key={upload.id} className="status-card">
-                            <h3>{upload.title}</h3>
-                            <p><strong>Course:</strong> {upload.course}</p>
-                            <p><strong>Total versions:</strong> {upload.versions?.length ?? 0}</p>
-                            <p><strong>Current Active version:</strong> {upload.activeVersion + 1}</p>
-                            <p><strong>Status:</strong> {formatStatus(upload.status)}</p>
-                            <p><strong>Upload date:</strong> {formatDate(upload.uploadDate)}</p>
-                            <p><strong>Estimated review time:</strong> {formatReviewTime(upload.usualReviewTime)}</p>
+            <div className="status-container">
+                <h2>Status of All Student Works </h2>
+                {uploads.length === 0 ? (
+                    <p>No uploads found.</p>
+                ) : (
+                    <div className="status-list">
+                        {uploads.map((upload) => (
+                            <div key={upload.id} className="status-card">
+                                <h3>{upload.title}</h3>
+                                <p><strong>Course:</strong> {upload.course}</p>
+                                <p><strong>Total versions:</strong> {upload.versions?.length ?? 0}</p>
+                                <p><strong>Current Active version:</strong> {upload.activeVersion + 1}</p>
+                                <p><strong>Status:</strong> {formatStatus(upload.status)}</p>
+                                <p><strong>Upload date:</strong> {formatDate(upload.uploadDate)}</p>
+                                <p><strong>Estimated review time:</strong> {formatReviewTime(upload.usualReviewTime)}</p>
 
-                            <button className="status-edit-toggle" onClick={() => toggleEditSection(upload.id)}>
-                                {expandedCard === upload.id ? "Close Edit Panel" : "Edit Upload"}
-                            </button>
+                                <button className="status-edit-toggle" onClick={() => toggleEditSection(upload.id)}>
+                                    {expandedCard === upload.id ? "Close Edit Panel" : "Edit Upload"}
+                                </button>
 
-                            {expandedCard === upload.id && (
-                                <div className="status-edit-section">
-                                    {/* Download */}
-                                    <label>Download Current File </label>
-                                    <div className="upload-new-version ">
-                                        <button onClick={() => handleDownload(upload.id, upload.title)}>Download</button>
+                                {expandedCard === upload.id && (
+                                    <div className="status-edit-section">
+                                        {/* Download */}
+                                        <label>Download Current File </label>
+                                        <div className="upload-new-version ">
+                                            <button onClick={() => handleDownload(upload.id, upload.title)}>Download</button>
 
-                                    </div>
+                                        </div>
 
-                                    {/* Upload new version */}
-                                    <label>Upload New Version</label>
-                                    <div className="upload-new-version">
-                                        <input
-                                            className="upload-input"
-                                            type="file"
-                                            accept=".pdf,.doc,.docx"
+                                        {/* Upload new version */}
+                                        <label>Upload New Version</label>
+                                        <div className="upload-new-version">
+                                            <input
+                                                className="upload-input"
+                                                type="file"
+                                                accept=".pdf,.doc,.docx"
 
-                                            onChange={(e) =>
-                                                setSelectedFiles((prev) => ({
-                                                    ...prev,
-                                                    [upload.id]: e.target.files[0]
-                                                }))
-                                            }
-                                        />
-                                        <button
-                                            type="button"
-                                            onClick={(e) => {
-                                                const fileInputEvent = { target: { files: [selectedFiles[upload.id]] } };
-                                                handleUpdate(fileInputEvent, upload.id);
-                                            }}
-                                        >
-                                            Upload
-                                        </button>
-                                    </div>
-
-                                    {/* Revert version */}
-                                    <label>Revert to Version</label>
-                                    <div className="revert-version">
-                                        <input
-                                            type="number"
-                                            placeholder="e.g. 1"
-                                            value={revertVersions[upload.id] || ""}
-                                            onChange={(e) => {
-                                                const val = parseInt(e.target.value);
-                                                if (!isNaN(val) && val >= 1 && val <= (upload.versions?.length || 1)) {
-                                                    setRevertVersions((prev) => ({
+                                                onChange={(e) =>
+                                                    setSelectedFiles((prev) => ({
                                                         ...prev,
-                                                        [upload.id]: val
-                                                    }));
+                                                        [upload.id]: e.target.files[0]
+                                                    }))
                                                 }
-                                            }}
-                                        />
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={(e) => {
+                                                    const fileInputEvent = { target: { files: [selectedFiles[upload.id]] } };
+                                                    handleUpdate(fileInputEvent, upload.id);
+                                                }}
+                                            >
+                                                Upload
+                                            </button>
+                                        </div>
 
-                                        <button onClick={() => handleRevert(upload.id, revertVersions[upload.id])}>
-                                            Revert
-                                        </button>
+                                        {/* Revert version */}
+                                        <label>Revert to Version</label>
+                                        <div className="revert-version">
+                                            <input
+                                                type="number"
+                                                placeholder="e.g. 1"
+                                                value={revertVersions[upload.id] || ""}
+                                                onChange={(e) => {
+                                                    const val = parseInt(e.target.value);
+                                                    if (!isNaN(val) && val >= 1 && val <= (upload.versions?.length || 1)) {
+                                                        setRevertVersions((prev) => ({
+                                                            ...prev,
+                                                            [upload.id]: val
+                                                        }));
+                                                    }
+                                                }}
+                                            />
 
+                                            <button onClick={() => handleRevert(upload.id, revertVersions[upload.id])}>
+                                                Revert
+                                            </button>
+
+                                        </div>
                                     </div>
-                                </div>
-                            )}
+                                )}
 
 
-                        </div>
-                    ))}
-                </div>
-            )}
-            
-        </div>
-        <ToastContainer
+                            </div>
+                        ))}
+                    </div>
+                )}
+
+            </div>
+            <ToastContainer
                 position="top-center"
                 autoClose={2000}
                 style={{ marginTop: "55px" }} />

@@ -54,29 +54,41 @@ function StudentsProgress() {
     setReportTo("");
     setReportResult(null);
   };
+const generateReport = (uploads) => {
+  // Ako ništa nije selektovano
+  if (!reportCourse && !reportFrom && !reportTo) {
+    return setReportResult("Please select course, period, or both.");
+  }
 
-  const generateReport = (uploads) => {
-    if (!reportCourse || !reportFrom || !reportTo) return setReportResult("Please select all fields.");
+  let filtered = uploads;
 
-    const filtered = uploads.filter(u =>
-      u.course === reportCourse &&
+  // Filtriraj po kursu ako je selektovan
+  if (reportCourse) {
+    filtered = filtered.filter(u => u.course === reportCourse);
+  }
+
+  // Filtriraj po periodu ako je selektovan
+  if (reportFrom && reportTo) {
+    filtered = filtered.filter(u =>
       new Date(u.uploadDate) >= new Date(reportFrom) &&
       new Date(u.uploadDate) <= new Date(reportTo)
     );
+  }
 
-    if (filtered.length === 0) {
-      return setReportResult("No activity in selected range.");
-    }
+  if (filtered.length === 0) {
+    return setReportResult("No activity in selected range.");
+  }
 
-    const grades = filtered.map(u => u.review?.grade).filter(Boolean);
-    const avg = grades.length ? grades.reduce((a, b) => a + b, 0) / grades.length : 0;
+  const grades = filtered.map(u => u.review?.grade).filter(Boolean);
+  const avg = grades.length ? grades.reduce((a, b) => a + b, 0) / grades.length : 0;
 
-    let status = "Satisfactory";
-    if (avg < 6) status = "Poor";
-    else if (avg > 8) status = "Excellent";
+  let status = "Satisfactory";
+  if (avg < 6) status = "Poor";
+  else if (avg > 8) status = "Excellent";
 
-    setReportResult(`Uploads: ${filtered.length}, Average grade: ${avg.toFixed(2)} → Progress: ${status}`);
-  };
+  setReportResult(`Uploads: ${filtered.length}, Average grade: ${avg.toFixed(2)} → Progress: ${status}`);
+};
+
 
   return (
     <div className="students-uploads-container">
