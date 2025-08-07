@@ -9,6 +9,7 @@ const ManageAllUsers = () => {
   const [activeCard, setActiveCard] = useState(null);
   const [editState, setEditState] = useState({});
   const [selectedRestrictions, setSelectedRestrictions] = useState({});
+  const [lastSelectedRestriction, setLastSelectedRestriction] = useState({});
   const [showCreateCard, setShowCreateCard] = useState(false);
   const availableRestrictions = {
     Student: ["upload", "status", "review", "progress", "recommendation", "login"],
@@ -32,7 +33,7 @@ const ManageAllUsers = () => {
       setUsers(response.data);
       const initialSelected = {};
       response.data.forEach((u) => {
-        initialSelected[u.email] = "";
+        initialSelected[u.email] = [];
       });
       setSelectedRestrictions(initialSelected);
     } catch (error) {
@@ -93,46 +94,75 @@ const ManageAllUsers = () => {
     }
   };
 
+
   const handleRestrictionChange = (email, value) => {
-    setSelectedRestrictions((prev) => ({
+    setSelectedRestrictions((prev) => {
+      const current = prev[email] || [];
+
+      if (!value || current.includes(value)) return prev;
+
+      return {
+        ...prev,
+        [email]: [...current, value],
+      };
+    });
+
+    setLastSelectedRestriction((prev) => ({
       ...prev,
       [email]: value,
     }));
   };
 
+
   const handleRestrict = async (email) => {
-    const selected = selectedRestrictions[email];
+    const selected = selectedRestrictions[email] || [];
     const role = users.find((u) => u.email === email)?.role;
-    if (!selected) {
+
+    if (!selected.length) {
       toast.warn("Please select a restriction.");
       return;
     }
 
-    const restrictionsToSend = selected === "__ALL__"
-      ? availableRestrictions[role]
-      : [selected];
-
-    try {
-      await axios.post("http://localhost:8845/admin/set-restrictions", {
-        email,
-        restrictions: restrictionsToSend,
-      });
-      toast.success("Restriction(s) applied.");
-      fetchUsers();
-    } catch (err) {
-      toast.error("Failed! Restriction already applied.");
+    if (selected.includes("ALL")) {
+      try {
+        await axios.post("http://localhost:8845/admin/set-restrictions", {
+          email,
+          restrictions: availableRestrictions[role],
+        });
+        toast.success("All restrictions applied.");
+        fetchUsers();
+        return;
+      } catch (err) {
+        toast.error("Failed to apply all restrictions.");
+        return;
+      }
     }
+
+    // Dodaj pojedinačne restrikcije jednu po jednu
+    for (const restriction of selected) {
+      try {
+        await axios.post("http://localhost:8845/admin/restrict", {
+          email,
+          restriction,
+        });
+      } catch (err) {
+        toast.error(`Failed to apply restriction: ${restriction}`);
+      }
+    }
+
+    toast.success("Restriction(s) applied.");
+    fetchUsers();
   };
 
   const handleUnrestrict = async (email) => {
     const selected = selectedRestrictions[email];
-    const role = users.find((u) => u.email === email)?.role;
-    if (!selected) {
+    if (!selected || selected.length === 0) {
       toast.warn("Please select a restriction.");
       return;
     }
 
-    if (selected === "__ALL__") {
+    // Ako je izabrano ALL → obriši sve restrikcije
+    if (selected.includes("ALL")) {
       try {
         await axios.post("http://localhost:8845/admin/remove-all-restrictions", { email });
         toast.success("All restrictions removed.");
@@ -140,17 +170,21 @@ const ManageAllUsers = () => {
       } catch (err) {
         toast.error("Failed to remove all restrictions.");
       }
-    } else {
-      try {
+      return;
+    }
+
+    // Inače, ukloni svaku pojedinačno izabranu restrikciju
+    try {
+      for (const restriction of selected) {
         await axios.post("http://localhost:8845/admin/unrestrict", {
           email,
-          restriction: selected,
+          restriction,
         });
-        toast.success(`Restriction '${selected}' removed.`);
-        fetchUsers();
-      } catch (err) {
-        toast.error("Failed to remove restriction.");
       }
+      toast.success("Selected restriction(s) removed.");
+      fetchUsers();
+    } catch (err) {
+      toast.error("Failed to remove restriction(s).");
     }
   };
 
@@ -219,19 +253,16 @@ const ManageAllUsers = () => {
               onChange={(e) => setCreateUserState({ ...createUserState, password: e.target.value })}
               autoComplete="off"
             />
-<select
-  className={`edit-input-2 ${createUserState.role === "" ? "placeholder" : ""}`}
-  value={createUserState.role}
-  onChange={(e) => setCreateUserState({ ...createUserState, role: e.target.value })}
->
-  <option value="" disabled hidden>Select role</option>
-  <option value="Student">Student</option>
-  <option value="Professor">Professor</option>
-  <option value="Admin">Admin</option>
-</select>
-
-
-
+            <select
+              className={`edit-input-2 ${createUserState.role === "" ? "placeholder" : ""}`}
+              value={createUserState.role}
+              onChange={(e) => setCreateUserState({ ...createUserState, role: e.target.value })}
+            >
+              <option value="" disabled hidden>Select role</option>
+              <option value="Student">Student</option>
+              <option value="Professor">Professor</option>
+              <option value="Admin">Admin</option>
+            </select>
             <button className="create-btn" onClick={handleCreateUser}>Create</button>
           </div>
         )}
@@ -280,16 +311,17 @@ const ManageAllUsers = () => {
 
                 <select
                   className="edit-input"
-                  value={selectedRestrictions[user.email] || ""}
+                  value=""
                   onChange={(e) => handleRestrictionChange(user.email, e.target.value)}
                 >
-                  <option value="">Select restriction</option>
-                  <option value="__ALL__">-- aply_all_restrictions --</option>
+                  <option value="" disabled hidden>
+                    {lastSelectedRestriction[user.email] || "Select restriction"}
+                  </option>
+                  <option value="ALL">-- apply_all_restrictions --</option>
                   {availableRestrictions[user.role]?.map((res) => (
                     <option key={res} value={res}>{`-- ${res} --`}</option>
                   ))}
                 </select>
-
                 <div className="manage-actions">
                   <button className="update-btn" onClick={() => handleUpdate(user.email)}>Save Changes</button>
                   <button className="restriction-btn" onClick={() => handleRestrict(user.email)}>Restrict  </button>
