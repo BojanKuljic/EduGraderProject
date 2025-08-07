@@ -219,6 +219,8 @@ namespace GradeAndAnalysesService
                     ".xlsx" => ExtractFromExcel(stream),
                     ".txt" => ExtractFromTxt(stream),
                     ".png" or ".jpg" or ".jpeg" => ExtractFromImage(stream),
+                    ".zip" => ExtractFromZip(stream),
+                    ".pptx" => ExtractFromPptx(stream),
                     _ => Encoding.UTF8.GetString(fileData)
                 };
             }
@@ -226,6 +228,25 @@ namespace GradeAndAnalysesService
             {
                 return "Failed to extract text.";
             }
+        }
+
+
+        private string ExtractFromPdf(Stream stream)
+        {
+            using var reader = new iText.Kernel.Pdf.PdfReader(stream);
+            using var pdfDoc = new iText.Kernel.Pdf.PdfDocument(reader);
+            var strategy = new iText.Kernel.Pdf.Canvas.Parser.Listener.SimpleTextExtractionStrategy();
+
+            StringBuilder sb = new();
+
+            for (int i = 1; i <= pdfDoc.GetNumberOfPages(); i++)
+            {
+                var page = pdfDoc.GetPage(i);
+                string text = iText.Kernel.Pdf.Canvas.Parser.PdfTextExtractor.GetTextFromPage(page, strategy);
+                sb.AppendLine(text);
+            }
+
+            return sb.ToString();
         }
         private string ExtractFromWord(Stream stream)
         {
@@ -253,6 +274,13 @@ namespace GradeAndAnalysesService
             return sb.ToString();
         }
 
+        private string ExtractFromTxt(Stream stream)
+        {
+            using var reader = new StreamReader(stream);
+            return reader.ReadToEnd();
+        }
+
+
         private string ExtractFromImage(Stream stream)
         {
             using var ms = new MemoryStream();
@@ -265,35 +293,64 @@ namespace GradeAndAnalysesService
             return page.GetText();
         }
 
-
-
-        private string ExtractFromTxt(Stream stream)
+        private string ExtractFromZip(Stream stream)
         {
-            using var reader = new StreamReader(stream);
-            return reader.ReadToEnd();
-        }
-
-
-
-
-
-        private string ExtractFromPdf(Stream stream)
-        {
-            using var reader = new iText.Kernel.Pdf.PdfReader(stream);
-            using var pdfDoc = new iText.Kernel.Pdf.PdfDocument(reader);
-            var strategy = new iText.Kernel.Pdf.Canvas.Parser.Listener.SimpleTextExtractionStrategy();
-
+            using var archive = new System.IO.Compression.ZipArchive(stream, System.IO.Compression.ZipArchiveMode.Read);
             StringBuilder sb = new();
 
-            for (int i = 1; i <= pdfDoc.GetNumberOfPages(); i++)
+            foreach (var entry in archive.Entries)
             {
-                var page = pdfDoc.GetPage(i);
-                string text = iText.Kernel.Pdf.Canvas.Parser.PdfTextExtractor.GetTextFromPage(page, strategy);
-                sb.AppendLine(text);
+                if (string.IsNullOrEmpty(entry.Name)) continue; // skip folders
+
+                using var entryStream = entry.Open();
+                using var ms = new MemoryStream();
+                entryStream.CopyTo(ms);
+
+                string extracted = ExtractTextFromFile(ms.ToArray(), entry.Name);
+                sb.AppendLine($"--- {entry.Name} ---");
+                sb.AppendLine(extracted);
+                sb.AppendLine();
             }
 
             return sb.ToString();
         }
+
+        private string ExtractFromPptx(Stream stream)
+        {
+            using var ms = new MemoryStream();
+            stream.CopyTo(ms);
+            ms.Position = 0;
+
+            StringBuilder sb = new();
+
+            using (var presentation = DocumentFormat.OpenXml.Packaging.PresentationDocument.Open(ms, false))
+            {
+                var slideParts = presentation.PresentationPart?.SlideParts;
+                if (slideParts != null)
+                {
+                    foreach (var slide in slideParts)
+                    {
+                        var texts = slide.Slide.Descendants<DocumentFormat.OpenXml.Drawing.Text>();
+                        foreach (var text in texts)
+                        {
+                            sb.AppendLine(text.Text);
+                        }
+                        sb.AppendLine(); // Razdvoji slajdove
+                    }
+                }
+            }
+
+            return sb.ToString();
+        }
+
+
+
+
+
+
+
+
+
 
 
 
@@ -338,22 +395,35 @@ namespace GradeAndAnalysesService
             {
                 string errorPrompt, improvementPrompt, scorePrompt, recommendationPrompt;
 
-                if (settings.Language?.ToLower() == "code")
+                switch (settings.Language?.ToLower())
                 {
-                    errorPrompt = $"Analyze this code for bugs and issues:\n{textContent}";
-                    improvementPrompt = $"Suggest improvements for this code:\n{textContent}";
-                    scorePrompt = $"Rate the code quality from 0 to 100:\n{textContent}";
-                    recommendationPrompt = $"Suggest coding resources to improve this code:\n{textContent}";
-                }
-                else
-                {
-                    using var tx = this.StateManager.CreateTransaction();
+                    case "code":
+                        errorPrompt = $"Analyze this code for bugs and issues:\n{textContent}";
+                        improvementPrompt = $"Suggest improvements for this code:\n{textContent}";
+                        scorePrompt = $"Rate the code quality from 0 to 100:\n{textContent}";
+                        recommendationPrompt = $"Suggest coding resources to improve this code:\n{textContent}";
+                        break;
 
-                    errorPrompt = string.Format((await _promptTemplates.TryGetValueAsync(tx, "error")).Value, textContent);
-                    improvementPrompt = string.Format((await _promptTemplates.TryGetValueAsync(tx, "improvement")).Value, textContent);
-                    scorePrompt = string.Format((await _promptTemplates.TryGetValueAsync(tx, "score")).Value, textContent);
-                    recommendationPrompt = string.Format((await _promptTemplates.TryGetValueAsync(tx, "recommendation")).Value, textContent);
+                    case "serbian":
+                        errorPrompt = $"Identifikuj greške u sledećem studentskom radu (može biti bilo kog tipa fajla). Navedi što manje grešaka sa kratkim objašnjenjem sve na srpskom jeziku obavezno:\n{textContent}";
+                        improvementPrompt = $"Predloži poboljšanja za sledeći rad. Napiši kratke, sazete i jasne savete koje student može primeniti sve na srpskom jeziku obavezno:\n{textContent}";
+                        scorePrompt = $"Oceni rad ocenom od 0 do 100, uz objašnjenje na srpskom:\n{textContent}";
+                        recommendationPrompt = $"Na osnovu analize rada, predloži personalizovane preporuke za dalje učenje." +
+                            $" Uključi relevantne izvore poput kurseva, članaka ili knjiga (po mogućstvu sa linkovima). NEmoj mnogo preporuka, izvuci samo one najbitnije  4 -5 njih i sve na srpskom jeziku obavezno :\n{textContent}";
+                        break;
+
+                    case "english":
+                    default:
+                        using (var tx = this.StateManager.CreateTransaction())
+                        {
+                            errorPrompt = string.Format((await _promptTemplates.TryGetValueAsync(tx, "error")).Value, textContent);
+                            improvementPrompt = string.Format((await _promptTemplates.TryGetValueAsync(tx, "improvement")).Value, textContent);
+                            scorePrompt = string.Format((await _promptTemplates.TryGetValueAsync(tx, "score")).Value, textContent);
+                            recommendationPrompt = string.Format((await _promptTemplates.TryGetValueAsync(tx, "recommendation")).Value, textContent);
+                        }
+                        break;
                 }
+
 
                 string errors = await GetAIResponse(errorPrompt);
                 string improvements = await GetAIResponse(improvementPrompt);
