@@ -3,7 +3,6 @@ import "../../styles/auth/Forbidden.css";
 
 const Forbidden = () => {
   return (
-
     <div className="forbidden-box">
       <div className="forbidden-borderLine">
         <div className="forbidden-content">
@@ -16,7 +15,6 @@ const Forbidden = () => {
         </div>
       </div>
     </div>
-
   );
 };
 

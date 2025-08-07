@@ -20,7 +20,7 @@ const Welcome = () => {
         </ul>
       </div>
       <label className="roles2">There are three roles in the system: 👥 </label>
-      <div className="roles">        
+      <div className="roles">
         <ul>
           <li><strong>Students</strong> – upload work and monitor progress</li>
           <li><strong>Professors</strong> – review and assess student work</li>

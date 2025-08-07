@@ -4,7 +4,7 @@
   left: 50%;
   transform: translateX(-50%);
   height: 86vh;
-  width: 750px; 
+  width: 750px;
   margin: 40px auto;
   padding: 30px 40px;
   background-color: #1c1f2b;
@@ -28,7 +28,6 @@
   font-size: 18px;
   line-height: 1.6;
   box-shadow: 0 0 8px #45f3ff;
-
 }
 
 .no-data {
@@ -38,7 +37,6 @@
   color: #ccc;
 }
 
-
 .chart-container {
   margin-top: 40px;
   padding: 20px;
@@ -46,11 +44,10 @@
   border-radius: 10px;
   box-shadow: 0 0 8px #45f3ff;
   text-align: center;
-height: auto;
+  height: auto;
   overflow-y: auto;
-  scrollbar-width: none;          
-  -ms-overflow-style: none;  
-  
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 .chart-container h3 {

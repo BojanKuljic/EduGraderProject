@@ -20,8 +20,8 @@
 }
 
 .filters button {
- display: block;
-margin: 0 auto;
+  display: block;
+  margin: 0 auto;
   padding: 10px 20px;
   background-color: #3c4ccb;
   border: none;
@@ -47,4 +47,3 @@ margin: 0 auto;
   text-align: center;
   box-shadow: 0 0 8px #3c4ccb;
 }
-

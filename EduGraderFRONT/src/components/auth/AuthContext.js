@@ -3,18 +3,17 @@ import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export const AuthContext = createContext();
-
 export const AuthContextProvider = ({ children }) => {
   const [authState, setAuthState] = useState(() => {
     const storedState = localStorage.getItem("authState");
     return storedState
       ? JSON.parse(storedState)
       : {
-          isAuthenticated: false,
-          role: null,
-          email: null,
-          restrictions: [],
-        };
+        isAuthenticated: false,
+        role: null,
+        email: null,
+        restrictions: [],
+      };
   });
 
   useEffect(() => {
@@ -58,7 +57,7 @@ export const AuthContextProvider = ({ children }) => {
         restrictions: freshRestrictions,
       }));
     } catch (err) {
-      console.error("❌ Failed to refresh restrictions:", err);
+      console.error("Failed to refresh restrictions:", err);
     }
   };
 
@@ -71,9 +70,7 @@ export const AuthContextProvider = ({ children }) => {
   );
 };
 
-// Hook za korišćenje auth konteksta
 export const useAuth = () => useContext(AuthContext);
-
 // PrivateRoute komponenta
 export const PrivateRoute = ({ allowedRoles, routeKey, children }) => {
   const {
@@ -91,31 +88,26 @@ export const PrivateRoute = ({ allowedRoles, routeKey, children }) => {
   // Provera pristupa
   useEffect(() => {
     if (!isAuthenticated || !role) return;
-
     const isBlocked =
       !allowedRoles.includes(role) || restrictions.includes(routeKey);
-
     setBlocked(isBlocked);
   }, [restrictions, role, routeKey]);
 
-  // Povremeni refresh
   useEffect(() => {
     if (isAuthenticated && email) {
       const interval = setInterval(() => {
         refreshRestrictions(email);
-      }, 500); // manji refresh interval ako ne koristiš Gemini
+      }, 500);
       return () => clearInterval(interval);
     }
   }, [isAuthenticated, email]);
 
-  // Čuvaj poslednju validnu rutu osim forbidden
   useEffect(() => {
     if (!blocked && location.pathname !== "/forbidden") {
       sessionStorage.setItem("lastRoute", location.pathname);
     }
   }, [location.pathname, blocked]);
 
-  // Ako mu je restrikcija uklonjena, vrati ga sa forbidden
   useEffect(() => {
     if (!blocked && location.pathname === "/forbidden") {
       const last = sessionStorage.getItem("lastRoute") || "/";

@@ -13,9 +13,9 @@ const Login = () => {
   const [role, setRole] = useState("");
   const navigate = useNavigate();
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const formData = new FormData();
     formData.append("email", email);
     formData.append("password", password);
@@ -24,57 +24,49 @@ const Login = () => {
     try {
       const response = await axios.post("http://localhost:8845/login", formData, {
         headers: { "Content-Type": "multipart/form-data" },
-
       });
-
       if (response.status === 200) {
-  toast.success("Login successful!");
-
-  const data = response.data;
+        toast.success("Login successful!");
+        const data = response.data;
         console.log("LOGIN response data:", data);
 
-  // Sacuvaj restrikcije lokalno
-  sessionStorage.setItem("email", data.email);
-  sessionStorage.setItem("role", data.role);
-  sessionStorage.setItem("restrictions", JSON.stringify(data.restrictions || []));
+        // Sacuvaj restrikcije lokalno
+        sessionStorage.setItem("email", data.email);
+        sessionStorage.setItem("role", data.role);
+        sessionStorage.setItem("restrictions", JSON.stringify(data.restrictions || []));
 
-  login({
-    
-  role: data.role,
-  email: data.email,
-  restrictions: data.restrictions || [],
-  
-});
+        login({
+          role: data.role,
+          email: data.email,
+          restrictions: data.restrictions || [],
+        });
 
-
-  setTimeout(() => {
-    switch (data.role) {
-      case "Admin":
-        navigate("/manageusers");
-        break;
-      case "Professor":
-        navigate("/studentsuploads");
-        break;
-      case "Student":
-        navigate("/upload");
-        break;
-      default:
-        navigate("/");
-    }
-  }, 2000);
-} else {
+        setTimeout(() => {
+          switch (data.role) {
+            case "Admin":
+              navigate("/manageusers");
+              break;
+            case "Professor":
+              navigate("/studentsuploads");
+              break;
+            case "Student":
+              navigate("/upload");
+              break;
+            default:
+              navigate("/");
+          }
+        }, 2000);
+      } else {
         toast.error(response.data.error || "Login failed");
       }
     } catch (error) {
-  if (error.response) {
-    // Backend je odgovorio sa error statusom (npr. 400, 401)
-    const errMsg = error.response.data || "Invalid credentials or role";
-    toast.error(typeof errMsg === "string" ? errMsg : JSON.stringify(errMsg));
-  } else {
-    // Mrežna greška
-    toast.error("Network error. Try again later.");
-  }
-}
+      if (error.response) {
+        const errMsg = error.response.data || "Invalid credentials or role";
+        toast.error(typeof errMsg === "string" ? errMsg : JSON.stringify(errMsg));
+      } else {
+        toast.error("Network error. Try again later.");
+      }
+    }
   };
 
   return (
@@ -88,7 +80,7 @@ const Login = () => {
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            //  autoComplete="off"
+          //  autoComplete="off"
           />
           <span>Email</span>
           <i></i>
@@ -99,7 +91,7 @@ const Login = () => {
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            //  autoComplete="off"
+          //  autoComplete="off"
           />
           <span>Password</span>
           <i></i>
@@ -108,8 +100,8 @@ const Login = () => {
         <div className="roleBox">
           <span className={role ? "roleLabel active" : "roleLabel"}>
             Role
-          </span>        
-            <div className="roleOptions">
+          </span>
+          <div className="roleOptions">
             <label>
               <input
                 type="radio"
@@ -148,17 +140,7 @@ const Login = () => {
 
         <input type="submit" id="submit" value="Login" />
       </form>
-      <ToastContainer
-        position="top-center"
-        autoClose={2000}
-        style={{ marginTop: "60px" }}
-        hideProgressBar={false}
-        newestOnTop={true}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover />
+      <ToastContainer position="top-center" autoClose={2000} style={{ marginTop: "60px" }} />
     </div>
   );
 };

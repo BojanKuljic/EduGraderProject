@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
-
 .forbidden-box {
     position: relative;
     width: 750px;
@@ -12,8 +11,10 @@
     font-size: 20px;
 }
 
-.forbidden-box::before, .forbidden-box::after,
-.forbidden-borderLine::before, .forbidden-borderLine::after {
+.forbidden-box::before,
+.forbidden-box::after,
+.forbidden-borderLine::before,
+.forbidden-borderLine::after {
     content: '';
     position: absolute;
     top: -50%;
@@ -41,10 +42,21 @@
 }
 
 @keyframes animate {
-    0% { transform: rotate(0deg); }
-    50% { transform: rotate(120deg); }
-    75% { transform: rotate(240deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+
+    50% {
+        transform: rotate(120deg);
+    }
+
+    75% {
+        transform: rotate(240deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 .forbidden-content {
@@ -60,21 +72,21 @@
     justify-content: center;
     align-items: center;
     opacity: 1;
-    text-align: center; 
+    text-align: center;
 }
 
 .forbidden-content h1 {
     color: #b1252ffd;
     font-size: 50px;
     font-weight: bold;
-    position: top;    
+    position: top;
 }
 
 .forbidden-content h2 {
     color: #c59b3fc5;
     font-size: 30px;
     font-weight: bold;
-    position: top;    
+    position: top;
 }
 
 .forbidden-content p {

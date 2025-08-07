@@ -32,10 +32,10 @@ ul li {
   font-size: 12px;
 }
 
-.p-font p{
+.p-font p {
   color: #fff;
-   font-size: 18px;
-   font-weight: bold;
+  font-size: 18px;
+  font-weight: bold;
   margin: 2px 0;
   text-shadow: none;
 }
@@ -68,12 +68,14 @@ ul li {
 .student-bar {
   background-color: #45f3ff;
 }
+
 .review-details-section ul {
-  padding-left: 20px; 
-  list-style-position: inside; /* marker ulazi u isti blok sa tekstom */
+  padding-left: 20px;
+  list-style-position: inside;
 }
+
 .report-box {
-  white-space: pre-wrap; /* omogućava \n u tekstu */
+  white-space: pre-wrap;
 }
 
 .chart-filter {
@@ -86,6 +88,7 @@ ul li {
   font-size: 16px;
   font-weight: bold;
 }
+
 .chart-filter select {
   padding: 5px;
   position: flex;

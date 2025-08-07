@@ -20,6 +20,7 @@ body {
     font-size: 30px;
     margin-top: 10px;
 }
+
 .Box2 {
     position: relative;
     width: 440px;
@@ -30,7 +31,10 @@ body {
     margin-top: 40px;
 }
 
-.Box2::before, .Box2::after, .BorderLine2::before, .BorderLine2::after {
+.Box2::before,
+.Box2::after,
+.BorderLine2::before,
+.BorderLine2::after {
     content: '';
     position: absolute;
     top: -50%;
@@ -58,16 +62,24 @@ body {
 }
 
 @keyframes animate2 {
-    0% { transform: rotate(0deg); }
-    50% { transform: rotate(120deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+
+    50% {
+        transform: rotate(120deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 .Box2 form {
     position: absolute;
     inset: 5px;
     background: #0f131f;
-    padding: 20px 30px 20px 30px ;
+    padding: 20px 30px 20px 30px;
     border-radius: 8px;
     z-index: 2;
     display: flex;
@@ -86,8 +98,8 @@ body {
     position: relative;
     width: 370px;
     margin-top: 40px;
-     -webkit-appearance: none;
-  appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
 }
 
 .InputBox2 input {
@@ -118,8 +130,8 @@ body {
     transition: 0.5s;
 }
 
-.InputBox2 input:valid ~ span,
-.InputBox2 input:focus ~ span {
+.InputBox2 input:valid~span,
+.InputBox2 input:focus~span {
     color: #fff;
     font-size: 0.85em;
     transform: translateY(-20px);
@@ -137,58 +149,57 @@ body {
     transition: 0.5s;
 }
 
-.InputBox2 input:valid ~ i,
-.InputBox2 input:focus ~ i {
+.InputBox2 input:valid~i,
+.InputBox2 input:focus~i {
     height: 44px;
     margin-bottom: 20px;
 }
 
 .roleBox {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin-top:  30px;
-  color: #b5acaf;
-  font-size: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 30px;
+    color: #b5acaf;
+    font-size: 25px;
 }
 
 .roleLabel {
-  color: #b5acaf;
-  font-weight: normal;
-  transition: color 0.3s ease, font-weight 0.3s ease;
+    color: #b5acaf;
+    font-weight: normal;
+    transition: color 0.3s ease, font-weight 0.3s ease;
 }
 
 .roleLabel.active {
-  color: #fff;
-  font-weight: bold;
+    color: #fff;
+    font-weight: bold;
 }
 
-
 .roleBox span {
-  margin-bottom: 15px;
+    margin-bottom: 15px;
 }
 
 .roleOptions {
-  display: flex; 
-  align-self: left;
-  gap: 5px;
-  font-size: 21px;
-  margin-left: -15px;
+    display: flex;
+    align-self: left;
+    gap: 5px;
+    font-size: 21px;
+    margin-left: -15px;
 }
 
 .roleOptions input:checked {
-  accent-color: #32d9fa; /* Plavkasta nijansa kao u login dugmetu */
+    accent-color: #32d9fa;
 }
 
 .roleOptions label {
-  display: flex;
-  
-  align-items: center;
+    display: flex;
+
+    align-items: center;
 }
 
 .roleOptions input {
-  margin: 10px;
-  width: 20px;
+    margin: 10px;
+    width: 20px;
 }
 
 #Submit2 {
@@ -200,7 +211,7 @@ body {
     width: 150px;
     height: 50px;
     margin-top: 30px;
-    align-self:center;
+    align-self: center;
     background: #45f3ff;
     color: 0f131f;
     display: flex;

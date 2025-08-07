@@ -13,7 +13,7 @@ const Recommendation = () => {
     const fetchUploads = async () => {
       try {
         const res = await axios.get(`http://localhost:8845/student/${email}/allUploads`);
-         const sortedUploads = res.data.sort((a, b) => new Date(b.uploadDate) - new Date(a.uploadDate));
+        const sortedUploads = res.data.sort((a, b) => new Date(b.uploadDate) - new Date(a.uploadDate));
         setUploads(sortedUploads || []);
       } catch (error) {
         toast.error("Failed to load uploads.");
@@ -43,7 +43,6 @@ const Recommendation = () => {
   return (
     <div className="recommendation-container">
       <h2>Personalized Recommendations</h2>
-
       <label>Select an upload:</label>
       <select onChange={(e) => handleSelectUpload(e.target.value)} defaultValue="">
         <option value="" disabled>Select...</option>
@@ -60,7 +59,6 @@ const Recommendation = () => {
           <p>{recommendations}</p>
         </div>
       )}
-
       <ToastContainer position="top-center" autoClose={2000} style={{ marginTop: "0px" }} />
     </div>
   );

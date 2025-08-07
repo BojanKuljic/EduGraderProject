@@ -1,4 +1,3 @@
-// ManageAllUsers.js
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "../../styles/admin/ManageAllUsers.css";
@@ -11,18 +10,16 @@ const ManageAllUsers = () => {
   const [editState, setEditState] = useState({});
   const [selectedRestrictions, setSelectedRestrictions] = useState({});
   const [showCreateCard, setShowCreateCard] = useState(false);
-
   const availableRestrictions = {
     Student: ["upload", "status", "review", "progress", "recommendation", "login"],
     Professor: ["studentsuploads", "suggestions", "studentsprogress", "generatedreport", "login"],
     Admin: ["manageusers", "systemsettings", "login"],
   };
-
   const [createUserState, setCreateUserState] = useState({
     name: "",
     email: "",
     password: "",
-    role: "Student",
+    role: "",
   });
 
   useEffect(() => {
@@ -33,7 +30,6 @@ const ManageAllUsers = () => {
     try {
       const response = await axios.get("http://localhost:8845/admin/all-users");
       setUsers(response.data);
-
       const initialSelected = {};
       response.data.forEach((u) => {
         initialSelected[u.email] = "";
@@ -107,12 +103,10 @@ const ManageAllUsers = () => {
   const handleRestrict = async (email) => {
     const selected = selectedRestrictions[email];
     const role = users.find((u) => u.email === email)?.role;
-
     if (!selected) {
       toast.warn("Please select a restriction.");
       return;
     }
-   
 
     const restrictionsToSend = selected === "__ALL__"
       ? availableRestrictions[role]
@@ -126,17 +120,13 @@ const ManageAllUsers = () => {
       toast.success("Restriction(s) applied.");
       fetchUsers();
     } catch (err) {
-    toast.error("Failed! Restriction already applied.");
-
+      toast.error("Failed! Restriction already applied.");
     }
   };
-
-
 
   const handleUnrestrict = async (email) => {
     const selected = selectedRestrictions[email];
     const role = users.find((u) => u.email === email)?.role;
-
     if (!selected) {
       toast.warn("Please select a restriction.");
       return;
@@ -164,7 +154,7 @@ const ManageAllUsers = () => {
     }
   };
 
-    const handleDelete = async (email) => {
+  const handleDelete = async (email) => {
     try {
       await axios.delete(`http://localhost:8845/admin/delete/${email}`);
       toast.success("User deleted.");
@@ -197,117 +187,123 @@ const ManageAllUsers = () => {
   };
 
   return (
-        <div>
-    <div className="manage-users-container">
-      <h2>All Users in System</h2>
-      <button className="create-btn" onClick={() => setShowCreateCard((prev) => !prev)}>
-        {showCreateCard ? "🢁 Close Form 🢁" : "+ Create New User +"}
-      </button>
+    <div>
+      <div className="manage-users-container">
+        <h2>All Users in System</h2>
+        <button className="create-btn" onClick={() => setShowCreateCard((prev) => !prev)}>
+          {showCreateCard ? "🢁 Close Form 🢁" : "+ Create New User +"}
+        </button>
 
-      {showCreateCard && (
-        <div className="user-card">
-          <h3>Create New User</h3>
-          <input
-            className="edit-input-2"
-            placeholder="Name"
-            value={createUserState.name}
-            onChange={(e) => setCreateUserState({ ...createUserState, name: e.target.value })}
-          />
-          <input
-            className="edit-input-2"
-            placeholder="Email"
-            value={createUserState.email}
-            onChange={(e) => setCreateUserState({ ...createUserState, email: e.target.value })}
-          />
-          <input
-            className="edit-input-2"
-            type="password"
-            placeholder="Password"
-            value={createUserState.password}
-            onChange={(e) => setCreateUserState({ ...createUserState, password: e.target.value })}
-          />
-          <select
-            className="edit-input-2"
-            value={createUserState.role}
-            onChange={(e) => setCreateUserState({ ...createUserState, role: e.target.value })}
-          >
-            <option value="Student">Student</option>
-            <option value="Professor">Professor</option>
-            <option value="Admin">Admin</option>
-          </select>
-          <button className="create-btn" onClick={handleCreateUser}>Create</button>
-        </div>
-      )}
+        {showCreateCard && (
+          <div className="user-card">
+            <h3>Create New User</h3>
+            <input
+              className="edit-input-2"
+              placeholder="Name"
+              value={createUserState.name}
+              onChange={(e) => setCreateUserState({ ...createUserState, name: e.target.value })}
+              autoComplete="off"
+            />
+            <input
+              className="edit-input-2"
+              placeholder="Email"
+              value={createUserState.email}
+              onChange={(e) => setCreateUserState({ ...createUserState, email: e.target.value })}
+              autoComplete="off"
+            />
+            <input
+              className="edit-input-2"
+              type="text"
+              placeholder="Password"
+              value={createUserState.password}
+              onChange={(e) => setCreateUserState({ ...createUserState, password: e.target.value })}
+              autoComplete="off"
+            />
+<select
+  className={`edit-input-2 ${createUserState.role === "" ? "placeholder" : ""}`}
+  value={createUserState.role}
+  onChange={(e) => setCreateUserState({ ...createUserState, role: e.target.value })}
+>
+  <option value="" disabled hidden>Select role</option>
+  <option value="Student">Student</option>
+  <option value="Professor">Professor</option>
+  <option value="Admin">Admin</option>
+</select>
 
-      {users.map((user) => (
-        <div key={user.email} className="user-card">
-          <p><strong>Name:</strong> {user.name}</p>
-          <p><strong>Email:</strong> {user.email}</p>
-          <p><strong>Role:</strong> {user.role}</p>
-          <p><strong>Status:</strong> {user.restrictions?.length > 0 ? "Restricted" : "Unrestricted"}</p>
-          <p><strong>Restrictions:</strong> {user.restrictions?.join(", ") || "None"}</p>
 
-          <button className="manage-btn" onClick={() => toggleCard(user.email)}>
-            {activeCard === user.email ? "Close" : "Manage"}
-          </button>
 
-          {activeCard === user.email && (
-            <div className="manage-section">
-              <input
-                className="edit-input"
-                value={editState[user.email]?.name || ""}
-                onChange={(e) => handleChange(user.email, "name", e.target.value)}
-              />
-              <input
-                className="edit-input"
-                value={editState[user.email]?.email || ""}
-                onChange={(e) => handleChange(user.email, "email", e.target.value)}
-              />
-              <input
-                className="edit-input"
-                type="text"
-                value={editState[user.email]?.password || ""}
-                onChange={(e) => handleChange(user.email, "password", e.target.value)}
-                name="custom-pasword"
-                autoComplete="off"
-              />
-              <select
-                className="edit-input"
-                value={editState[user.email]?.role}
-                onChange={(e) => handleRoleChange(user.email, e.target.value)}
-              >
-                <option value="Student">Student</option>
-                <option value="Professor">Professor</option>
-                <option value="Admin">Admin</option>
-              </select>
+            <button className="create-btn" onClick={handleCreateUser}>Create</button>
+          </div>
+        )}
 
-              <select
-                className="edit-input"
-                value={selectedRestrictions[user.email] || ""}
-                onChange={(e) => handleRestrictionChange(user.email, e.target.value)}
-              >
-                <option value="">Select restriction</option>
-                <option value="__ALL__">-- aply_all_restrictions --</option>
-                {availableRestrictions[user.role]?.map((res) => (
-                  <option key={res} value={res}>{`-- ${res} --`}</option>
-                ))}
-              </select>
+        {users.map((user) => (
+          <div key={user.email} className="user-card">
+            <p><strong>Name:</strong> {user.name}</p>
+            <p><strong>Email:</strong> {user.email}</p>
+            <p><strong>Role:</strong> {user.role}</p>
+            <p><strong>Status:</strong> {user.restrictions?.length > 0 ? "Restricted" : "Unrestricted"}</p>
+            <p><strong>Restrictions:</strong> {user.restrictions?.join(", ") || "None"}</p>
 
-              <div className="manage-actions">
-                <button className="update-btn" onClick={() => handleUpdate(user.email)}>Save Changes</button>
-                <button className="restriction-btn" onClick={() => handleRestrict(user.email)}>Restrict  </button>
-                <button className="restriction-btn" onClick={() => handleUnrestrict(user.email)}>Unrestrict</button>
-                   <button className="delete-btn" onClick={() => handleDelete(user.email)}>Delete</button>
+            <button className="manage-btn" onClick={() => toggleCard(user.email)}>
+              {activeCard === user.email ? "Close" : "Manage"}
+            </button>
+
+            {activeCard === user.email && (
+              <div className="manage-section">
+                <input
+                  className="edit-input"
+                  value={editState[user.email]?.name || ""}
+                  onChange={(e) => handleChange(user.email, "name", e.target.value)}
+                />
+                <input
+                  className="edit-input"
+                  value={editState[user.email]?.email || ""}
+                  onChange={(e) => handleChange(user.email, "email", e.target.value)}
+                />
+                <input
+                  className="edit-input"
+                  type="text"
+                  value={editState[user.email]?.password || ""}
+                  onChange={(e) => handleChange(user.email, "password", e.target.value)}
+                  name="custom-pasword"
+                  autoComplete="off"
+                />
+                <select
+                  className="edit-input"
+                  value={editState[user.email]?.role}
+                  onChange={(e) => handleRoleChange(user.email, e.target.value)}
+                >
+                  <option value="Student">Student</option>
+                  <option value="Professor">Professor</option>
+                  <option value="Admin">Admin</option>
+                </select>
+
+                <select
+                  className="edit-input"
+                  value={selectedRestrictions[user.email] || ""}
+                  onChange={(e) => handleRestrictionChange(user.email, e.target.value)}
+                >
+                  <option value="">Select restriction</option>
+                  <option value="__ALL__">-- aply_all_restrictions --</option>
+                  {availableRestrictions[user.role]?.map((res) => (
+                    <option key={res} value={res}>{`-- ${res} --`}</option>
+                  ))}
+                </select>
+
+                <div className="manage-actions">
+                  <button className="update-btn" onClick={() => handleUpdate(user.email)}>Save Changes</button>
+                  <button className="restriction-btn" onClick={() => handleRestrict(user.email)}>Restrict  </button>
+                  <button className="restriction-btn" onClick={() => handleUnrestrict(user.email)}>Unrestrict</button>
+                  <button className="delete-btn" onClick={() => handleDelete(user.email)}>Delete</button>
+                </div>
               </div>
-            </div>
-          )}
-        </div>
-      ))}
+            )}
+          </div>
+        ))}
 
+      </div>
+      <ToastContainer position="top-center" autoClose={2000} style={{ marginTop: "55px" }} />
     </div>
-          <ToastContainer position="top-center" autoClose={2000} style={{ marginTop: "55px" }} />
-
-</div>
   );
 };
 

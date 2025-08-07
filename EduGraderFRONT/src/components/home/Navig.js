@@ -36,16 +36,9 @@ const Navig = () => {
       {storedRole === "Guest" && (
         <nav className="navbar">
           <ul className="navbar-list">
-             <li className="navbar-item">
-              <NavLink to="/" className="navbar-link">Welcome</NavLink>
-            </li>
-            <li className="navbar-item">
-              <NavLink to="/login" className="navbar-link">Login</NavLink>
-            </li>
-            <li className="navbar-item">
-              <NavLink to="/signup" className="navbar-link">Sign Up</NavLink>
-            </li>
-           
+            <li className="navbar-item"><NavLink to="/" className="navbar-link">Welcome</NavLink></li>
+            <li className="navbar-item"><NavLink to="/login" className="navbar-link">Login</NavLink></li>
+            <li className="navbar-item"><NavLink to="/signup" className="navbar-link">Sign Up</NavLink></li>
           </ul>
         </nav>
       )}
@@ -69,7 +62,6 @@ const Navig = () => {
         <nav className="navbar">
           <ul className="navbar-list">
             <li className="navbar-item"><NavLink to="/studentsuploads" className="navbar-link">Overview Uploads</NavLink></li>
-            {/* <li className="navbar-item"><NavLink to="/grades" className="navbar-link">Grades</NavLink></li> */}
             <li className="navbar-item"><NavLink to="/suggestions" className="navbar-link">Suggestions</NavLink></li>
             <li className="navbar-item"><NavLink to="/studentsprogress" className="navbar-link">Students Progress</NavLink></li>
             <li className="navbar-item"><NavLink to="/generatedreport" className="navbar-link">Statistical Report</NavLink></li>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import "../../styles/admin/SystemsSettings.css";
 import { toast, ToastContainer } from "react-toastify";
+import "../../styles/admin/SystemsSettings.css";
 import "react-toastify/dist/ReactToastify.css";
 
 const SystemSettings = () => {
@@ -14,6 +14,7 @@ const SystemSettings = () => {
         maxUploads: 0,
         period: ""
     });
+
 
     useEffect(() => {
         fetchSettings();

@@ -25,7 +25,6 @@ const Review = () => {
 
     const handleSelectClick = (e) => {
         if (e.target.value === selectedUpload) {
-            // Ako korisnik klikne na već selektovanu stavku, resetuj review
             handleSelectUpload(e.target.value);
         }
     };
@@ -34,7 +33,7 @@ const Review = () => {
         setSelectedUpload(uploadId);
 
         if (!uploadId) {
-            setReview(null); // sakrij prethodni prikaz review-a
+            setReview(null);
             return;
         }
         try {
@@ -54,7 +53,6 @@ const Review = () => {
             <select
                 value={selectedUpload || ""}
                 onChange={(e) => handleSelectUpload(e.target.value)}
-                // onClick={handleSelectClick}
             >
                 <option value="" disabled>Select...</option>
                 {uploads.map((upload) => (
@@ -84,7 +82,6 @@ const Review = () => {
                     </div>
                 </div>
             )}
-
             <ToastContainer position="top-center" autoClose={2000} style={{ marginTop: "0px" }} />
         </div>
     );

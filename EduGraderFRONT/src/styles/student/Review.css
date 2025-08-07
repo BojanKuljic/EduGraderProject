@@ -11,10 +11,8 @@
   border-radius: 12px;
   box-shadow: 0 0 10px #45f3ff;
   color: #ffffff;
-
-
-  overflow-y: none; 
-  z-index: 10;      
+  overflow-y: none;
+  z-index: 10;
 }
 
 .review-container h2 {
@@ -39,26 +37,23 @@
   background: #2c2f3f;
   padding: 20px;
   border-radius: 8px;
-  max-height: 58vh;      
+  max-height: 58vh;
   overflow-y: auto;
- font-size: 18px;
+  font-size: 18px;
   box-shadow: 0 0 10px #45f3ff;
-
-  /* Sakrivanje scrollbara */
-  scrollbar-width: none;          
+  scrollbar-width: none;
   -ms-overflow-style: none;
 }
 
 .review-details::-webkit-scrollbar {
   display: none;
 }
+
 .review-details .grade {
   font-weight: bold;
   font-size: 25px;
   margin-left: 10px;
 }
-
-
 
 .review-section {
   margin-top: 20px;

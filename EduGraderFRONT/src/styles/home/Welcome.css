@@ -13,7 +13,6 @@ body {
   align-items: center;
   background: #09081a;
   min-height: 100vh;
-
 }
 
 .welcome-container {
@@ -39,9 +38,9 @@ body {
   margin-bottom: 25px;
   color: #32d9fa;
 }
+
 .description,
-.roles
-{
+.roles {
   font-size: 18px;
   font-weight: 500;
 }
@@ -51,7 +50,6 @@ body {
   line-height: 1.7;
   margin-bottom: 20px;
   color: #e3e3e3;
-
 }
 
 .description ul {
@@ -59,19 +57,18 @@ body {
   padding-left: 30px;
 }
 
-.roles ul{
+.roles ul {
   margin-top: 10px;
   padding-left: 30px;
 }
-.roles2{
+
+.roles2 {
   font-size: 20px;
-  /* margin-left: -20px; */
 }
 
 .welcome-container li {
   margin-bottom: 8px;
-    color: #e3e3e3;
-
+  color: #e3e3e3;
 }
 
 .footer-note {
@@ -80,12 +77,12 @@ body {
   text-align: center;
 }
 
-/* Animacija pri ulasku */
 @keyframes fadeInUp {
   from {
     opacity: 0;
     transform: translateY(30px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);

@@ -7,7 +7,7 @@
   width: 750px;
   margin: 40px auto;
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
   align-items: center;
   background-color: #1c1f2b;
   padding: 20px;
@@ -17,15 +17,14 @@
   box-shadow: 0 0 10px #45f3ff;
   z-index: 10;
   overflow: hidden;
-
 }
 
-.status-list{
-  margin: 20px 0px ;
-width: 700px;
-   overflow-y: auto;
-  scrollbar-width: none;          
-  -ms-overflow-style: none;  
+.status-list {
+  margin: 20px 0px;
+  width: 700px;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 .status-card {
@@ -38,7 +37,7 @@ width: 700px;
 }
 
 .status-container::-webkit-scrollbar {
-  display: none;                  
+  display: none;
 }
 
 .status-under-review {
@@ -56,7 +55,6 @@ width: 700px;
   font-weight: bold;
 }
 
-
 .status-title {
   font-size: 36px;
   margin-bottom: 10px;
@@ -69,27 +67,24 @@ width: 700px;
   color: #b5acaf;
 }
 
-
-
 .status-card:hover {
   transform: translateY(-5px);
 }
 
 .status-card h3 {
-  color:  #45f3ff;
-    font-size: 25px;
+  color: #45f3ff;
+  font-size: 25px;
 }
 
 .status-container h2 {
-  color:  #45f3ff;
-    font-size: 30px;
+  color: #45f3ff;
+  font-size: 30px;
 }
 
 .status-card p {
   font-size: 18px;
   margin: 5px 0;
 }
-
 
 .status-edit-toggle {
   margin-top: 15px;
@@ -114,14 +109,13 @@ width: 700px;
   background: rgba(255, 255, 255, 0.03);
   border-radius: 10px;
   box-shadow: 0 0 8px #32d9fa;
-   display: flex;
+  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
   width: 640px;
 }
-
 
 .status-edit-section label {
   font-weight: 400;
@@ -137,7 +131,6 @@ width: 700px;
   margin: 10px auto;
 }
 
-/* INPUT za file i number */
 .upload-new-version input[type="file"],
 .revert-version input[type="number"] {
   background-color: #2c2f3f;
@@ -147,11 +140,10 @@ width: 700px;
   border-radius: 6px;
   font-size: 14px;
   height: 45px;
-  flex: 1; /* zauzima sav prostor osim dugmeta */
+  flex: 1;
   box-sizing: border-box;
 }
 
-/* Dugmad za obe sekcije */
 .upload-new-version button,
 .revert-version button {
   height: 45px;
@@ -165,11 +157,9 @@ width: 700px;
   font-weight: bold;
   width: 100px;
   flex-shrink: 0;
-
 }
 
 .upload-new-version button:hover,
 .revert-version button:hover {
   opacity: 0.9;
 }
-

@@ -47,16 +47,14 @@
 }
 
 .manage-section {
-  margin-top: 20px;
-  padding: 20px;
-  background-color: #1f2230;
-  border-radius: 8px;
-  box-shadow: 0 0 8px #4f1f8d;
-
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #1f2230;
+    border-radius: 8px;
+    box-shadow: 0 0 8px #4f1f8d;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 

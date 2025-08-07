@@ -42,7 +42,7 @@ const Signup = () => {
     formData.append("role", form.role);
 
     try {
-const response = await axios.post("http://localhost:8845/signup", formData);
+      const response = await axios.post("http://localhost:8845/signup", formData);
 
 
       if (response.status === 200) {
@@ -61,7 +61,6 @@ const response = await axios.post("http://localhost:8845/signup", formData);
       <span className="BorderLine2"></span>
       <form onSubmit={handleSubmit} autoComplete="off">
         <h2 className="SignUp">Sign Up</h2>
-
         <div className="InputBox2">
           <input
             type="text"
@@ -118,19 +117,8 @@ const response = await axios.post("http://localhost:8845/signup", formData);
             ))}
           </div>
         </div>
-
         <input type="submit" id="Submit2" value="Sign Up" />
-
-        <ToastContainer
-          position="top-center"
-          autoClose={2000}
-          hideProgressBar={false}
-          closeOnClick
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          style={{ marginTop: "60px" }}
-        />
+        <ToastContainer position="top-center" autoClose={2000} style={{ marginTop: "60px" }} />
       </form>
     </div>
   );

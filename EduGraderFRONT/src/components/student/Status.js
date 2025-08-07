@@ -22,8 +22,6 @@ const Status = () => {
         }
     };
 
-
-
     const email = sessionStorage.getItem("email");
 
     useEffect(() => {
@@ -32,7 +30,7 @@ const Status = () => {
         fetchUploads();
         const interval = setInterval(() => {
             fetchUploads();
-        }, 2000); // osvežava na svakih 2 sekunde
+        }, 2000);
 
         return () => clearInterval(interval);
     }, [email]);
@@ -76,25 +74,19 @@ const Status = () => {
             };
 
             const mimeType = mimeTypes[extension] || "application/octet-stream";
-
             const byteCharacters = atob(base64Data);
             const byteNumbers = Array.from(byteCharacters, c => c.charCodeAt(0));
             const byteArray = new Uint8Array(byteNumbers);
-
             const blob = new Blob([byteArray], { type: mimeType });
-
             const link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
             link.download = fileName;
             link.click();
-
             toast.success("Download successful!");
         } catch (error) {
             console.err
         }
     }
-
-
 
     const handleUpdate = async (e, uploadId) => {
         const file = e.target.files[0];
@@ -107,7 +99,6 @@ const Status = () => {
         try {
             await axios.put(`http://localhost:8845/student/update?uploadId=${uploadId}`, formData, {
                 headers: { "Content-Type": "multipart/form-data" }
-
             });
             toast.success("New version uploaded!");
             setTimeout(() => window.location.reload(), 2000);
@@ -152,10 +143,8 @@ const Status = () => {
         return isNaN(date.getTime()) ? "Invalid date" : date.toLocaleString();
     };
 
-
     const formatReviewTime = (milliseconds) => {
         if (!milliseconds || isNaN(milliseconds)) return "N/A";
-
         const totalSeconds = Math.floor(milliseconds / 1000);
         const hrs = Math.floor(totalSeconds / 3600);
         const mins = Math.floor((totalSeconds % 3600) / 60);
@@ -165,11 +154,8 @@ const Status = () => {
         if (hrs > 0) parts.push(`${hrs}h`);
         if (mins > 0) parts.push(`${mins}m`);
         if (secs > 0 || parts.length === 0) parts.push(`${secs}s`);
-
         return parts.join(" ");
     };
-
-
 
     return (
         <div>
@@ -199,7 +185,6 @@ const Status = () => {
                                         <label>Download Current File </label>
                                         <div className="upload-new-version ">
                                             <button onClick={() => handleDownload(upload.id, upload.title)}>Download</button>
-
                                         </div>
 
                                         {/* Upload new version */}
@@ -209,7 +194,6 @@ const Status = () => {
                                                 className="upload-input"
                                                 type="file"
                                                 accept=".pdf,.doc,.docx"
-
                                                 onChange={(e) =>
                                                     setSelectedFiles((prev) => ({
                                                         ...prev,
@@ -249,22 +233,15 @@ const Status = () => {
                                             <button onClick={() => handleRevert(upload.id, revertVersions[upload.id])}>
                                                 Revert
                                             </button>
-
                                         </div>
                                     </div>
                                 )}
-
-
                             </div>
                         ))}
                     </div>
                 )}
-
             </div>
-            <ToastContainer
-                position="top-center"
-                autoClose={2000}
-                style={{ marginTop: "55px" }} />
+            <ToastContainer position="top-center" autoClose={2000} style={{ marginTop: "55px" }} />
         </div>
     );
 };

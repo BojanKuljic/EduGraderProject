@@ -4,21 +4,19 @@
   text-align: center;
   background-color: #414344;
   align-items: center;
-  width: 100vw;  /* Širina prema veličini prozora */
-  height: 100vh; /* Visina prema veličini prozora */
+  width: 100vw;  
+  height: 100vh; 
   overflow: auto;
   background-image: url('/public/background3.jpg');
-  background-size: cover; /* Podesi da slika pokrije ceo ekran */
-  background-position: center; /* Centriraj sliku */
-  background-repeat: no-repeat; /* Spreči ponavljanje */
-  background-attachment: fixed; /* Fiksiraj pozadinu */
+  background-size: cover; 
+  background-position: center; 
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
-
 
 .App-logo {
   height: 40vmin;
-  pointer-events: none;
-  
+  pointer-events: none;  
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -28,7 +26,6 @@
 }
 
 .App-header {
-
   min-height: 100vh;
   display: flex;
   flex-direction: column;
