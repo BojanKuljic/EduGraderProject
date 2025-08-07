@@ -71,7 +71,7 @@ body {
     z-index: 2;
     display: flex;
     flex-direction: column;
-    opacity: 0.95;
+    opacity: 0.99;
 }
 
 .box form h2 {

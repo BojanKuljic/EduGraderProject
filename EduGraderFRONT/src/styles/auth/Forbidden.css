@@ -1,16 +1,83 @@
-.forbidden-container {
-  margin-top: 100px;
-  color: white;
-  text-align: center;
-  font-family: 'Segoe UI', sans-serif;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+
+.forbidden-box {
+    position: relative;
+    width: 750px;
+    min-height: 400px;
+    background: #498fff66;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 45px;
+    font-size: 20px;
 }
 
-.forbidden-container h1 {
-  font-size: 3rem;
-  color: #e74c3c;
+.forbidden-box::before, .forbidden-box::after,
+.forbidden-borderLine::before, .forbidden-borderLine::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 750px;
+    height: 450px;
+    background: linear-gradient(0deg, transparent, transparent, #b066f7, #b066f7);
+    z-index: 1;
+    transform-origin: bottom right;
+    animation: animate 5s linear infinite;
 }
 
-.forbidden-container p {
-  font-size: 1.5rem;
-  color: #ccc;
+.forbidden-box::after {
+    animation-delay: -2.5s;
+}
+
+.forbidden-borderLine::before {
+    background: linear-gradient(00deg, transparent, transparent, #32d9fa, #32d9fa);
+    animation-delay: -2.5s;
+}
+
+.forbidden-borderLine::after {
+    background: linear-gradient(0deg, transparent, transparent, #32d9fa, #32d9fa);
+    animation-delay: -5s;
+}
+
+@keyframes animate {
+    0% { transform: rotate(0deg); }
+    50% { transform: rotate(120deg); }
+    75% { transform: rotate(240deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.forbidden-content {
+    position: absolute;
+    inset: 5px;
+    background: #1c1f2b;
+    padding: 40px;
+    border-radius: 8px;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    justify-content: center;
+    align-items: center;
+    opacity: 1;
+    text-align: center; 
+}
+
+.forbidden-content h1 {
+    color: #b1252ffd;
+    font-size: 50px;
+    font-weight: bold;
+    position: top;    
+}
+
+.forbidden-content h2 {
+    color: #c59b3fc5;
+    font-size: 30px;
+    font-weight: bold;
+    position: top;    
+}
+
+.forbidden-content p {
+    color: #fff;
+    font-size: 20px;
 }

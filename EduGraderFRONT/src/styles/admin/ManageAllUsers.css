@@ -127,6 +127,7 @@
   background-color: #c27232;
   color: white;
   border: none;
+ min-width: 100px;
   padding: 8px 14px;
   border-radius: 6px;
   cursor: pointer;
@@ -142,6 +143,7 @@
 .delete-btn {
   background-color: #d9534f;
   color: white;
+   min-width: 100px;
   border: none;
   padding: 8px 14px;
   border-radius: 6px;

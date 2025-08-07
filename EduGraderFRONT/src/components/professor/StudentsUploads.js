@@ -186,7 +186,7 @@ const handleSaveEditedGrade = async (uploadId) => {
                                     <div className="grade-actions">
                                         {editMode === upload.id ? (
                                             <>
-                                                <input
+                                                <input 
                                                     type="number"
                                                     min="5"
                                                     max="10"

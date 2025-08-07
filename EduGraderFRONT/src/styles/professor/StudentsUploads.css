@@ -50,6 +50,8 @@
 
 .details-button {
   margin-top: 15px;
+  margin-left: 8px;
+  min-width: 90px;
   padding: 10px 20px;
   background-color:#3c4ccb;
   border: none;
@@ -73,6 +75,14 @@
   border-radius: 8px;
   box-shadow: 0 0 8px #3c4ccb;
   line-height: 1.6;
+}
+.grade-input{
+  height: 42px;
+  width: 80px;
+  padding-left: 20px;
+  font-size: 18px;
+  font-weight: 500;
+  border-radius: 8px;
 }
 
 .review-details-section h3 {

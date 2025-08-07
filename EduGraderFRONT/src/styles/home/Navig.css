@@ -2,7 +2,7 @@
   background-color: #100e0e;
   opacity: 1;
   padding: 10px 0;
-  box-shadow: 0px 4px 15px rgba(73, 143, 255, 0.4), 0px 0px 25px rgba(221, 63, 73, 0.5);
+  box-shadow: 0px 4px 15px #498fff66, 0px 0px 25px #dd3f4980;
   position: fixed;
   top: 0;
   width: 100%;

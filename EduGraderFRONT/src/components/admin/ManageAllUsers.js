@@ -52,7 +52,7 @@ const ManageAllUsers = () => {
       [email]: {
         name: user.name,
         email: user.email,
-        password: "",
+        password: user.password,
         role: user.role,
       },
     }));
@@ -265,9 +265,11 @@ const ManageAllUsers = () => {
               />
               <input
                 className="edit-input"
-                type="password"
+                type="text"
                 value={editState[user.email]?.password || ""}
                 onChange={(e) => handleChange(user.email, "password", e.target.value)}
+                name="custom-pasword"
+                autoComplete="off"
               />
               <select
                 className="edit-input"
@@ -285,7 +287,7 @@ const ManageAllUsers = () => {
                 onChange={(e) => handleRestrictionChange(user.email, e.target.value)}
               >
                 <option value="">Select restriction</option>
-                <option value="__ALL__">-- Apply All Restrictions --</option>
+                <option value="__ALL__">-- aply_all_restrictions --</option>
                 {availableRestrictions[user.role]?.map((res) => (
                   <option key={res} value={res}>{`-- ${res} --`}</option>
                 ))}
@@ -293,7 +295,7 @@ const ManageAllUsers = () => {
 
               <div className="manage-actions">
                 <button className="update-btn" onClick={() => handleUpdate(user.email)}>Save Changes</button>
-                <button className="restriction-btn" onClick={() => handleRestrict(user.email)}>Restrict</button>
+                <button className="restriction-btn" onClick={() => handleRestrict(user.email)}>Restrict  </button>
                 <button className="restriction-btn" onClick={() => handleUnrestrict(user.email)}>Unrestrict</button>
                    <button className="delete-btn" onClick={() => handleDelete(user.email)}>Delete</button>
               </div>
