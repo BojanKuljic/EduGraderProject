@@ -109,9 +109,7 @@ namespace GradeAndAnalysesService
         private readonly HttpClient _httpClient = new HttpClient();
         private const string GEMINI_API_KEY = "AIzaSyBPBbg4TNRyJdcEehNJdF447G2WpsyiBlI";
         private const string GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
-
         private IReliableDictionary<string, string> _promptTemplates;
-
 
         public async Task<SystemSettings> GetSystemSettings()
         {
@@ -122,9 +120,6 @@ namespace GradeAndAnalysesService
         {
             return await _uploadDatabase.SetSystemSettings(settings);
         }
-
-
-
 
 
         public async Task<bool> SetPrompts(string errorPrompt, string improvementPrompt, string scorePrompt)
@@ -200,7 +195,6 @@ namespace GradeAndAnalysesService
 
             stopwatch.Stop();
             review.UsualReviewTime = stopwatch.ElapsedMilliseconds;
-
             return review;
         }
 
@@ -209,7 +203,6 @@ namespace GradeAndAnalysesService
             try
             {
                 string extension = Path.GetExtension(fileName).ToLower();
-
                 using var stream = new MemoryStream(fileData);
 
                 return extension switch
@@ -229,14 +222,11 @@ namespace GradeAndAnalysesService
                 return "Failed to extract text.";
             }
         }
-
-
         private string ExtractFromPdf(Stream stream)
         {
             using var reader = new iText.Kernel.Pdf.PdfReader(stream);
             using var pdfDoc = new iText.Kernel.Pdf.PdfDocument(reader);
             var strategy = new iText.Kernel.Pdf.Canvas.Parser.Listener.SimpleTextExtractionStrategy();
-
             StringBuilder sb = new();
 
             for (int i = 1; i <= pdfDoc.GetNumberOfPages(); i++)
@@ -279,7 +269,6 @@ namespace GradeAndAnalysesService
             using var reader = new StreamReader(stream);
             return reader.ReadToEnd();
         }
-
 
         private string ExtractFromImage(Stream stream)
         {
@@ -343,17 +332,6 @@ namespace GradeAndAnalysesService
             return sb.ToString();
         }
 
-
-
-
-
-
-
-
-
-
-
-
         private Review GetBasicAnalysis(string text, SystemSettings settings)
         {
             int wordCount = text.Split(' ', StringSplitOptions.RemoveEmptyEntries).Length;
@@ -385,9 +363,6 @@ namespace GradeAndAnalysesService
                 UsualReviewTime = 0
             };
         }
-
-
-
 
         private async Task<Review> GetAIAnalysis(string textContent, SystemSettings settings)
         {
@@ -456,8 +431,6 @@ namespace GradeAndAnalysesService
                 return new Review { Grade = 0, Errors = "Error during AI analysis" };
             }
         }
-
-
         private async Task<string> GetAIResponse(string prompt)
         {
             var requestBody = new
@@ -492,8 +465,6 @@ namespace GradeAndAnalysesService
             return "AI failed after retries";
         }
 
-
-
         private int ExtractScore(string aiResponse)
         {
             if (string.IsNullOrEmpty(aiResponse))
@@ -504,19 +475,17 @@ namespace GradeAndAnalysesService
             {
                 int clamped = Math.Clamp(rawScore, 0, 100);
 
-                // 🎓 Mapiraj na akademsku skalu od 5 do 10
-                if (clamped < 50) return 5;              // Ne prolazi
+                // Akademsku skalu od 5 do 10
+                if (clamped < 50) return 5;              
                 if (clamped < 60) return 6;
                 if (clamped < 70) return 7;
                 if (clamped < 85) return 8;
                 if (clamped < 95) return 9;
-                return 10;                               // Najveća ocena
+                return 10;                               
             }
 
             return 5;
         }
-
-
 
         protected override IEnumerable<ServiceReplicaListener> CreateServiceReplicaListeners() => this.CreateServiceRemotingReplicaListeners();
     }

@@ -13,7 +13,6 @@ namespace Common.Services
         Task<Review> AnalyzeWork(StudentUpload studentWorkDto);
         Task<bool> SetPrompts(string errorPrompt, string improvementPrompt, string scorePrompt);
         Task<Dictionary<string, string>> GetPrompts();
-
         Task<SystemSettings> GetSystemSettings();
         Task<bool> SetSystemSettings(SystemSettings settings);
     }

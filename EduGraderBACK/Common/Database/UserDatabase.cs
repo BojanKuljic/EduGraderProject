@@ -49,8 +49,6 @@ namespace Common.Database
             return result.ModifiedCount > 0;
         }
 
-
-
         public async Task<IEnumerable<User>> GetAllSystemUsers()
         {
             var allUsers = await _users.Find(Builders<User>.Filter.Empty).ToListAsync();

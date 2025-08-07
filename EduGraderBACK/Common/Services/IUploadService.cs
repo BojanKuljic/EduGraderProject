@@ -14,15 +14,10 @@ namespace Common.Services
         Task<bool> UpdateUpload(byte[] file, string uploadId);
         Task<bool> RevertVersion(string id, int version);
         Task<StudentUpload> GetStudentUpload(string id);
-
         Task<List<StudentUpload>> GetAllStudentUploads(string email);
         Task<List<StudentUpload>> GetAllUploads();
-
-
         Task<Review> GetReview(string id);
-
         Task<bool> ProfessorReview(string id, Review review);
-
         Task<bool> UpdateGrade(string uploadId, double grade);
 
     }

@@ -80,7 +80,6 @@ namespace AllUsersService
             return await _userDatabase.UpdateUser(email, user);
         }
 
-
         public async Task<bool> AddUserRestriction(string restriction, string email)
         {
             var user = await _userDatabase.GetUserByEmail(email);
@@ -142,8 +141,6 @@ namespace AllUsersService
             return await _userDatabase.SetUserRestrictions(email, new List<string>());
         }
 
-
-
         public async Task<bool> ChangeUserRole(string email, string newRole)
         {
             return await _userDatabase.ChangeUserRoleAsync(email, newRole);
@@ -153,7 +150,6 @@ namespace AllUsersService
         {
             return await _userDatabase.DeleteUserAsync(email);
         }
-
         protected override IEnumerable<ServiceReplicaListener> CreateServiceReplicaListeners() => this.CreateServiceRemotingReplicaListeners();
 
     }

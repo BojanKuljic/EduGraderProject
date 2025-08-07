@@ -19,7 +19,6 @@ namespace UploadService
     internal sealed class UploadService : StatefulService, IUploadService
     {
         private readonly UploadDatabase _uploadDatabase;
-
         public UploadService(StatefulServiceContext context)
             : base(context)
         {

@@ -35,7 +35,6 @@ namespace APIController_Service.Controllers
             if (existingUser != null)
                 return BadRequest("A user with this email already exists.");
 
-            // Ako je sve u redu, registruj
             var result = await _allUserService.Register(request);
             return result ? Ok(result) : BadRequest("Registration failed.");
         }

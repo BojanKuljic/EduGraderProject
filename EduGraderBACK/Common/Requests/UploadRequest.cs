@@ -17,7 +17,6 @@ namespace Common.Requests
         public string title { get; set; }
 
         public DateTime UploadDate = DateTime.Now;
-
         public IFormFile file { get; set; }
     }
 }

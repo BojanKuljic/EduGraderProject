@@ -42,8 +42,6 @@ namespace Common.Database
         }
 
 
-
-
         public async Task<StudentUpload> GetUpload(string id)
         {
             return await _uploads.Find(u => u.Id == id).FirstOrDefaultAsync();
